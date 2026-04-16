@@ -1,0 +1,302 @@
+<div class="container">
+    <!-- =================================================================================
+    // Panel de Administración de Solicitudes de Ausencia
+    // ================================================================================= -->
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-primary-subtle text-white">
+                    <h5 class="mb-0 text-primary">Gestión de Solicitudes de Ausencia</h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Filtros -->
+                    <form method="get" class="row g-3 mb-4">
+                        <div class="col-md-2">
+                            <label for="user_filter" class="form-label">Usuario</label>
+                            <select name="user_id" id="user_filter" class="form-select">
+                                <option value="">Todos los usuarios</option>
+                                <?php foreach ($users as $user): ?>
+                                <option value="<?= $user['id'] ?>"
+                                    <?= (isset($_GET['user_id']) && $_GET['user_id'] == $user['id']) ? 'selected' : '' ?>>
+                                    <?= esc($user['name']) ?> (<?= esc($user['identification']) ?>)
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="type_filter" class="form-label">Tipo</label>
+                            <select name="type" id="type_filter" class="form-select">
+                                <option value="">Todos los tipos</option>
+                                <?php foreach ($absenceTypes as $key => $type): ?>
+                                <option value="<?= $key ?>" <?= (isset($_GET['type']) && $_GET['type'] == $key) ? 'selected' : '' ?>>
+                                    <?= esc($type) ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="status" class="form-label">Estado</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="pending" <?= ($current_status ?? 'pending') === 'pending' ? 'selected' : '' ?>>Pendientes</option>
+                                <option value="approved" <?= ($current_status ?? '') === 'approved' ? 'selected' : '' ?>>Aprobadas</option>
+                                <option value="rejected" <?= ($current_status ?? '') === 'rejected' ? 'selected' : '' ?>>Rechazadas</option>
+                                <option value="cancelled" <?= ($current_status ?? '') === 'cancelled' ? 'selected' : '' ?>>Canceladas</option>
+                                <option value="all" <?= ($current_status ?? '') === 'all' ? 'selected' : '' ?>>Todas</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date_from" class="form-label">Fecha desde</label>
+                            <input type="date" name="date_from" id="date_from" class="form-control"
+                                value="<?= esc($_GET['date_from'] ?? '') ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date_to" class="form-label">Fecha hasta</label>
+                            <input type="date" name="date_to" id="date_to" class="form-control"
+                                value="<?= esc($_GET['date_to'] ?? '') ?>">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary btn-icon me-2">
+                                <iconify-icon icon="solar:filter-bold-duotone"></iconify-icon>
+                            </button>
+                            <a href="<?= base_url('absences/manage') ?>" class="btn btn-outline-muted btn-icon me-2">
+                                <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+                            </a>
+                            <a href="<?= base_url('absences/export-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-warning btn-icon">
+                                <iconify-icon icon="solar:file-bold-duotone"></iconify-icon>
+                            </a>
+                        </div>
+                    </form>
+
+                    <!-- Buscador de solicitudes -->
+                    <div class="mb-3">
+                        <input type="text" id="absenceTableSearch" class="form-control"
+                            placeholder="Buscar solicitudes...">
+                    </div>
+                    <!-- Fin de buscador de solicitudes -->
+
+                    <div class="mb-4 border rounded-1">
+                        <table class="table text-nowrap mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th class="d-none d-md-table-cell">Tipo</th>
+                                    <th class="text-center d-none d-md-table-cell">Fecha Inicio</th>
+                                    <th class="text-center d-none d-md-table-cell">Fecha Fin</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($absences)): ?>
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay solicitudes de ausencia.</td>
+                                </tr>
+                                <?php else: ?>
+                                <?php foreach ($absences as $absence): ?>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <h6 class="fs-4 fw-semibold mb-0">
+                                                <?= esc($absence['user_name']) ?>
+                                            </h6>
+                                            <span class="fw-normal text-muted small">
+                                                ID: <?= esc($absence['user_identification']) ?>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="d-none d-md-table-cell">
+                                        <h6 class="fw-semibold mb-0">
+                                            <?= $absenceTypes[$absence['type']] ?? $absence['type'] ?>
+                                        </h6>
+                                    </td>
+                                    <td class="text-center d-none d-md-table-cell">
+                                        <div>
+                                            <h6 class="fw-semibold mb-0 mb-1">
+                                                <?= esc(date('d/m/Y', strtotime($absence['start_date']))) ?>
+                                            </h6>
+                                            <?php if ($absence['start_time']): ?>
+                                            <span class="fw-normal text-muted small">
+                                                <?= esc(date('H:i', strtotime($absence['start_time']))) ?>
+                                            </span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                    <td class="text-center d-none d-md-table-cell">
+                                        <div>
+                                            <h6 class="fw-semibold mb-0 mb-1">
+                                                <?= esc(date('d/m/Y', strtotime($absence['end_date']))) ?>
+                                            </h6>
+                                            <?php if ($absence['end_time']): ?>
+                                            <span class="fw-normal text-muted small">
+                                                <?= esc(date('H:i', strtotime($absence['end_time']))) ?>
+                                            </span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php
+                                $statusClass = [
+                                    'pending' => 'warning',
+                                    'approved' => 'success',
+                                    'rejected' => 'danger',
+                                    'cancelled' => 'secondary'
+                                ];
+                                ?>
+                                        <span
+                                            class="badge bg-<?= $statusClass[$absence['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fs-2"
+                                            style="min-width: 70px; display: inline-block;">
+                                            <?= $statusLabels[$absence['status']] ?? $absence['status'] ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <!-- Acciones como dropdown Modernize/CoreUI -->
+                                        <div class="dropdown dropstart">
+                                            <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <?php if ($absence['status'] == 'pending'): ?>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-3 approve-absence-swal"
+                                                        href="#"
+                                                        data-url="<?= base_url('absences/approve/' . $absence['id']) ?>"
+                                                        data-method="post">
+                                                        <iconify-icon icon="solar:check-circle-bold-duotone"></iconify-icon> Aprobar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-3 reject-absence-swal"
+                                                        href="#" data-id="<?= $absence['id'] ?>">
+                                                        <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon> Rechazar
+                                                    </a>
+                                                </li>
+                                                <?php endif; ?>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-3"
+                                                        href="<?= base_url('absences/view/' . $absence['id']) ?>">
+                                                        <iconify-icon icon="solar:eye-bold-duotone"></iconify-icon> Ver detalles
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <div class="d-flex justify-content-center mt-3">
+                        <?= $pager->links() ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para rechazar solicitud -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rechazar Solicitud</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="rejectForm" method="post">
+                <?= csrf_field() ?>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="admin_comments" class="form-label">Comentarios (opcional)</label>
+                        <textarea name="admin_comments" id="admin_comments" class="form-control" rows="3"
+                            placeholder="Explica el motivo del rechazo..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Rechazar Solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// =================================================================================
+// Lógica de filtrado de tabla por búsqueda
+// =================================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('absenceTableSearch');
+    const table = document.querySelector('table');
+    const rows = table.querySelectorAll('tbody tr');
+
+    searchInput.addEventListener('input', function() {
+        const search = this.value.toLowerCase();
+        rows.forEach(row => {
+            const rowText = Array.from(row.querySelectorAll('td'))
+                .map(td => td.innerText.toLowerCase())
+                .join(' ');
+            row.style.display = rowText.includes(search) ? '' : 'none';
+        });
+    });
+});
+// =================================================================================
+// Confirmaciones con SweetAlert2
+// =================================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Aprobar solicitud
+    document.querySelectorAll('.approve-absence-swal').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.getAttribute('data-url');
+            const method = this.getAttribute('data-method') || 'GET';
+            Swal.fire({
+                title: '¿Aprobar solicitud?',
+                text: 'La solicitud será aprobada y el usuario será notificado.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, aprobar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (method === 'POST') {
+                        // Crear formulario y enviarlo
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = url;
+
+                        // Agregar CSRF token
+                        const csrfInput = document.createElement('input');
+                        csrfInput.type = 'hidden';
+                        csrfInput.name = 'csrf_test_name';
+                        csrfInput.value = '<?= csrf_hash() ?>';
+                        form.appendChild(csrfInput);
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    } else {
+                        window.location.href = url;
+                    }
+                }
+            });
+        });
+    });
+
+    // Rechazar solicitud
+    document.querySelectorAll('.reject-absence-swal').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const absenceId = this.getAttribute('data-id');
+            $('#rejectForm').attr('action', '<?= base_url('absences/reject/') ?>' + absenceId);
+            $('#rejectModal').modal('show');
+        });
+    });
+});
+</script>

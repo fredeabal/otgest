@@ -1,0 +1,490 @@
+<?php
+// =================================================================================
+// Controlador: DashboardController
+// =================================================================================
+// Controlador principal del escritorio/dashboard del sistema de gestión laboral
+
+namespace App\Controllers;
+use App\Models\WorkdayModel;
+use App\Models\UsersModel;
+use App\Models\DocumentsModel;
+use App\Models\AbsenceModel;
+use App\Models\ExpenseModel;
+
+class DashboardController extends BaseController
+{
+    // Modelos utilizados para acceder a los datos del sistema
+    protected $usersModel;      // Gestión de usuarios
+    protected $documentsModel;  // Gestión de documentos
+    protected $absenceModel;    // Gestión de ausencias
+    protected $expenseModel;    // Gestión de gastos
+    protected $workdayModel;    // Gestión de jornadas laborales
+
+    // =================================================================================
+    // Constructor - Inicialización de modelos
+    // =================================================================================
+    public function __construct()
+    {
+        // Inicializar modelos para acceso a datos
+        $this->usersModel = new UsersModel();
+        $this->documentsModel = new DocumentsModel();
+        $this->absenceModel = new AbsenceModel();
+        $this->expenseModel = new ExpenseModel();
+        $this->workdayModel = new WorkdayModel();
+    }
+
+    // =================================================================================
+    // Dashboard principal - Escritorio del usuario
+    // =================================================================================
+    public function index()
+    {
+        // Obtener datos del usuario autenticado y sus permisos
+        $userId = session()->get('user_id');
+        $userRole = session()->get('user_role');
+        $isAdmin = ($userRole == 1 || $userRole == 2); // Admin o Supervisor
+        $permissions = session()->get('user_permissions') ?? [];
+
+        // Inicializar datos para la vista
+        $data['title'] = 'Escritorio';
+        
+        // =================================================================================
+        // OPTIMIZACIÓN: Carga de estadísticas con cache
+        // =================================================================================
+        // Usar cache para evitar consultas repetitivas y mejorar rendimiento
+        $cacheKey = "dashboard_stats_{$userId}";
+        $cachedStats = cache()->get($cacheKey);
+        
+        if ($cachedStats !== null) {
+            $data['stats'] = $cachedStats;
+        } else {
+            $data['stats'] = $this->calculateAllStats($userId, $isAdmin, $permissions);
+            // Cache por 5 minutos para balance entre actualización y rendimiento
+            cache()->save($cacheKey, $data['stats'], 300);
+        }
+
+        // =================================================================================
+        // SECCIÓN 4: Datos de jornada laboral actual
+        // =================================================================================
+        // Obtener información de la jornada laboral actual para mostrar en el dashboard
+        $data['current_workday'] = $this->getCurrentWorkdayData($userId);
+
+        // =================================================================================
+        // SECCIÓN 5: Estadísticas mensuales de jornadas
+        // =================================================================================
+        // Calcular estadísticas del mes actual
+        $user = $this->usersModel->find($userId);
+        $userDailyHours = $user ? ($user['daily_hours'] ?? null) : null;
+
+        $currentMonthStart = date('Y-m-01');
+        $currentMonthEnd = date('Y-m-t');
+        $monthlyEvents = $this->workdayModel->where('user_id', $userId)
+            ->where('workday_date >=', $currentMonthStart)
+            ->where('workday_date <=', $currentMonthEnd)
+            ->orderBy('workday_date', 'ASC')
+            ->orderBy('event_time', 'ASC')
+            ->findAll();
+
+        // Agrupar eventos por fecha
+        $groupedEvents = [];
+        foreach ($monthlyEvents as $event) {
+            $groupedEvents[$event['workday_date']][] = $event;
+        }
+
+        // Calcular jornadas completadas
+        $totalHours = 0;
+        $workdaysCount = 0;
+        foreach ($groupedEvents as $date => $events) {
+            $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+            if ($workday && $workday['status'] === 'completed') {
+                $totalHours += $workday['total_hours'];
+                $workdaysCount++;
+            }
+        }
+
+        $data['stats']['my_workdays_month'] = $workdaysCount;
+        $data['stats']['my_total_hours_month'] = $totalHours * 60; // Convertir a minutos para la vista
+
+        // =================================================================================
+        // Renderizar vista del dashboard
+        // =================================================================================
+        // Mostrar el dashboard con todas las estadísticas calculadas
+        echo view('template/header', $data);
+        
+        // Cargar vista específica según el rol
+        if ($isAdmin) {
+            echo view('dashboard/admin', $data);
+        } else {
+            echo view('dashboard/dashboard', $data);
+        }
+        
+        echo view('template/footer');
+    }
+
+    // =================================================================================
+    // Método para calcular todas las estadísticas
+    // =================================================================================
+    // Calcula todas las estadísticas del dashboard en una sola operación optimizada
+    private function calculateAllStats($userId, $isAdmin, $permissions)
+    {
+        $stats = [];
+
+        try {
+            // =================================================================================
+            // SECCIÓN 1: Optimización de estadísticas de documentos
+            // =================================================================================
+            // Combinar consultas en una sola consulta agrupada
+            $documentsQuery = $this->documentsModel->builder()
+                ->select('sender_id, receiver_id, COUNT(*) as count')
+                ->where("sender_id = {$userId} OR receiver_id = {$userId}")
+                ->groupBy('sender_id, receiver_id')
+                ->get();
+
+            // Inicializar contadores
+            $stats['my_sent_documents'] = 0;
+            $stats['my_received_documents'] = 0;
+
+            if ($documentsQuery->getResult()) {
+                foreach ($documentsQuery->getResult() as $row) {
+                    if ($row->sender_id == $userId) {
+                        $stats['my_sent_documents'] += $row->count;
+                    }
+                    if ($row->receiver_id == $userId) {
+                        $stats['my_received_documents'] += $row->count;
+                    }
+                }
+            }
+
+            // =================================================================================
+            // SECCIÓN 2: Optimización de estadísticas de ausencias
+            // =================================================================================
+            // Consulta agrupada para ausencias por estado
+            $absencesQuery = $this->absenceModel->builder()
+                ->select('status, COUNT(*) as count')
+                ->where('user_id', $userId)
+                ->whereIn('status', ['approved', 'rejected'])
+                ->groupBy('status')
+                ->get();
+
+            $stats['my_absences_approved'] = 0;
+            $stats['my_absences_rejected'] = 0;
+
+            if ($absencesQuery->getResult()) {
+                foreach ($absencesQuery->getResult() as $row) {
+                    if ($row->status === 'approved') {
+                        $stats['my_absences_approved'] = $row->count;
+                    } elseif ($row->status === 'rejected') {
+                        $stats['my_absences_rejected'] = $row->count;
+                    }
+                }
+            }
+
+            // =================================================================================
+            // SECCIÓN 3: Estadísticas administrativas optimizadas
+            // =================================================================================
+            if ($isAdmin) {
+                $today = date('Y-m-d');
+                
+                // --- 1. ESTADOS DE USUARIOS (EN VIVO) ---
+                $liveEvents = $this->workdayModel->builder()
+                    ->select('event_type, user_id')
+                    ->where('workday_date', $today)
+                    ->whereIn('id', function($builder) use ($today) {
+                        return $builder->selectMax('id')->from('workday')->where('workday_date', $today)->groupBy('user_id');
+                    })
+                    ->get()->getResultArray();
+
+                $stats['users_active'] = 0;
+                $stats['users_break'] = 0;
+                foreach ($liveEvents as $event) {
+                    if ($event['event_type'] == 'in') $stats['users_active']++;
+                    if ($event['event_type'] == 'break_start') $stats['users_break']++;
+                }
+
+                // --- 2. GESTIÓN DE AUSENCIAS Y DOCUMENTOS ---
+                $stats['absences_today'] = $this->absenceModel->builder()
+                    ->where('status', 'approved')
+                    ->where('start_date <=', $today)->where('end_date >=', $today)
+                    ->countAllResults();
+
+                $stats['docs_pending_read'] = $this->documentsModel->where('read_at', null)->countAllResults();
+                $stats['absences_pending'] = $this->absenceModel->where('status', 'pending')->countAllResults();
+                $stats['expenses_pending'] = $this->expenseModel->where('status', 'pending')->countAllResults();
+
+                $stats['pending_expenses_amount'] = $this->expenseModel->builder()
+                    ->selectSum('amount')->where('status', 'pending')
+                    ->get()->getRow()->amount ?? 0;
+
+                // --- 3. GRÁFICA DUAL: RENDIMIENTO VS AUSENCIAS (ÚLTIMOS 7 DÍAS) ---
+                $labels = [];
+                $seriesAttendance = [];
+                $seriesAbsences = [];
+
+                for ($i = 6; $i >= 0; $i--) {
+                    $d = date('Y-m-d', strtotime("-$i days"));
+                    $labels[] = date('d M', strtotime($d));
+                    
+                    // Asistencia Real (Fichajes de entrada) - Forzamos a entero
+                    $seriesAttendance[] = (int) $this->workdayModel->where('workday_date', $d)->where('event_type', 'in')->countAllResults();
+                    
+                    // Ausencias Reales (Personal con ausencia aprobada activa en este día)
+                    $seriesAbsences[] = (int) $this->absenceModel
+                        ->where('status', 'approved')
+                        ->where('start_date <=', $d)
+                        ->where('end_date >=', $d)
+                        ->countAllResults();
+                }
+
+                $stats['chart_labels'] = $labels;
+                $stats['series_attendance'] = $seriesAttendance;
+                $stats['series_absences'] = $seriesAbsences;
+
+                // --- 4. LISTADO EN VIVO Y TIMELINE ---
+                $stats['live_status'] = $this->workdayModel->builder()
+                    ->select('users.name, users.avatar, workday.event_type, workday.event_time')
+                    ->join('users', 'users.id = workday.user_id')
+                    ->where('workday.workday_date', $today)
+                    ->whereIn('workday.id', function($builder) use ($today) {
+                        return $builder->selectMax('id')->from('workday')->where('workday_date', $today)->groupBy('user_id');
+                    })
+                    ->limit(5)->get()->getResultArray();
+
+                // Unificación de timeline de actividad (Últimos 5 movimientos)
+                $timeline = array_merge(
+                    $this->absenceModel->builder()->select('users.name, absences.type, absences.created_at, "absence" as category')->join('users', 'users.id = absences.user_id')->orderBy('absences.created_at', 'DESC')->limit(5)->get()->getResultArray(),
+                    $this->expenseModel->builder()->select('users.name, expenses.reason as type, expenses.created_at, "expense" as category')->join('users', 'users.id = expenses.user_id')->orderBy('expenses.created_at', 'DESC')->limit(5)->get()->getResultArray()
+                );
+                usort($timeline, function($a, $b) { return strtotime($b['created_at']) - strtotime($a['created_at']); });
+                $stats['activity_timeline'] = array_slice($timeline, 0, 5);
+            } else {
+                // Estadísticas para usuarios no admin con permisos limitados
+                if (in_array('absences.manage', $permissions)) {
+                    $stats['pending_absences'] = $this->absenceModel->where('status', 'pending')->countAllResults();
+                }
+                if (in_array('expenses.manage', $permissions)) {
+                    $stats['pending_expenses'] = $this->expenseModel->where('status', 'pending')->countAllResults();
+                }
+            }
+
+        } catch (\Exception $e) {
+            // Manejar errores de base de datos de manera elegante
+            log_message('error', 'Error calculando estadísticas del dashboard: ' . $e->getMessage());
+            
+            // Establecer valores por defecto en caso de error
+            $stats = array_merge($stats, [
+                'my_sent_documents' => 0,
+                'my_received_documents' => 0,
+                'my_absences_approved' => 0,
+                'my_absences_rejected' => 0,
+                'pending_absences' => 0,
+                'pending_expenses' => 0
+            ]);
+        }
+
+        return $stats;
+    }
+
+    // =================================================================================
+    // Método auxiliar para obtener datos de jornada laboral actual
+    // =================================================================================
+    // Obtiene la información de la jornada laboral más reciente del usuario
+    // para mostrar el estado en el dashboard
+    private function getCurrentWorkdayData($userId)
+    {
+        // Buscar la jornada laboral más reciente del usuario
+        $lastRecord = $this->workdayModel->where('user_id', $userId)
+            ->orderBy('event_time', 'DESC')
+            ->first();
+
+        // Si no hay registros, retornar null
+        if (!$lastRecord) {
+            return null;
+        }
+
+        // Si el último evento es 'out', la jornada está finalizada
+        if ($lastRecord['event_type'] === 'out') {
+            return [
+                'end_time' => $lastRecord['event_time'],
+                'autoclose' => $lastRecord['autoclose'] ?? false,
+                'start_time' => null
+            ];
+        }
+
+        // Si el último evento es 'in', 'break_start' o 'break_end', la jornada está activa
+        if (in_array($lastRecord['event_type'], ['in', 'break_start', 'break_end'])) {
+            // Buscar el evento de inicio ('in') más reciente para obtener la hora de inicio
+            $startRecord = $this->workdayModel->where('user_id', $userId)
+                ->where('event_type', 'in')
+                ->where('workday_date', $lastRecord['workday_date'])
+                ->orderBy('event_time', 'DESC')
+                ->first();
+
+            if ($startRecord) {
+                return [
+                    'start_time' => $startRecord['event_time'],
+                    'end_time' => null,
+                    'autoclose' => false
+                ];
+            }
+        }
+
+        // Para cualquier otro caso, retornar null
+        return null;
+    }
+
+    // =================================================================================
+    // Método helper para calcular datos de una jornada específica
+    // =================================================================================
+    private function calculateWorkdayData($date, $events, $userDailyHours = null)
+    {
+        // Verificar que hay eventos para procesar
+        if (empty($events)) {
+            return null;
+        }
+
+        // Inicializar variables de cálculo
+        $startTime = null;      // Hora de entrada
+        $endTime = null;        // Hora de salida
+        $totalBreakTime = 0;    // Tiempo total de pausas en segundos
+        $breakStart = null;     // Inicio de pausa actual
+        $autoclose = false;     // Indica si fue cerrada automáticamente
+
+        // Procesar eventos cronológicamente
+        foreach ($events as $event) {
+            switch ($event['event_type']) {
+                case 'in':
+                    // Evento de entrada - registrar hora de inicio
+                    $startTime = $event['event_time'];
+                    break;
+
+                case 'out':
+                    // Evento de salida - registrar hora de fin
+                    $endTime = $event['event_time'];
+                    // Verificar si fue cierre automático
+                    if ($event['autoclose']) {
+                        $autoclose = true;
+                    }
+                    break;
+
+                case 'break_start':
+                    // Inicio de pausa - guardar hora de inicio
+                    $breakStart = $event['event_time'];
+                    break;
+
+                case 'break_end':
+                    // Fin de pausa - calcular duración y sumar al total
+                    if ($breakStart) {
+                        $breakDuration = strtotime($event['event_time']) - strtotime($breakStart);
+                        $totalBreakTime += $breakDuration;
+                        $breakStart = null;  // Resetear para próxima pausa
+                    }
+                    break;
+            }
+        }
+
+        // Determinar estado de la jornada
+        if ($startTime && $endTime) {
+            $status = 'completed';  // Jornada completa (entrada y salida)
+        } elseif ($startTime) {
+            $status = 'in_progress'; // Jornada en progreso (solo entrada)
+        } else {
+            return null;  // Jornada inválida (sin entrada)
+        }
+
+        // Calcular horas trabajadas
+        $totalHours = 0;
+        if ($startTime) {
+            // Si no hay salida, usar hora actual para cálculo en tiempo real
+            $endTimeForCalculation = $endTime ?? date('Y-m-d H:i:s');
+
+            // Calcular tiempo total en segundos
+            $totalSeconds = strtotime($endTimeForCalculation) - strtotime($startTime);
+
+            // Restar tiempo de pausas
+            $totalSeconds -= $totalBreakTime;
+
+            // Convertir a horas decimales
+            $totalHours = max(0, $totalSeconds / 3600);
+        }
+
+        // Calcular horas extras
+        $overtimeHours = 0;
+        if ($userDailyHours && $totalHours > $userDailyHours) {
+            $overtimeHours = $totalHours - $userDailyHours;
+        }
+
+        // Retornar datos calculados de la jornada
+        return [
+            'date' => $date,
+            'start_time' => $startTime ? date('H:i', strtotime($startTime)) : null,
+            'start_date' => $startTime ? date('d/m/Y', strtotime($startTime)) : null,
+            'end_time' => $endTime ? date('H:i', strtotime($endTime)) : null,
+            'end_date' => $endTime ? date('d/m/Y', strtotime($endTime)) : null,
+            'total_hours' => $totalHours,
+            'overtime_hours' => $overtimeHours,
+            'status' => $status,
+            'autoclose' => $autoclose,
+            'break_time' => $totalBreakTime / 3600  // Tiempo de pausas en horas
+        ];
+    }
+
+    // =================================================================================
+    // Endpoint para obtener eventos del calendario (AJAX)
+    // =================================================================================
+    public function getEvents()
+    {
+        $userId = session()->get('user_id');
+        $events = [];
+
+        // 1. Obtener Días Trabajados (Workdays)
+        $workdays = $this->workdayModel->where('user_id', $userId)
+            ->select('workday_date')
+            ->distinct()
+            ->findAll();
+
+        foreach ($workdays as $wd) {
+            $events[] = [
+                'id' => 'work-' . $wd['workday_date'],
+                'title' => 'Jornada',
+                'start' => $wd['workday_date'],
+                'allDay' => true,
+                'color' => '#5d87ff', // Azul Modernize
+                'url' => base_url('workdays/view/' . $wd['workday_date']),
+                'extendedProps' => ['type' => 'workday']
+            ];
+        }
+
+        // 2. Obtener Ausencias Aprobadas (Absences)
+        $absences = $this->absenceModel->where('user_id', $userId)
+            ->where('status', 'approved')
+            ->findAll();
+
+        $absTypes = $this->absenceModel->getAbsenceTypes();
+
+        foreach ($absences as $abs) {
+            // Determinar color según tipo
+            $color = '#ffae1f'; // Warning por defecto (naranja)
+            if (in_array($abs['type'], ['baja', 'accidente', 'enfermedad'])) {
+                $color = '#fa896b'; // Danger (rojo)
+            } elseif ($abs['type'] === 'vacaciones') {
+                $color = '#13deb9'; // Success (verde)
+            }
+
+            // Para FullCalendar, el end date de un evento de todo el día es exclusivo (no incluido)
+            // Sumamos un día a end_date para que se muestre correctamente el rango completo
+            $endDate = date('Y-m-d', strtotime($abs['end_date'] . ' +1 day'));
+
+            $events[] = [
+                'id' => 'abs-' . $abs['id'],
+                'title' => $absTypes[$abs['type']] ?? 'Ausencia',
+                'start' => $abs['start_date'],
+                'end' => $endDate,
+                'allDay' => true,
+                'color' => $color,
+                'url' => base_url('absences/view/' . $abs['id']),
+                'extendedProps' => ['type' => 'absence']
+            ];
+        }
+
+        return $this->response->setJSON($events);
+    }
+}
