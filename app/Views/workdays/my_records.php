@@ -97,9 +97,9 @@
                                 <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2"
                                     style="min-width: 70px; display: inline-block;">
                                     <?php
-                                    $totalMinutes = $workday['total_hours'] * 60;
+                                    $totalMinutes = round($workday['total_hours'] * 60);
                                     $hours = floor($totalMinutes / 60);
-                                    $minutes = floor($totalMinutes % 60);
+                                    $minutes = $totalMinutes % 60;
                                     echo $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
                                     ?> h
                                 </span>
@@ -108,10 +108,9 @@
                                 <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2"
                                     style="min-width: 70px; display: inline-block;">
                                     <?php
-                                    $overtimeHours = $workday['overtime_hours'] ?? 0;
-                                    $overtimeMinutes = $overtimeHours * 60;
+                                    $overtimeMinutes = round(($workday['overtime_hours'] ?? 0) * 60);
                                     $hours = floor($overtimeMinutes / 60);
-                                    $minutes = floor($overtimeMinutes % 60);
+                                    $minutes = $overtimeMinutes % 60;
                                     echo $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
                                     ?> h
                                 </span>
@@ -153,6 +152,32 @@
                             </td>
                         </tr>
                         <?php endforeach; ?>
+                        <?php
+                        // Fila de totales acumulados
+                        $totalWorkedMins = 0;
+                        $totalOvertimeMins = 0;
+                        foreach ($workdays as $w) {
+                            $totalWorkedMins   += round($w['total_hours'] * 60);
+                            $totalOvertimeMins += round(($w['overtime_hours'] ?? 0) * 60);
+                        }
+                        ?>
+                        <?php if (!empty($workdays)): ?>
+                        <tr class="table-active fw-bold border-top border-2">
+                            <td colspan="3" class="text-end d-none d-md-table-cell text-muted small">TOTAL DEL PERÍODO</td>
+                            <td class="text-start d-md-none text-muted small">TOTAL</td>
+                            <td class="text-center">
+                                <span class="badge bg-info fw-semibold fs-2" style="min-width: 70px; display: inline-block;">
+                                    <?= floor($totalWorkedMins / 60) . ':' . str_pad($totalWorkedMins % 60, 2, '0', STR_PAD_LEFT) ?> h
+                                </span>
+                            </td>
+                            <td class="text-center d-none d-md-table-cell">
+                                <span class="badge bg-warning fw-semibold fs-2" style="min-width: 70px; display: inline-block;">
+                                    <?= floor($totalOvertimeMins / 60) . ':' . str_pad($totalOvertimeMins % 60, 2, '0', STR_PAD_LEFT) ?> h
+                                </span>
+                            </td>
+                            <td colspan="2" class="d-none d-md-table-cell"></td>
+                        </tr>
+                        <?php endif; ?>
                         <?php endif; ?>
                     </tbody>
                 </table>

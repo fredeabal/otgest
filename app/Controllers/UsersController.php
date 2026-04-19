@@ -89,6 +89,10 @@ class UsersController extends BaseController
             'max_daily_hours' => [
                 'label' => 'máximo horas diarias',
                 'rules' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[24]'
+            ],
+            'vacation_days' => [
+                'label' => 'días de vacaciones',
+                'rules' => 'permit_empty|integer|greater_than_equal_to[0]'
             ]
         ];
 
@@ -113,6 +117,7 @@ class UsersController extends BaseController
             'is_active' => $this->request->getPost('is_active'),
             'daily_hours' => $this->request->getPost('daily_hours'),
             'max_daily_hours' => $this->request->getPost('max_daily_hours'),
+            'vacation_days' => $this->request->getPost('vacation_days'),
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
             'permissions' => $permissions ? json_encode($permissions) : null, // Guardar como JSON
             'updated_by' => session()->get('user_id'),
@@ -210,6 +215,10 @@ class UsersController extends BaseController
             'max_daily_hours' => [
                 'label' => 'máximo horas diarias',
                 'rules' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[24]'
+            ],
+            'vacation_days' => [
+                'label' => 'días de vacaciones',
+                'rules' => 'permit_empty|integer|greater_than_equal_to[0]'
             ]
         ];
         // Solo validar contraseña si se intenta cambiar
@@ -238,6 +247,7 @@ class UsersController extends BaseController
             'birthdate' => $this->request->getPost('birthdate'),
             'daily_hours' => $this->request->getPost('daily_hours'),
             'max_daily_hours' => $this->request->getPost('max_daily_hours'),
+            'vacation_days' => $this->request->getPost('vacation_days'),
             'email' => $this->request->getPost('email'),
             'updated_by' => session()->get('user_id'),
         ];

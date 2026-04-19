@@ -106,9 +106,9 @@
                                 <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2"
                                       style="min-width: 70px; display: inline-block;">
                                     <?php
-                                    $totalMinutes = $workday['total_hours'] * 60;
+                                    $totalMinutes = round($workday['total_hours'] * 60);
                                     $hours = floor($totalMinutes / 60);
-                                    $minutes = floor($totalMinutes % 60);
+                                    $minutes = $totalMinutes % 60;
                                     echo $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
                                     ?> h
                                 </span>
@@ -117,9 +117,9 @@
                                 <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2"
                                       style="min-width: 70px; display: inline-block;">
                                     <?php
-                                    $overtimeMinutes = $workday['overtime_hours'] * 60;
+                                    $overtimeMinutes = round(($workday['overtime_hours'] ?? 0) * 60);
                                     $hours = floor($overtimeMinutes / 60);
-                                    $minutes = floor($overtimeMinutes % 60);
+                                    $minutes = $overtimeMinutes % 60;
                                     echo $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
                                     ?> h
                                 </span>

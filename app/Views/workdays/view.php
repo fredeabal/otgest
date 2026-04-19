@@ -12,7 +12,7 @@
                 <!-- Resumen de la jornada -->
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
@@ -24,25 +24,45 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
                                         <iconify-icon icon="solar:clock-circle-bold-duotone" class="text-primary" style="font-size: 2rem;"></iconify-icon>
                                     </div>
                                     <h6 class="text-muted mb-1">Horas Trabajadas</h6>
-                                    <h4 class="text-primary mb-0"><?php echo floor($worked_hours) . ':' . str_pad(round(($worked_hours - floor($worked_hours)) * 60), 2, '0', STR_PAD_LEFT); ?> h</h4>
+                                    <h4 class="text-primary mb-0"><?php 
+                                    $workedMins = round($worked_hours * 60);
+                                    echo floor($workedMins / 60) . ':' . str_pad($workedMins % 60, 2, '0', STR_PAD_LEFT); 
+                                    ?> h</h4>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="card border h-100">
+                                <div class="card-body text-center p-3">
+                                    <div class="mb-2">
+                                        <iconify-icon icon="solar:pause-circle-bold-duotone" class="text-warning" style="font-size: 2rem;"></iconify-icon>
+                                    </div>
+                                    <h6 class="text-muted mb-1">Tiempo de Pausas</h6>
+                                    <h4 class="text-warning mb-0"><?php 
+                                    $breakMins = round(($break_hours ?? 0) * 60);
+                                    echo floor($breakMins / 60) . ':' . str_pad($breakMins % 60, 2, '0', STR_PAD_LEFT); 
+                                    ?> h</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
                                         <iconify-icon icon="solar:add-circle-bold-duotone" class="text-primary" style="font-size: 2rem;"></iconify-icon>
                                     </div>
                                     <h6 class="text-muted mb-1">Horas Extras</h6>
-                                    <h4 class="text-primary mb-0"><?php echo floor($overtime_hours) . ':' . str_pad(round(($overtime_hours - floor($overtime_hours)) * 60), 2, '0', STR_PAD_LEFT); ?> h
+                                    <h4 class="text-primary mb-0"><?php 
+                                    $overtimeMins = round($overtime_hours * 60);
+                                    echo floor($overtimeMins / 60) . ':' . str_pad($overtimeMins % 60, 2, '0', STR_PAD_LEFT); 
+                                    ?> h
                                     </h4>
                                 </div>
                             </div>

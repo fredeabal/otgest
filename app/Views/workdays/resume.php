@@ -11,19 +11,19 @@ Vista: Reanudar Jornada Laboral
                 </div>
                 <div class="card-body text-center">
                     <div class="form-group">
-                        <iconify-icon icon="solar:pause-circle-bold-duotone" class="mb-3 text-primary" style="font-size: 3rem;"></iconify-icon><br>
+                        <iconify-icon icon="solar:alarm-pause-bold-duotone" class="mb-3 text-primary" style="font-size: 4rem;"></iconify-icon><br>
                         <small>Tu jornada está en pausa. Selecciona una opción para continuar.</small>
                         <div class="row mt-4">
                             <!-- Formulario para reanudar jornada -->
                             <div class="col-md-6">
-                                <form action="<?= base_url('workdays/resume') ?>" method="post" id="resume-form" class="mb-3">
+                                <form action="<?= base_url('workdays/resume') ?>" method="post" id="resume-form" class="mb-4">
                                     <?= csrf_field() ?>
 
                                     <!-- Campos ocultos para GPS -->
                                     <input type="hidden" name="latitud" id="latitud-resume">
                                     <input type="hidden" name="longitud" id="longitud-resume">
 
-                                    <button type="submit" class="btn d-block w-100 fw-medium btn-success" id="resume-workday-btn">
+                                    <button type="submit" class="btn d-block w-100 fw-medium btn-primary" id="resume-workday-btn">
                                         <iconify-icon icon="solar:play-circle-bold-duotone"></iconify-icon>
                                         Reanudar Jornada
                                     </button>

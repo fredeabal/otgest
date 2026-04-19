@@ -527,10 +527,10 @@ class WorkdayController extends Controller
             return redirect()->back()->with('errors', ['No tienes permisos para ver jornadas de otros usuarios.']);
         }
 
-        // Obtener eventos de la jornada
+        // Obtener eventos de la jornada ORDENADOS CRONOLÓGICAMENTE (ASC) para calcular pausas correctamente
         $events = $this->workdayModel->where('user_id', $userId)
             ->where('workday_date', $date)
-            ->orderBy('event_time', 'DESC')
+            ->orderBy('event_time', 'ASC')
             ->findAll();
 
         if (empty($events)) {
@@ -548,13 +548,16 @@ class WorkdayController extends Controller
         $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
 
         // Preparar datos para la vista
+        // Invertir el orden para mostrar en la vista (más reciente primero)
+        $eventsForDisplay = array_reverse($events);
         $data = [
-            'title' => 'Detalles de Jornada',
-            'workday_date' => $date,
-            'events' => $events,
-            'worked_hours' => $workday['total_hours'] ?? 0,
+            'title'          => 'Detalles de Jornada',
+            'workday_date'   => $date,
+            'events'         => $eventsForDisplay,
+            'worked_hours'   => $workday['total_hours'] ?? 0,
             'overtime_hours' => $workday['overtime_hours'] ?? 0,
-            'is_admin_view' => $isAdminView
+            'break_hours'    => $workday['break_time'] ?? 0,
+            'is_admin_view'  => $isAdminView
         ];
 
         // Renderizar vista
@@ -728,14 +731,16 @@ class WorkdayController extends Controller
         $user = model('App\Models\UsersModel')->find($userId);
 
         // Calcular totales
-        $totalHours = 0;
-        $totalOvertime = 0;
-        $completedCount = 0;
-        $inProgressCount = 0;
+        $totalHours       = 0;
+        $totalOvertime    = 0;
+        $totalBreak       = 0;
+        $completedCount   = 0;
+        $inProgressCount  = 0;
 
         foreach ($workdays as $workday) {
-            $totalHours += $workday['total_hours'];
+            $totalHours   += $workday['total_hours'];
             $totalOvertime += $workday['overtime_hours'] ?? 0;
+            $totalBreak    += $workday['break_time'] ?? 0;
             if ($workday['status'] === 'completed') {
                 $completedCount++;
             } else {
@@ -790,27 +795,34 @@ class WorkdayController extends Controller
                     <th>Hora Inicio</th>
                     <th>Hora Fin</th>
                     <th>Horas Totales</th>
+                    <th>T. Pausa</th>
                     <th>Horas Extras</th>
                     <th>Jornada</th>
                     <th>Estado</th>
-                    <th>Cierre Automático</th>
+                    <th>Cierre Auto.</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">';
 
         foreach ($workdays as $workday) {
             $startDisplay = $workday['start_time'] ? esc($workday['start_time']) . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['start_date']) . '</small>' : '-';
-            $endDisplay = $workday['end_time'] ? esc($workday['end_time']) . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['end_date']) . '</small>' : '-';
+            $endDisplay   = $workday['end_time']   ? esc($workday['end_time'])   . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['end_date'])   . '</small>' : '-';
             // Convertir horas decimales a formato horas:minutos
-            $totalHoursFormatted = floor($workday['total_hours']) . ':' . str_pad(round(($workday['total_hours'] - floor($workday['total_hours'])) * 60), 2, '0', STR_PAD_LEFT);
-            $overtimeHoursFormatted = floor($workday['overtime_hours'] ?? 0) . ':' . str_pad(round((($workday['overtime_hours'] ?? 0) - floor($workday['overtime_hours'] ?? 0)) * 60), 2, '0', STR_PAD_LEFT);
-            // Obtener daily_hours de la jornada
-            $dailyHoursFormatted = isset($workday['daily_hours']) ? floor($workday['daily_hours']) . ':' . str_pad(round(($workday['daily_hours'] - floor($workday['daily_hours'])) * 60), 2, '0', STR_PAD_LEFT) : '-';
+            $totalMinutes   = round($workday['total_hours'] * 60);
+            $totalHoursFormatted = floor($totalMinutes / 60) . ':' . str_pad($totalMinutes % 60, 2, '0', STR_PAD_LEFT);
+            $breakMinutes   = round(($workday['break_time'] ?? 0) * 60);
+            $breakFormatted = floor($breakMinutes / 60) . ':' . str_pad($breakMinutes % 60, 2, '0', STR_PAD_LEFT);
+            $overtimeMinutes = round(($workday['overtime_hours'] ?? 0) * 60);
+            $overtimeHoursFormatted = floor($overtimeMinutes / 60) . ':' . str_pad($overtimeMinutes % 60, 2, '0', STR_PAD_LEFT);
+            // Obtener daily_hours de la jornada (jornada pactada)
+            $dailyMinutes = isset($workday['daily_hours']) ? round($workday['daily_hours'] * 60) : 0;
+            $dailyHoursFormatted = isset($workday['daily_hours']) ? floor($dailyMinutes / 60) . ':' . str_pad($dailyMinutes % 60, 2, '0', STR_PAD_LEFT) : '-';
             $html .= '<tr>
                 <td style="text-align: center;">' . date('d/m/Y', strtotime($workday['date'])) . '</td>
                 <td style="text-align: center;">' . $startDisplay . '</td>
                 <td style="text-align: center;">' . $endDisplay . '</td>
                 <td style="text-align: center;">' . $totalHoursFormatted . '</td>
+                <td style="text-align: center;">' . $breakFormatted . '</td>
                 <td style="text-align: center;">' . $overtimeHoursFormatted . '</td>
                 <td style="text-align: center;">' . $dailyHoursFormatted . '</td>
                 <td style="text-align: center;">' . ($workday['status'] === 'completed' ? 'Completada' : 'En Progreso') . '</td>
@@ -819,12 +831,17 @@ class WorkdayController extends Controller
         }
 
         // Fila de totales
-        $totalHoursFormatted = floor($totalHours) . ':' . str_pad(round(($totalHours - floor($totalHours)) * 60), 2, '0', STR_PAD_LEFT);
-        $totalOvertimeFormatted = floor($totalOvertime) . ':' . str_pad(round(($totalOvertime - floor($totalOvertime)) * 60), 2, '0', STR_PAD_LEFT);
+        $totalMinutesPdf     = round($totalHours * 60);
+        $totalHoursFormatted = floor($totalMinutesPdf / 60) . ':' . str_pad($totalMinutesPdf % 60, 2, '0', STR_PAD_LEFT);
+        $totalBreakMinsPdf   = round($totalBreak * 60);
+        $totalBreakFormatted = floor($totalBreakMinsPdf / 60) . ':' . str_pad($totalBreakMinsPdf % 60, 2, '0', STR_PAD_LEFT);
+        $totalOvertimeMinsPdf   = round($totalOvertime * 60);
+        $totalOvertimeFormatted = floor($totalOvertimeMinsPdf / 60) . ':' . str_pad($totalOvertimeMinsPdf % 60, 2, '0', STR_PAD_LEFT);
         $html .= '
             <tr class="total-row">
                 <td colspan="3" style="text-align: center;"><strong>TOTALES</strong></td>
                 <td style="text-align: center;"><strong>' . $totalHoursFormatted . '</strong></td>
+                <td style="text-align: center;"><strong>' . $totalBreakFormatted . '</strong></td>
                 <td style="text-align: center;"><strong>' . $totalOvertimeFormatted . '</strong></td>
                 <td style="text-align: center;"><strong>-</strong></td>
                 <td colspan="2" style="text-align: center;"><strong></strong></td>
@@ -847,14 +864,16 @@ class WorkdayController extends Controller
     private function generateManagePdfHtml($workdays, $date_from, $date_to, $status, $user_id = null)
     {
         // Calcular totales
-        $totalHours = 0;
-        $totalOvertime = 0;
-        $completedCount = 0;
+        $totalHours      = 0;
+        $totalOvertime   = 0;
+        $totalBreak      = 0;
+        $completedCount  = 0;
         $inProgressCount = 0;
 
         foreach ($workdays as $workday) {
-            $totalHours += $workday['total_hours'];
+            $totalHours    += $workday['total_hours'];
             $totalOvertime += $workday['overtime_hours'] ?? 0;
+            $totalBreak    += $workday['break_time'] ?? 0;
             if ($workday['status'] === 'completed') {
                 $completedCount++;
             } else {
@@ -925,22 +944,28 @@ class WorkdayController extends Controller
                     <th>Hora Inicio</th>
                     <th>Hora Fin</th>
                     <th>Horas Totales</th>
+                    <th>T. Pausa</th>
                     <th>Horas Extras</th>
                     <th>Jornada</th>
                     <th>Estado</th>
-                    <th>Cierre Automático</th>
+                    <th>Cierre Auto.</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">';
 
         foreach ($workdays as $workday) {
             $startDisplay = $workday['start_time'] ? esc($workday['start_time']) . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['start_date']) . '</small>' : '-';
-            $endDisplay = $workday['end_time'] ? esc($workday['end_time']) . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['end_date']) . '</small>' : '-';
+            $endDisplay   = $workday['end_time']   ? esc($workday['end_time'])   . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['end_date'])   . '</small>' : '-';
             // Convertir horas decimales a formato horas:minutos
-            $totalHoursFormatted = floor($workday['total_hours']) . ':' . str_pad(round(($workday['total_hours'] - floor($workday['total_hours'])) * 60), 2, '0', STR_PAD_LEFT);
-            $overtimeHoursFormatted = floor($workday['overtime_hours'] ?? 0) . ':' . str_pad(round((($workday['overtime_hours'] ?? 0) - floor($workday['overtime_hours'] ?? 0)) * 60), 2, '0', STR_PAD_LEFT);
-            // Obtener daily_hours de la jornada
-            $dailyHoursFormatted = isset($workday['daily_hours']) ? floor($workday['daily_hours']) . ':' . str_pad(round(($workday['daily_hours'] - floor($workday['daily_hours'])) * 60), 2, '0', STR_PAD_LEFT) : '-';
+            $totalMinutes        = round($workday['total_hours'] * 60);
+            $totalHoursFormatted = floor($totalMinutes / 60) . ':' . str_pad($totalMinutes % 60, 2, '0', STR_PAD_LEFT);
+            $breakMinutes        = round(($workday['break_time'] ?? 0) * 60);
+            $breakFormatted      = floor($breakMinutes / 60) . ':' . str_pad($breakMinutes % 60, 2, '0', STR_PAD_LEFT);
+            $overtimeMinutes        = round(($workday['overtime_hours'] ?? 0) * 60);
+            $overtimeHoursFormatted = floor($overtimeMinutes / 60) . ':' . str_pad($overtimeMinutes % 60, 2, '0', STR_PAD_LEFT);
+            // Obtener daily_hours de la jornada (jornada pactada)
+            $dailyMinutes        = isset($workday['daily_hours']) ? round($workday['daily_hours'] * 60) : 0;
+            $dailyHoursFormatted = isset($workday['daily_hours']) ? floor($dailyMinutes / 60) . ':' . str_pad($dailyMinutes % 60, 2, '0', STR_PAD_LEFT) : '-';
             $html .= '<tr>';
             if ($showUserColumn) {
                 $html .= '<td style="text-align: center;">' . esc($workday['user_name']) . '<br><small style="font-size: 8px; color: #666;">' . esc($workday['user_identification']) . '</small></td>';
@@ -950,6 +975,7 @@ class WorkdayController extends Controller
                 <td style="text-align: center;">' . $startDisplay . '</td>
                 <td style="text-align: center;">' . $endDisplay . '</td>
                 <td style="text-align: center;">' . $totalHoursFormatted . '</td>
+                <td style="text-align: center;">' . $breakFormatted . '</td>
                 <td style="text-align: center;">' . $overtimeHoursFormatted . '</td>
                 <td style="text-align: center;">' . $dailyHoursFormatted . '</td>
                 <td style="text-align: center;">' . ($workday['status'] === 'completed' ? 'Completada' : 'En Progreso') . '</td>
@@ -958,13 +984,18 @@ class WorkdayController extends Controller
         }
 
         // Totales - colspan condicional
-        $totalColspan = $showUserColumn ? 4 : 3;
-        $totalHoursFormatted = floor($totalHours) . ':' . str_pad(round(($totalHours - floor($totalHours)) * 60), 2, '0', STR_PAD_LEFT);
-        $totalOvertimeFormatted = floor($totalOvertime) . ':' . str_pad(round(($totalOvertime - floor($totalOvertime)) * 60), 2, '0', STR_PAD_LEFT);
+        $totalColspan           = $showUserColumn ? 4 : 3;
+        $totalMinutesPdf        = round($totalHours * 60);
+        $totalHoursFormatted    = floor($totalMinutesPdf / 60) . ':' . str_pad($totalMinutesPdf % 60, 2, '0', STR_PAD_LEFT);
+        $totalBreakMinsPdf      = round($totalBreak * 60);
+        $totalBreakFormatted    = floor($totalBreakMinsPdf / 60) . ':' . str_pad($totalBreakMinsPdf % 60, 2, '0', STR_PAD_LEFT);
+        $totalOvertimeMinsPdf   = round($totalOvertime * 60);
+        $totalOvertimeFormatted = floor($totalOvertimeMinsPdf / 60) . ':' . str_pad($totalOvertimeMinsPdf % 60, 2, '0', STR_PAD_LEFT);
         $html .= '
             <tr class="total-row">
                 <td colspan="' . $totalColspan . '" style="text-align: center;"><strong>TOTALES</strong></td>
                 <td style="text-align: center;"><strong>' . $totalHoursFormatted . '</strong></td>
+                <td style="text-align: center;"><strong>' . $totalBreakFormatted . '</strong></td>
                 <td style="text-align: center;"><strong>' . $totalOvertimeFormatted . '</strong></td>
                 <td style="text-align: center;"><strong>-</strong></td>
                 <td colspan="2" style="text-align: center;"><strong></strong></td>
@@ -1053,6 +1084,12 @@ class WorkdayController extends Controller
                     }
                     break;
             }
+        }
+
+        // Si hay una pausa activa sin break_end (jornada aún en pausa), contabilizar ese tiempo también
+        if ($breakStart) {
+            $now = date('Y-m-d H:i:s');
+            $totalBreakTime += strtotime($now) - strtotime($breakStart);
         }
 
         // Determinar estado de la jornada

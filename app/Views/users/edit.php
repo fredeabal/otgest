@@ -72,7 +72,7 @@
                         // Fila: Jornada laboral y Horas máximas
                         // ================================================================================= -->
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="daily_hours" class="form-label">Jornada laboral</label>
                                 <select class="form-select" id="daily_hours" name="daily_hours">
                                     <option value="">Selecciona horas</option>
@@ -83,8 +83,8 @@
                                     <?php endfor; ?>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label for="max_daily_hours" class="form-label">Horas máximas permitidas</label>
+                            <div class="col-md-4">
+                                <label for="max_daily_hours" class="form-label">Horas máximas</label>
                                 <select class="form-select" id="max_daily_hours" name="max_daily_hours">
                                     <option value="">Selecciona horas</option>
                                     <?php for ($i = 1; $i <= 24; $i++): ?>
@@ -93,6 +93,10 @@
                                         <?= $i ?> horas</option>
                                     <?php endfor; ?>
                                 </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="vacation_days" class="form-label">Vacaciones anuales</label>
+                                <input type="number" class="form-control" id="vacation_days" name="vacation_days" min="0" placeholder="Ej. 22" value="<?= old('vacation_days', esc($user['vacation_days'] ?? '22')) ?>">
                             </div>
                         </div>
                         <!-- =================================================================================

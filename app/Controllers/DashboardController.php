@@ -233,12 +233,30 @@ class DashboardController extends BaseController
                     })
                     ->limit(5)->get()->getResultArray();
 
-                // Unificación de timeline de actividad (Últimos 5 movimientos)
-                $timeline = array_merge(
-                    $this->absenceModel->builder()->select('users.name, absences.type, absences.created_at, "absence" as category')->join('users', 'users.id = absences.user_id')->orderBy('absences.created_at', 'DESC')->limit(5)->get()->getResultArray(),
-                    $this->expenseModel->builder()->select('users.name, expenses.reason as type, expenses.created_at, "expense" as category')->join('users', 'users.id = expenses.user_id')->orderBy('expenses.created_at', 'DESC')->limit(5)->get()->getResultArray()
-                );
-                usort($timeline, function($a, $b) { return strtotime($b['created_at']) - strtotime($a['created_at']); });
+                // 1. Obtener últimas Ausencias
+                $absences = $this->absenceModel->select('users.name, absences.type, absences.created_at')
+                    ->join('users', 'users.id = absences.user_id')
+                    ->orderBy('absences.created_at', 'DESC')->limit(10)->findAll();
+                foreach($absences as &$a) $a['category'] = 'absence';
+
+                // 2. Obtener últimos Gastos
+                $expenses = $this->expenseModel->select('users.name, expenses.reason as type, expenses.created_at')
+                    ->join('users', 'users.id = expenses.user_id')
+                    ->orderBy('expenses.created_at', 'DESC')->limit(10)->findAll();
+                foreach($expenses as &$e) $e['category'] = 'expense';
+
+                // 3. Obtener últimos Documentos
+                $documents = $this->documentsModel->select('users.name, documents.title as type, documents.created_at')
+                    ->join('users', 'users.id = documents.sender_id')
+                    ->orderBy('documents.created_at', 'DESC')->limit(10)->findAll();
+                foreach($documents as &$d) $d['category'] = 'document';
+
+                // Unificación y ordenamiento cronológico
+                $timeline = array_merge($absences, $expenses, $documents);
+                usort($timeline, function($a, $b) { 
+                    return strtotime($b['created_at'] ?? '0') - strtotime($a['created_at'] ?? '0'); 
+                });
+                
                 $stats['activity_timeline'] = array_slice($timeline, 0, 5);
             } else {
                 // Estadísticas para usuarios no admin con permisos limitados

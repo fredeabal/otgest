@@ -87,6 +87,40 @@ class AbsenceController extends BaseController
             return redirect()->back()->withInput()->with('errors', ['No se pueden solicitar ausencias para fechas pasadas.']);
         }
 
+        // Verificación del límite de días de vacaciones
+        if ($this->request->getPost('type') == 'vacaciones') {
+            $user = $this->usersModel->find($userId);
+            $vacationDaysval = $user['vacation_days'] ?? null;
+            $vacationDaysAllowed = ($vacationDaysval !== null && $vacationDaysval !== '') ? (int)$vacationDaysval : 22;
+            
+            if ($vacationDaysAllowed > 0) {
+                // Calcular días para esta nueva solicitud
+                $requestedDays = $this->calculateWorkingDays($startDate, $endDate, 'vacaciones');
+                
+                // Total de días disfrutados este año
+                $currentYear = date('Y', strtotime($startDate));
+                $absencesThisYear = $this->absenceModel
+                    ->where('user_id', $userId)
+                    ->where('type', 'vacaciones')
+                    ->where('status !=', 'rejected')
+                    ->where('status !=', 'cancelled')
+                    ->findAll();
+                
+                $totalDaysTaken = 0;
+                foreach ($absencesThisYear as $abs) {
+                    if (date('Y', strtotime($abs['start_date'])) == $currentYear) {
+                        $totalDaysTaken += $this->calculateWorkingDays($abs['start_date'], $abs['end_date'], 'vacaciones');
+                    }
+                }
+                
+                if (($totalDaysTaken + $requestedDays) > $vacationDaysAllowed) {
+                    return redirect()->back()->withInput()->with('errors', ["No puedes exceder tu límite de {$vacationDaysAllowed} días de vacaciones anuales. Actualmente has solicitado/tomado {$totalDaysTaken} días."]);
+                }
+            } else if ($vacationDaysAllowed === '0' || $vacationDaysAllowed === 0) {
+                return redirect()->back()->withInput()->with('errors', ["No tienes días de vacaciones asignados."]);
+            }
+        }
+
         // Verificar superposiciones con otras solicitudes
         if ($this->absenceModel->checkOverlap($userId, $startDate, $endDate)) {
             return redirect()->back()->withInput()->with('errors', ['Ya tienes una solicitud de ausencia que se superpone con estas fechas.']);
@@ -236,10 +270,7 @@ class AbsenceController extends BaseController
         // Calcular días totales de ausencia
         $totalDays = 0;
         foreach ($absences as $absence) {
-            $start = new \DateTime($absence['start_date']);
-            $end = new \DateTime($absence['end_date']);
-            $interval = $start->diff($end);
-            $totalDays += $interval->days + 1; // +1 para incluir el día final
+            $totalDays += $this->calculateWorkingDays($absence['start_date'], $absence['end_date'], $absence['type']);
         }
 
         // Estilos CSS embebidos para el PDF
@@ -536,6 +567,41 @@ class AbsenceController extends BaseController
             return redirect()->back()->withInput()->with('errors', ['No se pueden solicitar ausencias para fechas pasadas.']);
         }
 
+        // Verificación del límite de días de vacaciones
+        if ($this->request->getPost('type') == 'vacaciones') {
+            $user = $this->usersModel->find(session()->get('user_id'));
+            $vacationDaysval = $user['vacation_days'] ?? null;
+            $vacationDaysAllowed = ($vacationDaysval !== null && $vacationDaysval !== '') ? (int)$vacationDaysval : 22;
+            
+            if ($vacationDaysAllowed > 0) {
+                // Calcular días para esta nueva solicitud
+                $requestedDays = $this->calculateWorkingDays($startDate, $endDate, 'vacaciones');
+                
+                // Total de días disfrutados este año
+                $currentYear = date('Y', strtotime($startDate));
+                $absencesThisYear = $this->absenceModel
+                    ->where('user_id', session()->get('user_id'))
+                    ->where('id !=', $id)
+                    ->where('type', 'vacaciones')
+                    ->where('status !=', 'rejected')
+                    ->where('status !=', 'cancelled')
+                    ->findAll();
+                
+                $totalDaysTaken = 0;
+                foreach ($absencesThisYear as $abs) {
+                    if (date('Y', strtotime($abs['start_date'])) == $currentYear) {
+                        $totalDaysTaken += $this->calculateWorkingDays($abs['start_date'], $abs['end_date'], 'vacaciones');
+                    }
+                }
+                
+                if (($totalDaysTaken + $requestedDays) > $vacationDaysAllowed) {
+                    return redirect()->back()->withInput()->with('errors', ["No puedes exceder tu límite de {$vacationDaysAllowed} días de vacaciones anuales. Actualmente has solicitado/tomado {$totalDaysTaken} días."]);
+                }
+            } else if ($vacationDaysAllowed === '0' || $vacationDaysAllowed === 0) {
+                return redirect()->back()->withInput()->with('errors', ["No tienes días de vacaciones asignados."]);
+            }
+        }
+
         // Verificar superposiciones con otras solicitudes (excluyendo la actual)
         if ($this->absenceModel->checkOverlap(session()->get('user_id'), $startDate, $endDate, $id)) {
             return redirect()->back()->withInput()->with('errors', ['Ya tienes una solicitud de ausencia que se superpone con estas fechas.']);
@@ -746,10 +812,7 @@ class AbsenceController extends BaseController
         // Recorrer ausencias
         foreach ($absences as $absence) {
             // Calcular días
-            $startDate = new \DateTime($absence['start_date']);
-            $endDate = new \DateTime($absence['end_date']);
-            $interval = $startDate->diff($endDate);
-            $days = $interval->days + 1; // Incluir el día final
+            $days = $this->calculateWorkingDays($absence['start_date'], $absence['end_date'], $absence['type']);
             
             $html .= '<tr>
                 <td>' . esc($absence['user_name']) . '</td>
@@ -871,10 +934,7 @@ class AbsenceController extends BaseController
         $statusLabels = $this->absenceModel->getStatusLabels();
 
         // Calcular días de ausencia
-        $startDate = new \DateTime($absence['start_date']);
-        $endDate = new \DateTime($absence['end_date']);
-        $interval = $startDate->diff($endDate);
-        $days = $interval->days + 1; // Incluir el día final
+        $days = $this->calculateWorkingDays($absence['start_date'], $absence['end_date'], $absence['type']);
 
         // Estilos CSS embebidos para el PDF
         $html = '<style>
@@ -1043,5 +1103,32 @@ class AbsenceController extends BaseController
 
         // Descargar archivo
         return $this->response->download($filePath, null)->setFileName('ausencia_' . $absenceId . '_' . basename($absence['attachment']));
+    }
+
+    // =================================================================================
+    // Calcular días descontando fines de semana (solo laborales para vacaciones)
+    // =================================================================================
+    private function calculateWorkingDays($startDate, $endDate, $type = 'vacaciones')
+    {
+        $start = new \DateTime($startDate);
+        $end = new \DateTime($endDate);
+        
+        // Si no es vacaciones, contamos días naturales
+        if ($type !== 'vacaciones') {
+            return $start->diff($end)->days + 1;
+        }
+
+        $days = 0;
+        $current = clone $start;
+
+        while ($current <= $end) {
+            // N = 1 (Lunes) ... 7 (Domingo)
+            if ($current->format('N') < 6) {
+                $days++;
+            }
+            $current->modify('+1 day');
+        }
+        
+        return $days;
     }
 }
