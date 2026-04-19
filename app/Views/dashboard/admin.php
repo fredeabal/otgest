@@ -5,104 +5,110 @@
  */
 ?>
 <div class="container-fluid animate__animated animate__fadeIn">
-    <!-- =================================================================================
-    // HEADER
-    // ================================================================================= -->
-    <div class="row mb-4 align-items-center">
-        <div class="col-md-12">
-            <h4 class="fw-bold mb-1 mt-2">Panel de Control Operativo</h4>
-            <p class="text-muted mb-0">Situación detallada de la empresa al <?= date('d M Y') ?></p>
-        </div>
-    </div>
 
     <!-- 
     // ---------------------------------------------------------------------------------
-    // FILA 1: KPIs DE PRESENCIA (EN VIVO)
-    // ---------------------------------------------------------------------------------
-    -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="card admin-card border-0 h-100 bg-success-subtle shadow-none">
-                <div class="card-body p-4 text-center">
-                    <div class="round-50 rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-3">
-                        <iconify-icon icon="solar:user-hand-up-bold-duotone" width="30"></iconify-icon>
-                    </div>
-                    <h3 class="fw-bold mb-1"><?= $stats['users_active'] ?? 0 ?></h3>
-                    <p class="text-success fw-semibold mb-0">Usuarios Activos</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card admin-card border-0 h-100 bg-warning-subtle shadow-none">
-                <div class="card-body p-4 text-center">
-                    <div class="round-50 rounded-circle bg-warning text-white d-flex align-items-center justify-content-center mx-auto mb-3">
-                        <iconify-icon icon="solar:tea-cup-bold-duotone" width="30"></iconify-icon>
-                    </div>
-                    <h3 class="fw-bold mb-1"><?= $stats['users_break'] ?? 0 ?></h3>
-                    <p class="text-warning fw-semibold mb-0">Usuarios en Pausa</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card admin-card border-0 h-100 bg-primary-subtle shadow-none">
-                <div class="card-body p-4 text-center">
-                    <div class="round-50 rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3">
-                        <iconify-icon icon="solar:calendar-mark-bold-duotone" width="30"></iconify-icon>
-                    </div>
-                    <h3 class="fw-bold mb-1"><?= $stats['absences_today'] ?? 0 ?></h3>
-                    <p class="text-primary fw-semibold mb-0">Ausencias hoy</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 
-    // ---------------------------------------------------------------------------------
-    // FILA 2: ALERTAS DE GESTIÓN (PENDIENTES)
+    // FILA 1: ALERTAS DE GESTIÓN (PENDIENTES) - PRIORIDAD ALTA
     // ---------------------------------------------------------------------------------
     -->
     <div class="row g-4 mb-4">
         <!-- Docs Pendientes -->
         <div class="col-md-4">
-            <a href="<?= base_url('documents/list') ?>" class="card admin-card border-0 h-100 bg-info-subtle shadow-none text-decoration-none transition-hover">
-                <div class="card-body d-flex align-items-center p-4">
-                    <div class="round-45 rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-3">
-                        <iconify-icon icon="solar:document-add-bold-duotone" width="24"></iconify-icon>
+            <div class="card h-100 border shadow-none bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="round-45 rounded-circle bg-info-subtle text-info d-flex align-items-center justify-content-center">
+                            <iconify-icon icon="solar:document-add-bold-duotone" width="24"></iconify-icon>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-info"><?= $stats['docs_pending_read'] ?? 0 ?></h2>
                     </div>
-                    <div>
-                        <h4 class="fw-bold mb-0"><?= $stats['docs_pending_read'] ?? 0 ?></h4>
-                        <p class="text-info fw-semibold mb-0 small">Docs. pendientes</p>
+                    <p class="text-muted fw-bold mb-3 small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Documentos Pendientes</p>
+                    <div class="pt-3 border-top text-end">
+                        <a href="<?= base_url('documents/list') ?>" class="text-secondary text-decoration-none fw-bold small transition-hover">
+                            Gestionar <iconify-icon icon="solar:alt-arrow-right-linear" class="ms-1"></iconify-icon>
+                        </a>
                     </div>
                 </div>
-            </a>
+            </div>
         </div>
         <!-- Ausencias Pendientes -->
         <div class="col-md-4">
-            <a href="<?= base_url('absences/manage') ?>" class="card admin-card border-0 h-100 bg-danger-subtle shadow-none text-decoration-none transition-hover">
-                <div class="card-body d-flex align-items-center p-4">
-                    <div class="round-45 rounded-circle bg-danger text-white d-flex align-items-center justify-content-center me-3">
-                        <iconify-icon icon="solar:bell-bing-bold-duotone" width="24"></iconify-icon>
+            <div class="card h-100 border shadow-none bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="round-45 rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center">
+                            <iconify-icon icon="solar:bell-bing-bold-duotone" width="24"></iconify-icon>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-danger"><?= $stats['absences_pending'] ?? 0 ?></h2>
                     </div>
-                    <div>
-                        <h4 class="fw-bold mb-0"><?= $stats['absences_pending'] ?? 0 ?></h4>
-                        <p class="text-danger fw-semibold mb-0 small">Ausencias pendientes</p>
+                    <p class="text-muted fw-bold mb-3 small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Ausencias Pendientes</p>
+                    <div class="pt-3 border-top text-end">
+                        <a href="<?= base_url('absences/manage') ?>" class="text-secondary text-decoration-none fw-bold small transition-hover">
+                            Gestionar <iconify-icon icon="solar:alt-arrow-right-linear" class="ms-1"></iconify-icon>
+                        </a>
                     </div>
                 </div>
-            </a>
+            </div>
         </div>
         <!-- Gastos Pendientes -->
         <div class="col-md-4">
-            <a href="<?= base_url('expenses/manage') ?>" class="card admin-card border-0 h-100 bg-secondary-subtle shadow-none text-decoration-none transition-hover">
-                <div class="card-body d-flex align-items-center p-4">
-                    <div class="round-45 rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3">
-                        <iconify-icon icon="solar:bill-list-bold-duotone" width="24"></iconify-icon>
+            <div class="card h-100 border shadow-none bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="round-45 rounded-circle bg-secondary-subtle text-secondary d-flex align-items-center justify-content-center">
+                            <iconify-icon icon="solar:bill-list-bold-duotone" width="24"></iconify-icon>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-secondary"><?= $stats['expenses_pending'] ?? 0 ?></h2>
                     </div>
-                    <div>
-                        <h4 class="fw-bold mb-0"><?= $stats['expenses_pending'] ?? 0 ?></h4>
-                        <p class="text-secondary fw-semibold mb-0 small">Gastos pendientes</p>
+                    <p class="text-muted fw-bold mb-3 small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Gastos Pendientes</p>
+                    <div class="pt-3 border-top text-end">
+                        <a href="<?= base_url('expenses/manage') ?>" class="text-secondary text-decoration-none fw-bold small transition-hover">
+                            Gestionar <iconify-icon icon="solar:alt-arrow-right-linear" class="ms-1"></iconify-icon>
+                        </a>
                     </div>
                 </div>
-            </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+    // ---------------------------------------------------------------------------------
+    // FILA 2: KPIs DE PRESENCIA (EN VIVO)
+    // ---------------------------------------------------------------------------------
+    -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card h-100 border shadow-none bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <iconify-icon icon="solar:user-hand-up-bold-duotone" width="30"></iconify-icon>
+                    </div>
+                    <h2 class="fw-bold mb-1 text-success"><?= $stats['users_active'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small" style="font-size: 0.65rem; letter-spacing: 0.5px;">Usuarios Activos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border shadow-none bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <iconify-icon icon="solar:tea-cup-bold-duotone" width="30"></iconify-icon>
+                    </div>
+                    <h2 class="fw-bold mb-1 text-warning"><?= $stats['users_break'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small" style="font-size: 0.65rem; letter-spacing: 0.5px;">En Pausa</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border shadow-none bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <iconify-icon icon="solar:calendar-mark-bold-duotone" width="30"></iconify-icon>
+                    </div>
+                    <h2 class="fw-bold mb-1 text-primary"><?= $stats['absences_today'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small" style="font-size: 0.65rem; letter-spacing: 0.5px;">Ausencias Hoy</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -113,7 +119,7 @@
     -->
     <div class="row g-4 mb-4">
         <div class="col-lg-8">
-            <div class="card admin-card border-0 mb-4 h-100">
+            <div class="card h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h5 class="card-title fw-bold mb-0">Rendimiento vs Ausencias</h5>
@@ -124,9 +130,12 @@
         </div>
         
         <div class="col-lg-4">
-            <div class="card admin-card border-0 h-100">
+            <div class="card h-100">
                 <div class="card-body p-4">
-                    <h5 class="card-title fw-bold mb-4">Últimos Movimientos</h5>
+                    <h5 class="card-title fw-bold mb-4 d-flex align-items-center">
+                        <iconify-icon icon="solar:history-bold-duotone" class="me-2 text-info"></iconify-icon>
+                        Últimos Movimientos
+                    </h5>
                     <div class="timeline-widget">
                         <?php if(!empty($stats['activity_timeline'])): ?>
                             <?php foreach($stats['activity_timeline'] as $item): ?>
@@ -193,35 +202,16 @@
 </script>
 
 <style>
-/* Sobrescritura de paleta Danger a nivel de Dashboard */
-:root, [data-bs-theme="dark"] {
-    --bs-danger: #ff3361 !important;
-    --bs-danger-rgb: 255, 51, 97 !important;
-    --bs-danger-bg-subtle: rgba(255, 51, 97, 0.15) !important;
-    --bs-danger-text-emphasis: #ff3361 !important;
-}
+    .card { border-radius: 12px !important; }
+    .round-45 { width: 45px; height: 45px; flex-shrink: 0; }
+    .round-50 { width: 50px; height: 50px; flex-shrink: 0; }
+    .shadow-none { box-shadow: none !important; }
 
-.bg-danger-subtle {
-    background-color: rgba(255, 51, 97, 0.1) !important;
-}
-
-.text-danger {
-    color: #ff3361 !important;
-}
-
-.bg-danger {
-    background-color: #ff3361 !important;
-}
-
-.admin-card {
-    background: #2a3447 !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 20px !important;
-}
-.transition-hover { transition: transform 0.3s ease; }
-.transition-hover:hover { transform: translateY(-5px); }
-.round-50 { width: 50px; height: 50px; }
-.round-45 { width: 45px; height: 45px; }
-.timeline-badge { width: 10px; height: 10px; background: #2a3447; z-index: 1; }
-.timeline-line { width: 2px; }
+    /* Timeline */
+    .timeline-badge {
+        width: 10px; height: 10px;
+        background: white; z-index: 1;
+        border: 2px solid var(--bs-primary) !important;
+    }
+    .timeline-line { width: 1px; background-color: #eee !important; }
 </style>

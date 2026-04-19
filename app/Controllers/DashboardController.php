@@ -38,34 +38,17 @@ class DashboardController extends BaseController
     // =================================================================================
     public function index()
     {
-        // Obtener datos del usuario autenticado y sus permisos
         $userId = session()->get('user_id');
         $userRole = session()->get('user_role');
-        $isAdmin = ($userRole == 1 || $userRole == 2); // Admin o Supervisor
+        $isAdmin = ($userRole == 1 || $userRole == 2);
         $permissions = session()->get('user_permissions') ?? [];
 
-        // Inicializar datos para la vista
         $data['title'] = 'Escritorio';
-        
-        // =================================================================================
-        // OPTIMIZACIÓN: Carga de estadísticas con cache
-        // =================================================================================
-        // Usar cache para evitar consultas repetitivas y mejorar rendimiento
-        $cacheKey = "dashboard_stats_{$userId}";
-        $cachedStats = cache()->get($cacheKey);
-        
-        if ($cachedStats !== null) {
-            $data['stats'] = $cachedStats;
-        } else {
-            $data['stats'] = $this->calculateAllStats($userId, $isAdmin, $permissions);
-            // Cache por 5 minutos para balance entre actualización y rendimiento
-            cache()->save($cacheKey, $data['stats'], 300);
-        }
+        $data['stats'] = $this->calculateAllStats($userId, $isAdmin, $permissions);
 
         // =================================================================================
         // SECCIÓN 4: Datos de jornada laboral actual
         // =================================================================================
-        // Obtener información de la jornada laboral actual para mostrar en el dashboard
         $data['current_workday'] = $this->getCurrentWorkdayData($userId);
 
         // =================================================================================
@@ -196,8 +179,14 @@ class DashboardController extends BaseController
                 $stats['users_active'] = 0;
                 $stats['users_break'] = 0;
                 foreach ($liveEvents as $event) {
-                    if ($event['event_type'] == 'in') $stats['users_active']++;
-                    if ($event['event_type'] == 'break_start') $stats['users_break']++;
+                    // Si el último evento es entrada o fin de pausa, el usuario está activo
+                    if ($event['event_type'] == 'in' || $event['event_type'] == 'break_end') {
+                        $stats['users_active']++;
+                    }
+                    // Si el último evento es inicio de pausa, el usuario está en pausa
+                    if ($event['event_type'] == 'break_start') {
+                        $stats['users_break']++;
+                    }
                 }
 
                 // --- 2. GESTIÓN DE AUSENCIAS Y DOCUMENTOS ---
@@ -209,10 +198,6 @@ class DashboardController extends BaseController
                 $stats['docs_pending_read'] = $this->documentsModel->where('read_at', null)->countAllResults();
                 $stats['absences_pending'] = $this->absenceModel->where('status', 'pending')->countAllResults();
                 $stats['expenses_pending'] = $this->expenseModel->where('status', 'pending')->countAllResults();
-
-                $stats['pending_expenses_amount'] = $this->expenseModel->builder()
-                    ->selectSum('amount')->where('status', 'pending')
-                    ->get()->getRow()->amount ?? 0;
 
                 // --- 3. GRÁFICA DUAL: RENDIMIENTO VS AUSENCIAS (ÚLTIMOS 7 DÍAS) ---
                 $labels = [];
@@ -258,10 +243,10 @@ class DashboardController extends BaseController
             } else {
                 // Estadísticas para usuarios no admin con permisos limitados
                 if (in_array('absences.manage', $permissions)) {
-                    $stats['pending_absences'] = $this->absenceModel->where('status', 'pending')->countAllResults();
+                    $stats['absences_pending'] = $this->absenceModel->where('status', 'pending')->countAllResults();
                 }
                 if (in_array('expenses.manage', $permissions)) {
-                    $stats['pending_expenses'] = $this->expenseModel->where('status', 'pending')->countAllResults();
+                    $stats['expenses_pending'] = $this->expenseModel->where('status', 'pending')->countAllResults();
                 }
             }
 
@@ -275,8 +260,8 @@ class DashboardController extends BaseController
                 'my_received_documents' => 0,
                 'my_absences_approved' => 0,
                 'my_absences_rejected' => 0,
-                'pending_absences' => 0,
-                'pending_expenses' => 0
+                'absences_pending' => 0,
+                'expenses_pending' => 0
             ]);
         }
 
