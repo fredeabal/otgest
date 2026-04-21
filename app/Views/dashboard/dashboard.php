@@ -201,7 +201,7 @@
                     <h5 class="mb-0 text-primary">Calendario de Actividad</h5>
                 </div>
                 <div class="card-body">
-                    <div id="calendar" style="min-height: 500px;"></div>
+                    <div id="calendar" style="min-height: 500px;" data-events-url="<?= base_url('dashboard/events') ?>"></div>
                     
                     <!-- Leyenda del Calendario -->
                     <div class="d-flex flex-wrap gap-4 mt-4 pt-3 border-top justify-content-center">
@@ -228,55 +228,4 @@
     </div>
 </div>
 
-<script src="<?= base_url() ?>assets/libs/fullcalendar/index.global.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar');
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'es',
-            headerToolbar: {
-                left: 'prev,next',
-                center: 'title',
-                right: ''
-            },
-            events: '<?= base_url('dashboard/events') ?>',
-            eventClick: function(info) {
-                if (info.event.url) {
-                    info.jsEvent.preventDefault();
-                    window.location.href = info.event.url;
-                }
-            },
-            height: 'auto',
-            firstDay: 1, // Lunes
-            handleWindowResize: true,
-            displayEventTime: false,
-            // Estilos específicos para tema oscuro y Modernize
-            eventDisplay: 'block',
-            themeSystem: 'bootstrap5'
-        });
-        calendar.render();
-    });
-</script>
 
-<style>
-/* Utilidades de forma */
-.round-45 { width: 45px; height: 45px; flex-shrink: 0; }
-.round-50 { width: 50px; height: 50px; flex-shrink: 0; }
-
-/* Calendario - Tema Modernize */
-#calendar { --fc-border-color: var(--bs-border-color); font-family: inherit; }
-.fc .fc-toolbar-title { font-size: 1.25rem; font-weight: 600; }
-.fc .fc-button-primary { background-color: var(--bs-primary); border-color: var(--bs-primary); box-shadow: none !important; }
-.fc .fc-button-primary:hover,
-.fc .fc-button-primary:active,
-.fc .fc-button-primary:focus { background-color: var(--bs-primary-rgb); border-color: var(--bs-primary-rgb); }
-.fc-theme-bootstrap5 .fc-scrollgrid { border: 1px solid var(--bs-border-color); }
-.fc .fc-daygrid-day-number { padding: 8px; font-size: 0.85rem; }
-.fc .fc-event { border-radius: 4px; padding: 2px 5px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: none; }
-.fc .fc-day-today { background-color: rgba(93, 135, 255, 0.05) !important; }
-.fc .fc-col-header-cell,
-.fc th,
-.fc-theme-standard .fc-col-header-cell { background-color: transparent !important; border-bottom: 1px solid var(--bs-border-color) !important; padding: 0; }
-.fc .fc-col-header-cell-cushion { color: var(--bs-body-color); opacity: 0.8; font-weight: 600; }
-</style>

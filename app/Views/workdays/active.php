@@ -51,29 +51,3 @@ Vista: Jornada Activa (Después de Reanudar)
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Función para obtener ubicación GPS
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    // Asignar coordenadas a ambos formularios
-                    document.getElementById('latitud-pause').value = position.coords.latitude;
-                    document.getElementById('longitud-pause').value = position.coords.longitude;
-                    document.getElementById('latitud-end').value = position.coords.latitude;
-                    document.getElementById('longitud-end').value = position.coords.longitude;
-                },
-                function(error) {
-                    console.log('Error obteniendo ubicación:', error);
-                    // Continuar sin GPS si hay error
-                }
-            );
-        }
-    }
-
-    // Inicializar GPS
-    getLocation();
-});
-</script>

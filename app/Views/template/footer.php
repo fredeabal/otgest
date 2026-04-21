@@ -12,6 +12,19 @@
 <!-- SweetAlert2 -->
 <script src="<?= base_url() ?>assets/libs/sweetalert2/dist/sweetalert2.min.js"></script>
 
+<!-- Librerías Gráficas -->
+<script src="<?= base_url() ?>assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/fullcalendar/index.global.min.js"></script>
+
+<!-- Scripts de Dashboard -->
+<script src="<?= base_url() ?>assets/js/dashboard-admin.js"></script>
+<script src="<?= base_url() ?>assets/js/dashboard-user.js"></script>
+
+<!-- Scripts Globales y Módulos -->
+<script src="<?= base_url() ?>assets/js/utils.js"></script>
+<script src="<?= base_url() ?>assets/js/absences.js"></script>
+<script src="<?= base_url() ?>assets/js/workdays.js"></script>
+
 <!-- Script para cambio de tema persistente -->
 <script src="<?= base_url('assets/js/theme/theme-switcher.js') ?>"></script>
 
@@ -61,14 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Fin de alertas globales
 // ================================================================================= -->
 
-<!-- =================================================================================
-// Funciones globales
-// ================================================================================= -->
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
+
 
 </body>
 

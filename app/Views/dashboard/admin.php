@@ -125,7 +125,12 @@
                         <iconify-icon icon="solar:diagram-up-line-duotone" class="me-2 text-primary" width="24"></iconify-icon>
                         <h5 class="card-title fw-bold mb-0">Rendimiento vs Ausencias</h5>
                     </div>
-                    <div id="dual_performance_chart" style="min-height: 380px;"></div>
+                    <div id="dual_performance_chart" 
+                         style="min-height: 380px;"
+                         data-absences='<?= json_encode($stats['series_absences'] ?? []) ?>'
+                         data-attendance='<?= json_encode($stats['series_attendance'] ?? []) ?>'
+                         data-labels='<?= json_encode($stats['chart_labels'] ?? []) ?>'>
+                    </div>
                 </div>
             </div>
         </div>
@@ -166,53 +171,4 @@
     </div>
 </div>
 
-<!-- =================================================================================
-// SCRIPTS & ESTILOS GESTIÓN
-// ================================================================================= -->
-<script src="<?= base_url() ?>assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-<link rel="stylesheet" href="<?= base_url() ?>assets/libs/animate.css/animate.min.css"/>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- GRÁFICO DUAL (RENDIMIENTO VS AUSENCIAS) ---
-        new ApexCharts(document.querySelector("#dual_performance_chart"), {
-            chart: { 
-                height: 380, type: 'area', fontFamily: 'Plus Jakarta Sans', foreColor: '#7C8FAC', 
-                toolbar: { show: false }, stacked: false, background: 'transparent'
-            },
-            stroke: { curve: 'smooth', width: [3, 3] },
-            fill: { 
-                type: 'gradient', 
-                gradient: { shadeIntensity: 1, opacityFrom: [0, 0], opacityTo: [0, 0], stops: [0, 95, 100] } 
-            },
-            series: [
-                { name: 'Ausencia', type: 'area', data: <?= json_encode($stats['series_absences'] ?? []) ?> },
-                { name: 'Asistencia', type: 'area', data: <?= json_encode($stats['series_attendance'] ?? []) ?> }
-            ],
-            xaxis: { 
-                categories: <?= json_encode($stats['chart_labels'] ?? []) ?>, 
-                axisBorder: { show: false }, axisTicks: { show: false } 
-            },
-            markers: { size: [5, 0], strokeWidth: 0, hover: { size: 7 } },
-            colors: ['#ff3361', '#5d87ff'],
-            grid: { borderColor: 'rgba(255,255,255,0.05)', strokeDashArray: 4 },
-            legend: { show: true, position: 'top', horizontalAlign: 'right', labels: { colors: '#7C8FAC' } },
-            tooltip: { theme: 'dark' }
-        }).render();
-    });
-</script>
-
-<style>
-    .card { border-radius: 12px !important; }
-    .round-45 { width: 45px; height: 45px; flex-shrink: 0; }
-    .round-50 { width: 50px; height: 50px; flex-shrink: 0; }
-    .shadow-none { box-shadow: none !important; }
-
-    /* Timeline */
-    .timeline-badge {
-        width: 10px; height: 10px;
-        background: white; z-index: 1;
-        border: 2px solid var(--bs-primary) !important;
-    }
-    .timeline-line { width: 1px; background-color: #eee !important; }
-</style>

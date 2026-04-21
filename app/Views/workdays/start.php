@@ -31,26 +31,3 @@ Vista: Iniciar Jornada Laboral
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Obtener ubicación GPS
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    document.getElementById('latitud').value = position.coords.latitude;
-                    document.getElementById('longitud').value = position.coords.longitude;
-                },
-                function(error) {
-                    console.log('Error obteniendo ubicación:', error);
-                    // Continuar sin GPS si hay error
-                }
-            );
-        }
-    }
-
-    // Inicializar GPS
-    getLocation();
-});
-</script>

@@ -21,6 +21,7 @@
     <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/logos/favicon.png" />
     <!-- CSS Principal -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css" />
     <!-- solar icons -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <!-- SweetAlert2 -->
@@ -28,6 +29,8 @@
     <!-- Datepicker -->
     <link rel="stylesheet"
         href="<?= base_url() ?>assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <!-- Animations -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/animate.css/animate.min.css"/>
     
     <title><?= esc($title) ?></title>
 

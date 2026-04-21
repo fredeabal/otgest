@@ -291,6 +291,23 @@ Para soporte técnico o consultas:
 - Crear un issue en el repositorio
 - Contactar al equipo de desarrollo
 
+## Estándares de Desarrollo (Frontend)
+
+Para mantener la base de código limpia, escalable y profesional, se deben seguir estrictamente las siguientes reglas:
+
+### 🚫 Prohibición de Código Inline
+- **NO utilizar etiquetas `<style>`** dentro de las vistas (`.php`). Todos los estilos personalizados deben añadirse a [`public/assets/css/custom.css`](file:///Users/esweb/Documents/OtgestApp/app/public/assets/css/custom.css).
+- **NO utilizar etiquetas `<script>`** con lógica compleja dentro de las vistas. La lógica de JavaScript debe externalizarse a archivos `.js` en `public/assets/js/`.
+- **NO utilizar estilos `inline`** (atributo `style="..."`) salvo para casos de posicionamiento dinámico crítico que no puedan resolverse con clases CSS.
+
+### 📦 Gestión de Activos (JS/CSS)
+- **CSS**: Usar variables CSS localizadas en `custom.css` para mantener la consistencia del tema oscuro.
+- **JavaScript**:
+  - Utilizar **Data Attributes** (`data-*`) en el HTML para pasar datos dinámicos de PHP a los archivos JS externos.
+  - Las librerías globales (ApexCharts, FullCalendar, etc.) deben cargarse en el `footer.php` o `header.php`.
+  - Los scripts específicos de un módulo deben residir en su propio archivo (ej. `absences.js`, `workdays.js`).
+- **Iconografía**: Utilizar exclusivamente `iconify-icon` con el set de Solar Icons.
+
 ## Changelog
 
 ### Versión Actual

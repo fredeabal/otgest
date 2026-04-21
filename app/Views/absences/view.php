@@ -18,7 +18,7 @@
                                         <button type="button" class="btn-close"
                                             data-bs-dismiss="modal"></button>
                                     </div>
-                                    <form id="rejectForm" method="post">
+                                    <form id="rejectForm" method="post" data-action-base="<?= base_url('absences/reject/') ?>">
                                         <?= csrf_field() ?>
                                         <div class="modal-body">
                                             <div class="form-group">
@@ -40,47 +40,7 @@
                             </div>
                         </div>
 
-                        <script>
-                        // =================================================================================
-                        // Confirmación de aprobación con SweetAlert
-                        // =================================================================================
-                        document.addEventListener('DOMContentLoaded', function() {
-                            document.querySelectorAll('.approve-absence-swal').forEach(function(link) {
-                                link.addEventListener('click', function(e) {
-                                    e.preventDefault();
-                                    const url = link.dataset.url;
-                                    const action = link.dataset.title;
-                                    const isApprove = link.classList.contains('approve-absence-swal');
 
-                                    Swal.fire({
-                                        title: `Confirmar ${action}`,
-                                        text: `¿Estás seguro de ${action} esta solicitud?`,
-                                        icon: 'question',
-                                        showCancelButton: true,
-                                        confirmButtonColor: isApprove ? '#28a745' : '#dc3545',
-                                        cancelButtonColor: '#6c757d',
-                                        confirmButtonText: isApprove ? 'Sí, aprobar' : 'Sí, rechazar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            window.location.href = url;
-                                        }
-                                    });
-                                });
-                            });
-                        });
-
-                        // Función para rechazar ausencia (directo al modal)
-                        function rejectAbsence(absenceId) {
-                            $('#rejectForm').attr('action', '<?= base_url('absences/reject/') ?>' + absenceId);
-                            $('#rejectModal').modal('show');
-                        }
-
-                        // Función para volver atrás
-                        function goBack() {
-                            window.history.back();
-                        }
-                        </script>
 
                         <?php if (!empty($absence['admin_comments'])): ?>
                         <div class="list-group-item px-0">
@@ -252,8 +212,8 @@
                                 data-url="<?= base_url('absences/approve/' . $absence['id']) ?>" data-title="aprobar">
                                 Aprobar
                             </a>
-                            <a href="javascript:void(0)" onclick="rejectAbsence(<?= $absence['id'] ?>)"
-                                class="btn bg-danger-subtle text-danger me-2">
+                            <a href="javascript:void(0)" class="btn bg-danger-subtle text-danger me-2 reject-absence-swal" 
+                               data-id="<?= $absence['id'] ?>">
                                 Rechazar
                             </a>
                             <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark">

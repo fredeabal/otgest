@@ -207,7 +207,7 @@
                 <h5 class="modal-title">Rechazar Solicitud</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="rejectForm" method="post">
+            <form id="rejectForm" method="post" data-action-base="<?= base_url('absences/reject/') ?>">
                 <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="form-group">
@@ -224,79 +224,3 @@
         </div>
     </div>
 </div>
-
-<script>
-// =================================================================================
-// Lógica de filtrado de tabla por búsqueda
-// =================================================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('absenceTableSearch');
-    const table = document.querySelector('table');
-    const rows = table.querySelectorAll('tbody tr');
-
-    searchInput.addEventListener('input', function() {
-        const search = this.value.toLowerCase();
-        rows.forEach(row => {
-            const rowText = Array.from(row.querySelectorAll('td'))
-                .map(td => td.innerText.toLowerCase())
-                .join(' ');
-            row.style.display = rowText.includes(search) ? '' : 'none';
-        });
-    });
-});
-// =================================================================================
-// Confirmaciones con SweetAlert2
-// =================================================================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Aprobar solicitud
-    document.querySelectorAll('.approve-absence-swal').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const url = this.getAttribute('data-url');
-            const method = this.getAttribute('data-method') || 'GET';
-            Swal.fire({
-                title: '¿Aprobar solicitud?',
-                text: 'La solicitud será aprobada y el usuario será notificado.',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sí, aprobar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    if (method === 'POST') {
-                        // Crear formulario y enviarlo
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = url;
-
-                        // Agregar CSRF token
-                        const csrfInput = document.createElement('input');
-                        csrfInput.type = 'hidden';
-                        csrfInput.name = 'csrf_test_name';
-                        csrfInput.value = '<?= csrf_hash() ?>';
-                        form.appendChild(csrfInput);
-
-                        document.body.appendChild(form);
-                        form.submit();
-                    } else {
-                        window.location.href = url;
-                    }
-                }
-            });
-        });
-    });
-
-    // Rechazar solicitud
-    document.querySelectorAll('.reject-absence-swal').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const absenceId = this.getAttribute('data-id');
-            $('#rejectForm').attr('action', '<?= base_url('absences/reject/') ?>' + absenceId);
-            $('#rejectModal').modal('show');
-        });
-    });
-});
-</script>

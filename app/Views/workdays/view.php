@@ -123,36 +123,14 @@
                                             <iconify-icon icon="solar:map-point-bold-duotone" class="me-1"></iconify-icon>
                                             Ubicación:
                                             <a href="https://www.google.com/maps/search/?api=1&query=<?= $event['latitude'] ?>,<?= $event['longitude'] ?>"
-                                               target="_blank" class="text-decoration-none" id="location-<?= $index ?>">
+                                               target="_blank" class="text-decoration-none reverse-geocode" 
+                                               data-lat="<?= $event['latitude'] ?>" data-lon="<?= $event['longitude'] ?>">
                                                 Cargando dirección...
                                                 <iconify-icon icon="solar:link-bold-duotone" class="ms-1 small"></iconify-icon>
                                             </a>
                                         </p>
 
-                                        <script>
-                                        (async () => {
-                                            const lat = <?= $event['latitude'] ?>;
-                                            const lon = <?= $event['longitude'] ?>;
-                                            const link = document.getElementById('location-<?= $index ?>');
 
-                                            try {
-                                                const response = await fetch(
-                                                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
-                                                    { headers: { 'User-Agent': 'CodeIgniter4-Geolocalizacion/1.0' } }
-                                                );
-
-                                                const data = await response.json();
-                                                if (data.display_name) {
-                                                    link.innerHTML = data.display_name + ' <iconify-icon icon="solar:link-bold-duotone" class="ms-1 small"></iconify-icon>';
-                                                } else {
-                                                    link.innerHTML = `${lat}, ${lon} <iconify-icon icon="solar:link-bold-duotone" class="ms-1 small"></iconify-icon>`;
-                                                }
-                                            } catch (error) {
-                                                console.error('Error al obtener dirección:', error);
-                                                link.innerHTML = `${lat}, ${lon} <iconify-icon icon="solar:link-bold-duotone" class="ms-1 small"></iconify-icon>`;
-                                            }
-                                        })();
-                                        </script>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -181,9 +159,3 @@
     </div>
 </div>
 
-
-<script>
-function goBack() {
-    window.history.back();
-}
-</script>
