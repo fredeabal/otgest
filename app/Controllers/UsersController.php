@@ -399,9 +399,9 @@ class UsersController extends BaseController
         $uploadPath = WRITEPATH . 'uploads/profiles/';
         
         // Crear carpeta si no existe
-        if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0777, true);
-        }
+        // if (!is_dir($uploadPath)) {
+        //  mkdir($uploadPath, 0777, true);
+        // }
         // Eliminar avatar anterior si no es el default
         if (!empty($user['avatar']) && $user['avatar'] !== 'user-default.png') {
             $oldPath = $uploadPath . $user['avatar'];
@@ -429,34 +429,17 @@ class UsersController extends BaseController
     // =================================================================================
     public function avatar($filename)
     {
-        // Ruta en el directorio writable (donde se suben los archivos)
+        // obtener la ruta del archivo
         $path = WRITEPATH . 'uploads/profiles/' . $filename;
-
-        // Si no existe el archivo solicitado, intentamos con el default en writable
+        // si no existe, usar la imagen por defecto
         if (!is_file($path)) {
             $path = WRITEPATH . 'uploads/profiles/user-default.png';
         }
-
-        // Si sigue sin existir (común al subir al servidor sin la carpeta writable),
-        // usamos la imagen de respaldo en los assets públicos que siempre está en el repositorio
-        if (!is_file($path)) {
-            $path = FCPATH . 'assets/images/profile/user-default.jpeg';
-        }
-
-        // Si por algún milagro nada existe, devolvemos un 404 real de CodeIgniter
-        if (!is_file($path)) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
         $mime = mime_content_type($path);
-        
-        // Limpiamos cualquier salida previa para evitar corrupción de imagen
-        if (ob_get_level()) ob_end_clean();
-
-        return $this->response
-            ->setHeader('Content-Type', $mime)
-            ->setHeader('Content-Length', (string)filesize($path))
-            ->setBody(file_get_contents($path));
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
     }
 
 

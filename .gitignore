@@ -69,7 +69,6 @@ writable/session/*
 
 writable/uploads/*
 !writable/uploads/index.html
-!writable/uploads/profiles/user-default.png
 
 writable/debugbar/*
 !writable/debugbar/.gitkeep
