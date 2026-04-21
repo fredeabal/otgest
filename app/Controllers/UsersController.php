@@ -399,9 +399,9 @@ class UsersController extends BaseController
         $uploadPath = WRITEPATH . 'uploads/profiles/';
         
         // Crear carpeta si no existe
-        // if (!is_dir($uploadPath)) {
-        //  mkdir($uploadPath, 0777, true);
-        // }
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
         // Eliminar avatar anterior si no es el default
         if (!empty($user['avatar']) && $user['avatar'] !== 'user-default.png') {
             $oldPath = $uploadPath . $user['avatar'];
@@ -409,7 +409,6 @@ class UsersController extends BaseController
                 unlink($oldPath);
             }
         }
-
         // Mover el archivo
         if (!$avatar->move($uploadPath, $fileName, true)) {
             return redirect()->back()->with('errors', ['No se pudo guardar la imagen.']);
@@ -423,24 +422,45 @@ class UsersController extends BaseController
 
         return redirect()->back()->with('success', 'Avatar actualizado correctamente.');
     }
-
     // =================================================================================
-    // Servir avatar desde writable
+    // Servir avatar desde writable con fallbacks
     // =================================================================================
     public function avatar($filename)
     {
-        // obtener la ruta del archivo
+        // 1. Intentar en el directorio writable (donde se suben los archivos)
         $path = WRITEPATH . 'uploads/profiles/' . $filename;
-        // si no existe, usar la imagen por defecto
+
+        // 2. Si no existe, intentar con el user-default.png en writable
         if (!is_file($path)) {
             $path = WRITEPATH . 'uploads/profiles/user-default.png';
         }
+
+        // 3. Fallback definitivo: Usar imagen de respaldo en assets públicos (garantizada en repo)
+        if (!is_file($path)) {
+            // Intentar con JPEG o SVG de los assets
+            $fallback = FCPATH . 'assets/images/profile/user-default.jpeg';
+            if (!is_file($fallback)) {
+                $fallback = FCPATH . 'assets/images/profile/user-default.svg';
+            }
+            $path = $fallback;
+        }
+
+        // 4. Si después de todo no hay archivo, 404
+        if (!is_file($path)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
         $mime = mime_content_type($path);
-        header('Content-Type: ' . $mime);
-        header('Content-Length: ' . filesize($path));
-        readfile($path);
-        exit;
+        
+        // Limpiamos buffer para evitar corrupción
+        if (ob_get_level()) ob_end_clean();
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader('Content-Length', (string)filesize($path))
+            ->setBody(file_get_contents($path));
     }
+
 
 
     // =================================================================================
