@@ -42,7 +42,8 @@ echo -e "${NC}"
 SERVER_IP=$(hostname -I | awk '{print $1}')
 read -p "👉 Ingresa la IP o Dominio del servidor [Predeterminado: ${SERVER_IP}]: " INPUT_DOMAIN
 DOMAIN=${INPUT_DOMAIN:-$SERVER_IP}
-# Eliminar protocolo (http/https) y trailing slashes si el usuario lo introdujo por error
+
+# Limpiar protocolo e IP si se incluyó http/https por error
 DOMAIN=$(echo "$DOMAIN" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 
 echo -e "\n${YELLOW}⏳ [1/6] Actualizando paquetes e instalando dependencias del sistema...${NC}"
@@ -102,7 +103,7 @@ if [ ! -f ".env" ]; then
     fi
 fi
 
-# Crear directorios obligatorios para CodeIgniter 4
+# Crear directorio y subdirectorios obligatorios para SQLite y CodeIgniter 4
 DB_DIR="${INSTALL_DIR}/writable"
 mkdir -p "$DB_DIR"
 mkdir -p "${DB_DIR}/cache"
@@ -110,6 +111,7 @@ mkdir -p "${DB_DIR}/session"
 mkdir -p "${DB_DIR}/logs"
 mkdir -p "${DB_DIR}/debugbar"
 mkdir -p "${DB_DIR}/uploads"
+mkdir -p "${INSTALL_DIR}/public/uploads"
 DB_PATH="${DB_DIR}/database.db"
 
 # Ajustar valores en .env
@@ -177,7 +179,7 @@ rm -f /etc/nginx/sites-enabled/default
 # Test de configuración y recarga de Nginx
 nginx -t
 systemctl restart nginx
-systemctl restart php${PHP_VER}-fpm
+systemctl restart php${PHP_VER}-fpm 2>/dev/null || true
 
 # 8. Ajustar permisos finales del sistema de archivos
 chown -R www-data:www-data "$INSTALL_DIR"

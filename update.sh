@@ -6,7 +6,6 @@
 # =================================================================================
 
 # Asegurar que el script se ejecute desde una copia temporal para evitar problemas de desfase de bytes si se actualiza a sí mismo en disco
-# Solo es necesario si se ejecuta localmente desde un archivo físico (si no, está en memoria/pipe y no hay bug de desfase)
 if [ -z "$OTGEST_SELF_RUN" ] && [ -f "$0" ] && grep -q "OTGEST - AUTOMATIC UPDATER SCRIPT" "$0" 2>/dev/null; then
     TMP_SCRIPT=$(mktemp /tmp/otgest_update.XXXXXX)
     cp "$0" "$TMP_SCRIPT"
@@ -23,7 +22,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${BLUE}======================================================================${NC}"
-echo -e "${GREEN}             🚀 OTGEST - ACTUALIZADOR AUTOMÁTICO 🚀              ${NC}"
+echo -e "${GREEN}             🚀 OTGEST - ACTUALIZADOR AUTOMÁTICO 🚀            ${NC}"
 echo -e "${BLUE}======================================================================${NC}"
 echo ""
 
@@ -95,7 +94,12 @@ echo -e "${YELLOW}⏳ [4/5] Restaurando permisos y limpiando caché de la aplica
 # Limpiar caché interno de CodeIgniter 4
 php spark cache:clear 2>/dev/null || true
 
-# Asegurar que la carpeta uploads exista antes de darle permisos
+# Asegurar que las carpetas requeridas existan antes de darles permisos
+mkdir -p "$INSTALL_DIR/writable/cache"
+mkdir -p "$INSTALL_DIR/writable/session"
+mkdir -p "$INSTALL_DIR/writable/logs"
+mkdir -p "$INSTALL_DIR/writable/debugbar"
+mkdir -p "$INSTALL_DIR/writable/uploads"
 mkdir -p "$INSTALL_DIR/public/uploads"
 
 chown -R www-data:www-data "$INSTALL_DIR"
