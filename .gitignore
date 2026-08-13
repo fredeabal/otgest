@@ -16,6 +16,7 @@
 # Archivos de IDE y sistema
 .idea/
 .vscode/
+.agents/
 *.sublime-project
 *.sublime-workspace
 .DS_Store

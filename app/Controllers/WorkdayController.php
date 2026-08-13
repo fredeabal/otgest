@@ -5,12 +5,11 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
 use App\Models\WorkdayModel;
 use App\Models\UsersModel;
 use App\Models\CompanyModel;
 
-class WorkdayController extends Controller
+class WorkdayController extends BaseController
 {
     // instanciar modelos
     protected $workdayModel;
@@ -367,7 +366,7 @@ class WorkdayController extends Controller
             $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
             // Calcular datos de la jornada usando el método helper
-            $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+            $workday = calculate_workday_data($date, $events, $userDailyHours);
             if ($workday) {
                 // Agregar daily_hours y información del usuario para PDFs
                 $workday['daily_hours'] = $userDailyHours;
@@ -460,7 +459,7 @@ class WorkdayController extends Controller
                 $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
                 // Calcular datos de la jornada usando el método helper
-                $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+                $workday = calculate_workday_data($date, $events, $userDailyHours);
                 if ($workday) {
                     $workday['user_id'] = $uid;
                     $workday['daily_hours'] = $userDailyHours;
@@ -523,7 +522,7 @@ class WorkdayController extends Controller
         $isAdminView = $this->request->getGet('user_id') !== null && $this->request->getGet('user_id') != session()->get('user_id');
 
         // Verificar permisos: si es vista de otro usuario, debe tener permiso manage_workday o ser admin (user_role == 1)
-        if ($isAdminView && !in_array('workdays.manage', session()->get('user_permissions') ?? []) && session()->get('user_role') != 1) {
+        if ($isAdminView && !has_permission('workdays.manage')) {
             return redirect()->back()->with('errors', ['No tienes permisos para ver jornadas de otros usuarios.']);
         }
 
@@ -545,7 +544,7 @@ class WorkdayController extends Controller
         $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
         // Calcular datos de la jornada
-        $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+        $workday = calculate_workday_data($date, $events, $userDailyHours);
 
         // Preparar datos para la vista
         // Invertir el orden para mostrar en la vista (más reciente primero)
@@ -604,7 +603,7 @@ class WorkdayController extends Controller
             $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
             $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-            $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+            $workday = calculate_workday_data($date, $events, $userDailyHours);
             if ($workday) {
                 $workday['daily_hours'] = $userDailyHours;
                 $workdays[] = $workday;
@@ -635,10 +634,10 @@ class WorkdayController extends Controller
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        // Descargar PDF directamente
+        // Descargar PDF usando el response de CodeIgniter
         $filename = 'mis_jornadas_' . date('Y-m-d') . '.pdf';
-        $dompdf->stream($filename, ['Attachment' => true]);
-        exit();
+        $pdfContent = $dompdf->output();
+        return $this->response->download($filename, $pdfContent);
     }
 
     // =================================================================================
@@ -674,6 +673,7 @@ class WorkdayController extends Controller
         // Procesar cada jornada
         $workdays = [];
         foreach ($groupedEvents as $uid => $dates) {
+            $user = $this->userModel->find($uid);
             foreach ($dates as $date => $events) {
                 // Obtener daily_hours específico de esta jornada desde el evento 'in'
                 $inEvent = array_filter($events, function($event) {
@@ -682,7 +682,7 @@ class WorkdayController extends Controller
                 $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
                 $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-                $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+                $workday = calculate_workday_data($date, $events, $userDailyHours);
                 if ($workday) {
                     $workday['user_id'] = $uid;
                     $workday['daily_hours'] = $userDailyHours;
@@ -714,10 +714,10 @@ class WorkdayController extends Controller
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        // Descargar PDF directamente
-        $filename = 'gestion_jornadas_' . date('Y-m-d') . '.pdf';
-        $dompdf->stream($filename, ['Attachment' => true]);
-        exit();
+        // Descargar PDF usando el response de CodeIgniter
+        $filename = 'jornadas_gestionadas_' . date('Y-m-d') . '.pdf';
+        $pdfContent = $dompdf->output();
+        return $this->response->download($filename, $pdfContent);
     }
 
 
@@ -1039,104 +1039,6 @@ class WorkdayController extends Controller
     // =================================================================================
     // Método helper para calcular datos de una jornada específica
     // =================================================================================
-    private function calculateWorkdayData($date, $events, $userDailyHours = null)
-    {
-        // Verificar que hay eventos para procesar
-        if (empty($events)) {
-            return null;
-        }
-
-        // Inicializar variables de cálculo
-        $startTime = null;      // Hora de entrada
-        $endTime = null;        // Hora de salida
-        $totalBreakTime = 0;    // Tiempo total de pausas en segundos
-        $breakStart = null;     // Inicio de pausa actual
-        $autoclose = false;     // Indica si fue cerrada automáticamente
-
-        // Procesar eventos cronológicamente
-        foreach ($events as $event) {
-            switch ($event['event_type']) {
-                case 'in':
-                    // Evento de entrada - registrar hora de inicio
-                    $startTime = $event['event_time'];
-                    break;
-
-                case 'out':
-                    // Evento de salida - registrar hora de fin
-                    $endTime = $event['event_time'];
-                    // Verificar si fue cierre automático
-                    if ($event['autoclose']) {
-                        $autoclose = true;
-                    }
-                    break;
-
-                case 'break_start':
-                    // Inicio de pausa - guardar hora de inicio
-                    $breakStart = $event['event_time'];
-                    break;
-
-                case 'break_end':
-                    // Fin de pausa - calcular duración y sumar al total
-                    if ($breakStart) {
-                        $breakDuration = strtotime($event['event_time']) - strtotime($breakStart);
-                        $totalBreakTime += $breakDuration;
-                        $breakStart = null;  // Resetear para próxima pausa
-                    }
-                    break;
-            }
-        }
-
-        // Si hay una pausa activa sin break_end (jornada aún en pausa), contabilizar ese tiempo también
-        if ($breakStart) {
-            $now = date('Y-m-d H:i:s');
-            $totalBreakTime += strtotime($now) - strtotime($breakStart);
-        }
-
-        // Determinar estado de la jornada
-        if ($startTime && $endTime) {
-            $status = 'completed';  // Jornada completa (entrada y salida)
-        } elseif ($startTime) {
-            $status = 'in_progress'; // Jornada en progreso (solo entrada)
-        } else {
-            return null;  // Jornada inválida (sin entrada)
-        }
-
-        // Calcular horas trabajadas
-        $totalHours = 0;
-        if ($startTime) {
-            // Si no hay salida, usar hora actual para cálculo en tiempo real
-            $endTimeForCalculation = $endTime ?? date('Y-m-d H:i:s');
-
-            // Calcular tiempo total en segundos
-            $totalSeconds = strtotime($endTimeForCalculation) - strtotime($startTime);
-
-            // Restar tiempo de pausas
-            $totalSeconds -= $totalBreakTime;
-
-            // Convertir a horas decimales
-            $totalHours = max(0, $totalSeconds / 3600);
-        }
-
-        // Calcular horas extras
-        $overtimeHours = 0;
-        if ($userDailyHours && $totalHours > $userDailyHours) {
-            $overtimeHours = $totalHours - $userDailyHours;
-        }
-
-        // Retornar datos calculados de la jornada
-        return [
-            'date' => $date,
-            'start_time' => $startTime ? date('H:i', strtotime($startTime)) : null,
-            'start_date' => $startTime ? date('d/m/Y', strtotime($startTime)) : null,
-            'end_time' => $endTime ? date('H:i', strtotime($endTime)) : null,
-            'end_date' => $endTime ? date('d/m/Y', strtotime($endTime)) : null,
-            'total_hours' => $totalHours,
-            'overtime_hours' => $overtimeHours,
-            'status' => $status,
-            'autoclose' => $autoclose,
-            'break_time' => $totalBreakTime / 3600  // Tiempo de pausas en horas
-        ];
-    }
 
     // =================================================================================
     // Método auxiliar para cerrar automáticamente una jornada si excede las horas máximas
@@ -1167,7 +1069,7 @@ class WorkdayController extends Controller
             ->findAll();
 
         // Calcular horas trabajadas usando el método existente
-        $workdayData = $this->calculateWorkdayData($workdayDate, $events, $maxDailyHours);
+        $workdayData = calculate_workday_data($workdayDate, $events, $maxDailyHours);
 
         // Verificar si excede las horas máximas
         if ($workdayData['total_hours'] >= $maxDailyHours) {

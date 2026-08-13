@@ -18,14 +18,14 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="round-45 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <iconify-icon icon="solar:document-add-bold-duotone" width="24"></iconify-icon>
+                            <i class="ti ti-file-plus fs-24px"></i>
                         </div>
                         <h2 class="fw-bold mb-0 text-primary"><?= $stats['docs_pending_read'] ?? 0 ?></h2>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Documentos Pendientes</p>
+                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Documentos Pendientes</p>
                     <div class="pt-3 border-top text-end">
                         <a href="<?= base_url('documents/list') ?>" class="text-primary text-decoration-none fw-bold small transition-hover">
-                            Gestionar <iconify-icon icon="solar:alt-arrow-right-linear" class="ms-1"></iconify-icon>
+                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -37,14 +37,14 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="round-45 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <iconify-icon icon="solar:bell-bing-bold-duotone" width="24"></iconify-icon>
+                            <i class="ti ti-bell-ringing fs-24px"></i>
                         </div>
                         <h2 class="fw-bold mb-0 text-primary"><?= $stats['absences_pending'] ?? 0 ?></h2>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Ausencias Pendientes</p>
+                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Ausencias Pendientes</p>
                     <div class="pt-3 border-top text-end">
                         <a href="<?= base_url('absences/manage') ?>" class="text-primary text-decoration-none fw-bold small transition-hover">
-                            Gestionar <iconify-icon icon="solar:alt-arrow-right-linear" class="ms-1"></iconify-icon>
+                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -56,14 +56,14 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="round-45 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <iconify-icon icon="solar:bill-list-bold-duotone" width="24"></iconify-icon>
+                            <i class="ti ti-receipt fs-24px"></i>
                         </div>
                         <h2 class="fw-bold mb-0 text-primary"><?= $stats['expenses_pending'] ?? 0 ?></h2>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Gastos Pendientes</p>
+                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Gastos Pendientes</p>
                     <div class="pt-3 border-top text-end">
                         <a href="<?= base_url('expenses/manage') ?>" class="text-primary text-decoration-none fw-bold small transition-hover">
-                            Gestionar <iconify-icon icon="solar:alt-arrow-right-linear" class="ms-1"></iconify-icon>
+                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -81,10 +81,10 @@
             <div class="card h-100 border shadow-none bg-white">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center mx-auto mb-3">
-                        <iconify-icon icon="solar:alarm-play-bold-duotone" width="30"></iconify-icon>
+                        <i class="ti ti-player-play fs-30px"></i>
                     </div>
                     <h2 class="fw-bold mb-1 text-success"><?= $stats['users_active'] ?? 0 ?></h2>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small" style="font-size: 0.65rem; letter-spacing: 0.5px;">Usuarios Activos</p>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm" >Usuarios Activos</p>
                 </div>
             </div>
         </div>
@@ -92,10 +92,10 @@
             <div class="card h-100 border shadow-none bg-white">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center mx-auto mb-3">
-                        <iconify-icon icon="solar:alarm-pause-bold-duotone" width="30"></iconify-icon>
+                        <i class="ti ti-player-pause fs-30px"></i>
                     </div>
                     <h2 class="fw-bold mb-1 text-warning"><?= $stats['users_break'] ?? 0 ?></h2>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small" style="font-size: 0.65rem; letter-spacing: 0.5px;">Usuarios En Pausa</p>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm" >Usuarios En Pausa</p>
                 </div>
             </div>
         </div>
@@ -103,10 +103,10 @@
             <div class="card h-100 border shadow-none bg-white">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center mx-auto mb-3">
-                        <iconify-icon icon="solar:alarm-turn-off-bold-duotone" width="30"></iconify-icon>
+                        <i class="ti ti-alarm-off fs-30px"></i>
                     </div>
                     <h2 class="fw-bold mb-1 text-danger"><?= $stats['absences_today'] ?? 0 ?></h2>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small" style="font-size: 0.65rem; letter-spacing: 0.5px;">Ausencias Hoy</p>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm" >Ausencias Hoy</p>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
             <div class="card h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-4">
-                        <iconify-icon icon="solar:diagram-up-line-duotone" class="me-2 text-primary" width="24"></iconify-icon>
+                        <i class="ti ti-chart-line me-2 text-primary fs-24px"></i>
                         <h5 class="card-title fw-bold mb-0">Rendimiento vs Ausencias</h5>
                     </div>
                     <div id="dual_performance_chart" 
@@ -139,7 +139,7 @@
             <div class="card h-100">
                 <div class="card-body p-4">
                     <h5 class="card-title fw-bold mb-4 d-flex align-items-center">
-                        <iconify-icon icon="solar:sort-by-time-bold-duotone" class="me-2 text-primary" width="24"></iconify-icon>
+                        <i class="ti ti-history me-2 text-primary fs-24px"></i>
                         Últimos Movimientos
                     </h5>
                     <div class="timeline-widget">

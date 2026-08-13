@@ -11,7 +11,7 @@ Vista: Jornada Activa (Después de Reanudar)
                 </div>
                 <div class="card-body text-center">
                     <div class="form-group">
-                        <iconify-icon icon="solar:alarm-play-bold-duotone" class="mb-3 text-primary" style="font-size: 4rem;"></iconify-icon><br>
+                        <i class="ti ti-player-play mb-3 text-primary fs-4rem"></i><br>
                         <small>Tu jornada laboral está activa. Selecciona una opción para continuar.</small>
                         <div class="row mt-4">
                             <!-- Formulario para pausar jornada -->
@@ -24,7 +24,7 @@ Vista: Jornada Activa (Después de Reanudar)
                                     <input type="hidden" name="longitud" id="longitud-pause">
 
                                     <button type="submit" class="btn d-block w-100 fw-medium btn-warning" id="pause-workday-btn">
-                                        <iconify-icon icon="solar:alarm-pause-bold-duotone"></iconify-icon>
+                                        <i class="ti ti-player-pause"></i>
                                         Pausar Jornada
                                     </button>
                                 </form>
@@ -39,7 +39,7 @@ Vista: Jornada Activa (Después de Reanudar)
                                     <input type="hidden" name="longitud" id="longitud-end">
 
                                     <button type="submit" class="btn d-block w-100 fw-medium btn-danger" id="end-workday-btn">
-                                        <iconify-icon icon="solar:stop-circle-bold-duotone"></iconify-icon>
+                                        <i class="ti ti-player-stop"></i>
                                         Finalizar Jornada
                                     </button>
                                 </form>

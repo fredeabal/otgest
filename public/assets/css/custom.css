@@ -9,6 +9,19 @@
 .round-50 { width: 50px; height: 50px; flex-shrink: 0; }
 .shadow-none { box-shadow: none !important; }
 
+/* Nuevas utilidades para evitar CSS inline (Rule 9) */
+.fs-4rem { font-size: 4rem !important; }
+.fs-3rem { font-size: 3rem !important; }
+.fs-2rem { font-size: 2rem !important; }
+.fs-40px { font-size: 40px !important; }
+.fs-30px { font-size: 30px !important; }
+.fs-24px { font-size: 24px !important; }
+.text-xxs { font-size: 0.6rem !important; }
+.text-xs { font-size: 0.65rem !important; }
+.w-100px { width: 100px !important; }
+.w-70px-inline { min-width: 70px !important; display: inline-block !important; }
+.debug-container { max-height: 150px; overflow-y: auto; font-size: 0.8em; text-align: left; }
+
 /* Timeline (Dashboard Admin) */
 .timeline-badge {
     width: 10px; 
@@ -71,4 +84,802 @@
     color: var(--bs-body-color); 
     opacity: 0.8; 
     font-weight: 600; 
+}
+
+
+/* =============================================
+   ESTILOS IMPORTADOS DE FILECREW
+   ============================================= */
+
+/* =============================================
+   Estilos personalizados de la aplicación
+   ============================================= */
+
+/* =============================================
+   VARIABLES GLOBALES DE COLOR
+   Modifica estos valores para cambiar rápidamente 
+   la paleta de colores de toda la aplicación.
+   ============================================= */
+:root, [data-bs-theme="dark"] {
+    /* Color Principal (Botones primarios, enlaces activos, etc. - Cloudflare Orange) */
+
+    /* Color Secundario */
+    --bs-secondary: #49beff !important;
+    --bs-secondary-rgb: 73, 190, 255 !important;
+    --bs-secondary-bg-subtle: rgba(73, 190, 255, 0.15) !important;
+
+    /* Color de Éxito (Emerald Green) */
+    --bs-success: #34c759 !important;
+    --bs-success-rgb: 52, 199, 89 !important;
+    --bs-success-bg-subtle: rgba(52, 199, 89, 0.15) !important;
+
+    /* Color de Peligro / Error (El rojo/granate vibrante) */
+    --bs-danger: #b31b34 !important;
+    --bs-danger-rgb: 179, 27, 52 !important;
+    --bs-danger-bg-subtle: rgba(179, 27, 52, 0.15) !important;
+    --bs-danger-text-emphasis: #d82b4a !important;
+
+    /* Color de Advertencia (Cloudflare Yellow/Amber) */
+    --bs-warning: #FAAD14 !important;
+    --bs-warning-rgb: 250, 173, 20 !important;
+    --bs-warning-bg-subtle: rgba(250, 173, 20, 0.15) !important;
+
+    /* Color de Información */
+    --bs-info: #539bff !important;
+    --bs-info-rgb: 83, 155, 255 !important;
+    --bs-info-bg-subtle: rgba(83, 155, 255, 0.15) !important;
+}
+
+/* Forzar Primary en componentes específicos */
+.btn-primary {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+.btn-primary:hover {
+    filter: brightness(0.9);
+}
+
+.btn-outline-primary {
+    color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    background-color: transparent !important;
+}
+.btn-outline-primary:hover {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+/* Forzar Warning en componentes específicos */
+.btn-warning {
+    background-color: var(--bs-warning) !important;
+    border-color: var(--bs-warning) !important;
+    color: #000;
+}
+.btn-warning:hover {
+    filter: brightness(0.9);
+}
+
+/* Forzar Danger en componentes específicos */
+.btn-danger {
+    background-color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+    color: #fff !important;
+}
+.btn-danger:hover {
+    filter: brightness(0.9);
+}
+
+.btn-outline-danger {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+}
+.btn-outline-danger:hover {
+    background-color: var(--bs-danger) !important;
+    color: #fff !important;
+}
+
+/* Forzar Success en componentes específicos */
+.btn-success {
+    background-color: var(--bs-success) !important;
+    border-color: var(--bs-success) !important;
+    color: #fff !important;
+}
+.btn-success:hover {
+    background-color: #2ba84b !important;
+    border-color: #2ba84b !important;
+    color: #fff !important;
+}
+
+/* --- Avatar circular con inicial del usuario --- */
+.user-avatar-circle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+}
+
+/* --- Modal de confirmación de eliminación --- */
+.delete-modal-icon {
+    width: 64px;
+    height: 64px;
+}
+
+/* --- Tabla de usuarios --- */
+#users-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+/* --- Botones de acción en tablas --- */
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+/* --- Indicador circular para badges (estilo Modernize) --- */
+.round-8 {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+}
+
+/* --- Paginación personalizada --- */
+.pagination .page-link {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    margin: 0 4px;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-heading-color, #2A3547);
+    background-color: var(--bs-secondary-bg, #f8f9fa);
+    transition: all 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 9px rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: transparent !important;
+    opacity: 0.5;
+}
+
+.pagination .page-link:hover:not(.disabled) {
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+}
+
+/* --- Badge de rol con efecto sutil --- */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* --- Barra de búsqueda mejorada --- */
+.input-group:focus-within {
+    box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.15);
+    border-radius: var(--bs-border-radius);
+}
+
+/* --- Clases para responsive y regla 9 --- */
+.badge-status {
+    display: inline-block;
+    width: 75px;
+    text-align: center;
+    font-size: 0.6rem !important;
+}
+
+.text-login-time {
+    font-size: 0.8rem;
+}
+
+.search-form-responsive {
+    width: 100%;
+}
+
+/* =============================================
+   Light Theme Overrides
+   ============================================= */
+[data-bs-theme="light"] body {
+    background-color: #00000004 !important;
+}
+
+/* --- Estilos para Menú Desplegable (Dropdown) en Tema Claro --- */
+[data-bs-theme="light"] .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-bs-theme="light"] .dropdown-item:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #2A3547 !important;
+}
+
+[data-bs-theme="light"] .dropdown-item:hover,
+[data-bs-theme="light"] .dropdown-item:focus {
+    background-color: var(--bs-primary-bg-subtle) !important;
+    color: var(--bs-primary) !important;
+}
+
+/* --- Estilos para Etiquetas de Control Check (Switches/Checkboxes) en Tema Claro --- */
+[data-bs-theme="light"] .form-check-label:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #2A3547 !important;
+}
+
+/* --- Estilos para Menú Desplegable (Dropdown) en Tema Oscuro --- */
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: #121a1f !important;
+    border: 1px solid #1a262d !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #a8b6c2 !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+    background-color: var(--bs-primary-bg-subtle) !important;
+    color: var(--bs-primary) !important;
+}
+
+/* --- Estilos para Etiquetas de Control Check (Switches/Checkboxes) en Tema Oscuro --- */
+[data-bs-theme="dark"] .form-check-label:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #a8b6c2 !important;
+}
+
+
+/* =============================================
+   Premium Dark Theme Overrides (Apuestas Style)
+   Solo aplica cuando data-bs-theme="dark"
+   ============================================= */
+[data-bs-theme="dark"] {
+    /* Backgrounds Base */
+    --bs-body-bg: #0b1114 !important;
+    --bs-body-bg-rgb: 11, 17, 20 !important;
+    --bs-dark: #0b1114 !important;
+    --bs-dark-rgb: 11, 17, 20 !important;
+    
+    /* Superficies y Tarjetas */
+    --bs-card-bg: #121a1f !important;
+    --bs-secondary-bg: #121a1f !important;
+    --bs-tertiary-bg: #1a262d !important;
+    
+    /* Bordes Generales */
+    --bs-border-color: #1a262d !important;
+
+    /* Subtle Dark */
+    --bs-dark-bg-subtle: #121a1f !important;
+    --bs-dark-border-subtle: #1a262d !important;
+}
+
+/* Cabecera y Menú Lateral Oscuros */
+[data-bs-theme="dark"] .left-sidebar,
+[data-bs-theme="dark"] .topbar {
+    background-color: #0b1114 !important;
+}
+
+[data-bs-theme="dark"] .left-sidebar {
+    border-right: 1px solid #1a262d !important;
+}
+
+/* Controles de Formulario y Buscador */
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background-color: #0b1114 !important;
+    border: 1px solid #1a262d !important;
+    color: #a8b6c2 !important;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+    background-color: #0b1114 !important;
+    border-color: rgba(var(--bs-primary-rgb), 0.5) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+    color: #8c9ca6 !important;
+}
+
+/* Tablas Premium Dark */
+[data-bs-theme="dark"] .table {
+    --bs-table-bg: transparent !important;
+    --bs-table-color: #f8f9fa !important;
+    --bs-table-border-color: rgba(255, 255, 255, 0.05) !important;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02) !important;
+    --bs-table-hover-bg: rgba(var(--bs-primary-rgb), 0.05) !important;
+}
+
+[data-bs-theme="dark"] .table thead th {
+    background-color: #121a1f !important;
+    color: #f6f9fc !important;
+    border-bottom: 2px solid #1a262d !important;
+}
+
+[data-bs-theme="dark"] .table tbody td {
+    background-color: #0b1114 !important;
+    color: #f8f9fa !important;
+}
+
+
+/* --- Contenedor de caja de búsqueda con icono --- */
+.search-box-container {
+    width: 100%;
+}
+.search-box-container .form-control {
+    padding-left: 2.25rem;
+}
+.search-box-container .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.text-primary-hover {
+    transition: color 0.15s ease-in-out;
+}
+.text-primary-hover:hover {
+    color: var(--bs-primary) !important;
+}
+
+.network-icon-circle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+}
+
+
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+/* =============================================
+   Utilidades para Formularios y UI (Rule 9 Compliant)
+   ============================================= */
+.input-transparent {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    color: inherit;
+}
+.input-transparent:focus {
+    outline: none;
+}
+.file-icon-box {
+    width: 40px;
+    height: 40px;
+}
+.max-w-300 {
+    max-width: 300px;
+}
+.max-w-100 {
+    max-width: 100%;
+}
+.text-xs {
+    font-size: 0.75rem;
+}
+.letter-spacing-sm {
+    letter-spacing: 0.5px;
+}
+
+.switch-custom-size {
+    width: 2.5em !important;
+    height: 1.25em !important;
+    cursor: pointer !important;
+}
+.display-inline-block {
+    display: inline-block !important;
+}
+.overflow-visible {
+    overflow: visible !important;
+}
+.relative-z0 {
+    position: relative !important;
+    z-index: 0 !important;
+}
+
+/* =============================================
+   ESTILOS DE LA LANDING PAGE (FILECREW)
+   ============================================= */
+.landing-body {
+    background-color: #0b1114;
+    color: #f8f9fa;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+.landing-header {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(11, 17, 20, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1030;
+}
+
+.landing-logo {
+    height: 30px;
+    width: auto;
+}
+
+.landing-nav-link {
+    color: #a8b6c2;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+
+.landing-nav-link:hover {
+    color: var(--bs-primary);
+}
+
+.landing-z-index-2 {
+    z-index: 2;
+}
+
+/* Hero Section */
+.landing-hero {
+    min-height: 80vh;
+    background: radial-gradient(circle at 80% 20%, rgba(93, 135, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 10% 80%, rgba(73, 190, 255, 0.05) 0%, transparent 50%);
+}
+
+.landing-hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+.landing-hero-subtitle {
+    font-size: 1.15rem;
+    line-height: 1.7;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #8caeff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.landing-hero-img-wrapper {
+    position: relative;
+    display: inline-block;
+    animation: landing-float 6s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+}
+
+.landing-hero-img {
+    max-height: 480px;
+    object-fit: cover;
+}
+
+@keyframes landing-float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+
+.landing-hero-gradient-ball-1 {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    top: 15%;
+    right: 5%;
+    background: radial-gradient(circle, rgba(93, 135, 255, 0.15) 0%, transparent 70%);
+    filter: blur(40px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.landing-hero-gradient-ball-2 {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    bottom: 10%;
+    left: 5%;
+    background: radial-gradient(circle, rgba(73, 190, 255, 0.1) 0%, transparent 70%);
+    filter: blur(30px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Feature Cards (Glassmorphism) */
+.landing-feature-card {
+    background: rgba(18, 26, 31, 0.5) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 20px !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.landing-feature-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(var(--bs-primary-rgb), 0.3) !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.landing-feature-icon-wrapper {
+    width: 75px;
+    height: 75px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.max-w-700 {
+    max-width: 700px;
+}
+
+.landing-section-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Steps Timeline */
+.landing-step-item {
+    background: rgba(18, 26, 31, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    transition: border-color 0.3s ease;
+}
+
+.landing-step-item:hover {
+    border-color: rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.landing-step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.3);
+}
+
+/* Benefits & CTA Card */
+.landing-cta-card {
+    background: linear-gradient(135deg, rgba(18, 26, 31, 0.9) 0%, rgba(18, 26, 31, 0.6) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 24px !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.landing-cta-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 100% 0%, rgba(93, 135, 255, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Buttons and Micro-animations */
+.landing-btn-pulse {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.landing-btn-pulse:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(var(--bs-primary-rgb), 0.3) !important;
+}
+
+.landing-btn-primary-gradient {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #8caeff 100%) !important;
+    border: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.landing-btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(var(--bs-primary-rgb), 0.4) !important;
+}
+
+/* =============================================
+   FileCrew Custom CSS Logos (Rule 9 Compliant)
+   ============================================= */
+.filecrew-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none !important;
+}
+
+.filecrew-logo-icon {
+    width: 32px;
+    height: 32px;
+    background-color: var(--bs-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px !important;
+}
+
+.filecrew-logo-text {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+    color: var(--bs-heading-color, #2A3547);
+}
+
+[data-bs-theme="dark"] .filecrew-logo-text {
+    color: #ffffff;
+}
+
+.filecrew-logo-highlight {
+    color: var(--bs-primary);
+}
+
+/* =============================================
+   FileCrew Drag & Drop Upload Zone (Rule 9)
+   ============================================= */
+.upload-dropzone {
+    border: 2px dashed rgba(var(--bs-primary-rgb), 0.3);
+    background-color: var(--bs-secondary-bg, #f8f9fa);
+    border-radius: 12px;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+[data-bs-theme="dark"] .upload-dropzone {
+    border-color: rgba(var(--bs-primary-rgb), 0.4) !important;
+}
+
+.upload-dropzone.dragover {
+    border-color: var(--bs-primary) !important;
+    background-color: var(--bs-primary-bg-subtle) !important;
+}
+
+.upload-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* --- Badge de reemplazo de archivo --- */
+.badge-replace-file {
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* =============================================
+   Bootstrap Datepicker Custom Styles
+   ============================================= */
+.datepicker table tr td.today, 
+.datepicker table tr td.today:hover, 
+.datepicker table tr td.today.disabled, 
+.datepicker table tr td.today.disabled:hover {
+    background-color: var(--bs-primary-bg-subtle) !important;
+    border: 1px solid var(--bs-primary) !important;
+    color: inherit !important;
+}
+.datepicker table tr td.active, 
+.datepicker table tr td.active:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+/* Dark Mode para el Datepicker */
+[data-bs-theme="dark"] .datepicker {
+    background-color: var(--bs-card-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    color: #f8f9fa !important;
+}
+[data-bs-theme="dark"] .datepicker table tr td.day:hover,
+[data-bs-theme="dark"] .datepicker table tr td.focused {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+[data-bs-theme="dark"] .datepicker .datepicker-switch:hover, 
+[data-bs-theme="dark"] .datepicker .prev:hover, 
+[data-bs-theme="dark"] .datepicker .next:hover, 
+[data-bs-theme="dark"] .datepicker tfoot tr th:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+/* --- Estilos para los cards de permisos de roles --- */
+.permission-card {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--bs-card-bg, #ffffff);
+    border: 1px solid var(--bs-border-color) !important;
+}
+
+.permission-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-bs-theme="dark"] .permission-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* --- Efecto de copiado para el input de contraseña en public_reveal --- */
+.password-input-copied {
+    border-color: var(--bs-success) !important;
+    background-color: var(--bs-success-bg-subtle) !important;
+    box-shadow: 0 0 8px rgba(var(--bs-success-rgb), 0.2) !important;
+}
+
+/* =============================================
+   Estilos de Historial de Envíos (Dashboard)
+   ============================================= */
+.avatar-icon-wrapper {
+    width: 28px;
+    height: 28px;
+}
+
+.table-row-hover {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.table-row-hover:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+[data-bs-theme="light"] .table-row-hover:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.text-truncate-max-200 {
+    max-width: 200px;
+}
+
+/* Limit size of password generator length range input */
+.pwd-length-range {
+    max-width: 300px;
+}
+
+/* =============================================
+   Corrección de fondos en Auth (Login, Reset...)
+   ============================================= */
+/* Para Tema Claro: Fondo transparente para que se vea blanco puro */
+[data-bs-theme="light"] .radial-gradient::before {
+    background: none !important;
+    background-color: transparent !important;
+}
+
+/* Para Tema Oscuro: Fondo integrado con el tema dark premium */
+[data-bs-theme="dark"] .radial-gradient::before {
+    background: none !important;
+    background-color: rgba(11, 17, 20, 0.8) !important;
 }

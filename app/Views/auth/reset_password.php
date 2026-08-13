@@ -3,15 +3,31 @@
      ================================================================================= -->
 
 <!DOCTYPE html>
-<html lang="es" dir="ltr" data-color-theme="Blue_Theme" data-layout="vertical">
+<html lang="es" dir="ltr" data-bs-theme="dark" data-color-theme="Blue_Theme" data-layout="vertical">
 
 <head>
+    <!-- =================================================================================
+    // Script para evitar el parpadeo del tema
+    // ================================================================================= -->
+    <script>
+    (function() {
+        var userTheme = '<?= session()->get('user_theme') ?? '' ?>';
+        var localTheme = localStorage.getItem('theme');
+        var theme = userTheme || localTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        if (userTheme) {
+            document.documentElement.setAttribute('data-user-theme', userTheme);
+        }
+    })();
+    </script>
     <!-- Cabecera y recursos principales -->
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css?v=<?= time() ?>" />
     <title>Restablecer Contraseña</title>
 </head>
 
@@ -66,8 +82,10 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Restablecer
                                         contraseña</button>
-                                    <a class="text-primary fw-medium" href="<?= site_url('login') ?>">Volver al
-                                        login</a>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <a class="text-primary fw-medium" href="<?= site_url('login') ?>">Volver al
+                                            login</a>
+                                    </div>
                                 </form>
                             </div>
                         </div>

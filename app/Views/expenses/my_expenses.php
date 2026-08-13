@@ -32,13 +32,13 @@
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary btn-icon me-2">
-                        <iconify-icon icon="solar:filter-bold-duotone"></iconify-icon>
+                        <i class="ti ti-filter"></i>
                     </button>
-                    <a href="<?= base_url('expenses/my-expenses') ?>" class="btn btn-outline-muted btn-icon me-2">
-                        <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+                    <a href="<?= base_url('expenses/my-expenses') ?>" class="btn btn-outline-primary btn-icon me-2">
+                        <i class="ti ti-circle-x"></i>
                     </a>
-                    <a href="<?= base_url('expenses/export-my-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-warning btn-icon">
-                        <iconify-icon icon="solar:file-bold-duotone"></iconify-icon>
+                    <a href="<?= base_url('expenses/export-my-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-outline-primary btn-icon">
+                        <i class="ti ti-file"></i>
                     </a>
                 </div>
             </form>
@@ -111,7 +111,7 @@
                                         break;
                                 }
                                 ?>
-                                <span class="<?= $statusClass ?>" style="min-width: 70px; display: inline-block;"><?= $statusText ?></span>
+                                <span class="<?= $statusClass ?> w-70px-inline" ><?= $statusText ?></span>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
                                 <h6 class="fw-semibold mb-0 mb-1">
@@ -126,13 +126,13 @@
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                        <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('expenses/view/' . $expense['id']) ?>">
-                                                <iconify-icon icon="solar:eye-bold-duotone"></iconify-icon> Ver detalle
+                                                <i class="ti ti-eye"></i> Ver detalle
                                             </a>
                                         </li>
                                     </ul>

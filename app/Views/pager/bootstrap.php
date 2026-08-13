@@ -14,12 +14,12 @@ $pager->setSurroundCount(2);
     <?php if ($pager->hasPrevious()) : ?>
       <li class="page-item">
         <a class="page-link d-inline-flex align-items-center justify-content-center" href="<?= $pager->getPrevious() ?>" aria-label="Anterior">
-        <iconify-icon icon="solar:alt-arrow-left-outline"></iconify-icon>
+        <i class="ti ti-arrow-left"></i>
         </a>
       </li>
     <?php else : ?>
       <li class="page-item">
-        <span class="page-link d-inline-flex align-items-center justify-content-center"><iconify-icon icon="solar:alt-arrow-left-outline"></iconify-icon></span>
+        <span class="page-link d-inline-flex align-items-center justify-content-center"><i class="ti ti-arrow-left"></i></span>
       </li>
     <?php endif; ?>
 
@@ -36,12 +36,12 @@ $pager->setSurroundCount(2);
     <?php if ($pager->hasNext()) : ?>
       <li class="page-item">
         <a class="page-link d-inline-flex align-items-center justify-content-center" href="<?= $pager->getNext() ?>" aria-label="Siguiente">
-        <iconify-icon icon="solar:alt-arrow-right-outline"></iconify-icon>
+        <i class="ti ti-arrow-right"></i>
         </a>
       </li>
     <?php else : ?>
       <li class="page-item">
-        <span class="page-link d-inline-flex align-items-center justify-content-center"><iconify-icon icon="solar:alt-arrow-right-outline"></iconify-icon></span>
+        <span class="page-link d-inline-flex align-items-center justify-content-center"><i class="ti ti-arrow-right"></i></span>
       </li>
     <?php endif; ?>
 

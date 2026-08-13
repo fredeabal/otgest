@@ -71,14 +71,25 @@ $routes->get('documents/download/(:num)', 'DocumentsController::download/$1', ['
 // =================================================================================
 // Rutas de gestión de empresa (solo admin)
 // =================================================================================
-$routes->get('company/edit', 'CompanyController::edit', ['filter' => 'permission:admin.company']);
-$routes->post('company/update', 'CompanyController::update', ['filter' => 'permission:admin.company']);
-$routes->post('company/clear-sessions', 'CompanyController::clearSessions', ['filter' => 'permission:admin.company']);
-$routes->post('company/clear-cache', 'CompanyController::clearCache', ['filter' => 'permission:admin.company']);
-$routes->post('company/clear-logs', 'CompanyController::clearLogs', ['filter' => 'permission:admin.company']);
-$routes->post('company/clear-debugbar', 'CompanyController::clearDebugbar', ['filter' => 'permission:admin.company']);
-$routes->post('company/test-smtp', 'CompanyController::testSmtp', ['filter' => 'permission:admin.company']);
-$routes->get('company/download-db', 'CompanyController::downloadDatabase', ['filter' => 'permission:admin.company']);
+$routes->group('settings', ['filter' => 'permission:admin.company'], function($routes) {
+    $routes->get('company', 'SettingsController::company');
+    $routes->post('company/update', 'SettingsController::updateCompany');
+    
+    $routes->get('smtp', 'SettingsController::smtp');
+    $routes->post('smtp/update', 'SettingsController::updateSmtp');
+    $routes->post('test-smtp', 'SettingsController::testSmtp');
+    
+    $routes->get('maintenance', 'SettingsController::maintenance');
+    $routes->post('clear-sessions', 'SettingsController::clearSessions');
+    $routes->post('clear-cache', 'SettingsController::clearCache');
+    $routes->post('clear-logs', 'SettingsController::clearLogs');
+    $routes->post('clear-debugbar', 'SettingsController::clearDebugbar');
+    $routes->post('clear-all', 'SettingsController::clearAll');
+    $routes->post('run-tests', 'SettingsController::runTests');
+    
+    $routes->get('download-db', 'SettingsController::downloadDatabase');
+    $routes->post('restore-db', 'SettingsController::restoreDatabase');
+});
 // =================================================================================
 // Rutas de gestión de solicitudes de ausencia
 // =================================================================================

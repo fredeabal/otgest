@@ -47,10 +47,10 @@
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary btn-icon me-2">
-                        <iconify-icon icon="solar:filter-bold-duotone"></iconify-icon>
+                        <i class="ti ti-filter"></i>
                     </button>
-                    <a href="<?= base_url('documents/sent') ?>" class="btn btn-outline-muted btn-icon">
-                        <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+                    <a href="<?= base_url('documents/sent') ?>" class="btn btn-outline-primary btn-icon">
+                        <i class="ti ti-circle-x"></i>
                     </a>
                 </div>
             </form>
@@ -108,17 +108,17 @@
                                     <?= esc(date('H:i', strtotime($doc['read_at']))) ?>
                                 </span>
                                 <?php else: ?>
-                                <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning text-warning fs-2"
-                                    style="min-width: 70px; display: inline-block;">Pendiente</span>
+                                <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-70px-inline"
+                                    >Pendiente</span>
                                 <?php endif; ?>
                             </td>
                             <!-- <td class="text-center">
                                 <?php if (!empty($doc['read_at'])): ?>
-                                <span class="badge bg-success-subtle text-success fw-semibold border border-success text-success fs-2"
-                                    style="min-width: 70px; display: inline-block;">Entregado</span>
+                                <span class="badge bg-success-subtle text-success fw-semibold border border-success fs-2 w-70px-inline"
+                                    >Entregado</span>
                                 <?php else: ?>
-                                <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning text-warning fs-2"
-                                    style="min-width: 70px; display: inline-block;">Pendiente</span>
+                                <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-70px-inline"
+                                    >Pendiente</span>
                                 <?php endif; ?>
                             </td> -->
                             <td class="text-center">
@@ -126,20 +126,20 @@
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                        <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3 view-doc"
                                                 href="#" data-url="<?= base_url('documents/view/' . $doc['id']) ?>"
                                                 data-title="<?= esc($doc['title']) ?>">
-                                                <iconify-icon icon="solar:eye-bold-duotone"></iconify-icon> Ver
+                                                <i class="ti ti-eye"></i> Ver
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('documents/download/' . $doc['id']) ?>">
-                                                <iconify-icon icon="solar:download-bold-duotone"></iconify-icon> Descargar
+                                                <i class="ti ti-download"></i> Descargar
                                             </a>
                                         </li>
                                     </ul>

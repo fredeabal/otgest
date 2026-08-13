@@ -33,13 +33,13 @@
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary btn-icon me-2">
-                        <iconify-icon icon="solar:filter-bold-duotone"></iconify-icon>
+                        <i class="ti ti-filter"></i>
                     </button>
-                    <a href="<?= base_url('workdays/my-records') ?>" class="btn btn-outline-muted btn-icon me-2">
-                        <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+                    <a href="<?= base_url('workdays/my-records') ?>" class="btn btn-outline-primary btn-icon me-2">
+                        <i class="ti ti-circle-x"></i>
                     </a>
-                    <a href="<?= base_url('workdays/export-my-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-warning btn-icon">
-                        <iconify-icon icon="solar:file-bold-duotone"></iconify-icon>
+                    <a href="<?= base_url('workdays/export-my-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-outline-primary btn-icon">
+                        <i class="ti ti-file"></i>
                     </a>
                 </div>
             </form>
@@ -85,8 +85,8 @@
                                     <?= esc($workday['end_time']) ?><br>
                                     <small class="text-muted"><?= esc($workday['end_date']) ?></small>
                                 <?php elseif ($workday['autoclose']): ?>
-                                    <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning text-warning fs-2"
-                                        style="min-width: 70px; display: inline-block;">Automático</span><br>
+                                    <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-70px-inline"
+                                        >Automático</span><br>
                                     <small class="text-muted"><?= esc($workday['end_date']) ?></small>
                                 <?php else: ?>
                                     -
@@ -94,8 +94,8 @@
                             </td>
                             <!-- Horas totales -->
                             <td class="text-center">
-                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2"
-                                    style="min-width: 70px; display: inline-block;">
+                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-70px-inline"
+                                    >
                                     <?php
                                     $totalMinutes = round($workday['total_hours'] * 60);
                                     $hours = floor($totalMinutes / 60);
@@ -105,8 +105,8 @@
                                 </span>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
-                                <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2"
-                                    style="min-width: 70px; display: inline-block;">
+                                <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2 w-70px-inline"
+                                    >
                                     <?php
                                     $overtimeMinutes = round(($workday['overtime_hours'] ?? 0) * 60);
                                     $hours = floor($overtimeMinutes / 60);
@@ -127,8 +127,7 @@
                                     'in_progress' => 'En curso'
                                 ];
                                 ?>
-                                <span class="badge bg-<?= $statusClass[$workday['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fs-2"
-                                    style="min-width: 70px; display: inline-block;">
+                                <span class="badge bg-<?= $statusClass[$workday['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fs-2 w-70px-inline">
                                     <?= $statusText[$workday['status']] ?? $workday['status'] ?>
                                 </span>
                             </td>
@@ -138,13 +137,13 @@
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                        <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('workdays/view/' . $workday['date']) ?>">
-                                                <iconify-icon icon="solar:eye-bold-duotone"></iconify-icon> Ver detalles
+                                                <i class="ti ti-eye"></i> Ver detalles
                                             </a>
                                         </li>
                                     </ul>
@@ -152,32 +151,6 @@
                             </td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php
-                        // Fila de totales acumulados
-                        $totalWorkedMins = 0;
-                        $totalOvertimeMins = 0;
-                        foreach ($workdays as $w) {
-                            $totalWorkedMins   += round($w['total_hours'] * 60);
-                            $totalOvertimeMins += round(($w['overtime_hours'] ?? 0) * 60);
-                        }
-                        ?>
-                        <?php if (!empty($workdays)): ?>
-                        <tr class="table-active fw-bold border-top border-2">
-                            <td colspan="3" class="text-end d-none d-md-table-cell text-muted small">TOTAL DEL PERÍODO</td>
-                            <td class="text-start d-md-none text-muted small">TOTAL</td>
-                            <td class="text-center">
-                                <span class="badge bg-info fw-semibold fs-2" style="min-width: 70px; display: inline-block;">
-                                    <?= floor($totalWorkedMins / 60) . ':' . str_pad($totalWorkedMins % 60, 2, '0', STR_PAD_LEFT) ?> h
-                                </span>
-                            </td>
-                            <td class="text-center d-none d-md-table-cell">
-                                <span class="badge bg-warning fw-semibold fs-2" style="min-width: 70px; display: inline-block;">
-                                    <?= floor($totalOvertimeMins / 60) . ':' . str_pad($totalOvertimeMins % 60, 2, '0', STR_PAD_LEFT) ?> h
-                                </span>
-                            </td>
-                            <td colspan="2" class="d-none d-md-table-cell"></td>
-                        </tr>
-                        <?php endif; ?>
                         <?php endif; ?>
                     </tbody>
                 </table>

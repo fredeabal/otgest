@@ -7,9 +7,14 @@
     // ================================================================================= -->
     <script>
     (function() {
-        var theme = '<?= session()->get('user_theme') ?: 'light' ?>';
+        var userTheme = '<?= session()->get('user_theme') ?? '' ?>';
+        var localTheme = localStorage.getItem('theme');
+        var theme = userTheme || localTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
         document.documentElement.setAttribute('data-bs-theme', theme);
-        document.documentElement.setAttribute('data-user-theme', theme);
+        if (userTheme) {
+            document.documentElement.setAttribute('data-user-theme', userTheme);
+        }
     })();
     </script>
 
@@ -21,7 +26,7 @@
     <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/logos/favicon.png" />
     <!-- CSS Principal -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css?v=<?= time() ?>" />
     <!-- solar icons -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <!-- SweetAlert2 -->
@@ -68,7 +73,7 @@
                         <!-- ============================= -->
                         <!-- Jornadas de Trabajo -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || array_intersect(['workdays.clockin', 'workdays.records', 'workdays.manage'], session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission(['workdays.clockin', 'workdays.records', 'workdays.manage'])): ?>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
@@ -77,7 +82,7 @@
                                 <span class="hide-menu">Jornadas</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
-                                <?php if (session()->get('user_role') == 1 || in_array('workdays.clockin', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('workdays.clockin')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('workdays') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -86,7 +91,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('workdays.records', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('workdays.records')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('workdays/my-records') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -95,7 +100,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('workdays.manage', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('workdays.manage')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('workdays/manage') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -111,7 +116,7 @@
                         <!-- ============================= -->
                         <!-- Documentos -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || array_intersect(['documents.received', 'documents.sent', 'documents.send', 'documents.manage'], session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission(['documents.received', 'documents.sent', 'documents.send', 'documents.manage'])): ?>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
@@ -120,7 +125,7 @@
                                 <span class="hide-menu">Documentos</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
-                                <?php if (session()->get('user_role') == 1 || in_array('documents.received', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('documents.received')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('documents/list') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -129,7 +134,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('documents.sent', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('documents.sent')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('documents/sent') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -138,7 +143,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('documents.send', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('documents.send')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('documents/send') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -147,7 +152,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('documents.manage', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('documents.manage')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('documents/bulk-send') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -163,7 +168,7 @@
                         <!-- ============================= -->
                         <!-- Solicitudes -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || array_intersect(['absences.request', 'absences.list', 'absences.manage'], session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission(['absences.request', 'absences.list', 'absences.manage'])): ?>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
@@ -172,7 +177,7 @@
                                 <span class="hide-menu">Ausencias</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
-                                <?php if (session()->get('user_role') == 1 || in_array('absences.request', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('absences.request')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('absences/request') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -181,7 +186,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('absences.list', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('absences.list')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('absences/list') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -190,7 +195,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('absences.manage', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('absences.manage')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('absences/manage') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -206,7 +211,7 @@
                         <!-- ============================= -->
                         <!-- Gastos -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || array_intersect(['expenses.create', 'expenses.my', 'expenses.manage'], session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission(['expenses.create', 'expenses.my', 'expenses.manage'])): ?>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
@@ -215,7 +220,7 @@
                                 <span class="hide-menu">Gastos</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
-                                <?php if (session()->get('user_role') == 1 || in_array('expenses.create', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('expenses.create')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('expenses/create') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -224,7 +229,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('expenses.my', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('expenses.my')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('expenses/my-expenses') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -233,7 +238,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if (session()->get('user_role') == 1 || in_array('expenses.manage', session()->get('user_permissions') ?? [])): ?>
+                                <?php if (has_permission('expenses.manage')): ?>
                                 <li class="sidebar-item">
                                     <a href="<?= base_url('expenses/manage') ?>" class="sidebar-link">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -249,7 +254,7 @@
                         <!-- ============================= -->
                         <!-- Usuarios -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || in_array('admin.users', session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission('admin.users')): ?>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
@@ -278,7 +283,7 @@
                         <!-- ============================= -->
                         <!-- Roles -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || in_array('admin.roles', session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission('admin.roles')): ?>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
@@ -305,16 +310,39 @@
                         </li>
                         <?php endif; ?>
                         <!-- ============================= -->
-                        <!-- Empresa -->
+                        <!-- Configuración -->
                         <!-- ============================= -->
-                        <?php if (session()->get('user_role') == 1 || in_array('admin.company', session()->get('user_permissions') ?? [])): ?>
+                        <?php if (has_permission('admin.company')): ?>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="<?= base_url('company/edit') ?>" aria-expanded="false">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:buildings-bold-duotone" class="fs-5"></iconify-icon>
+                                    <iconify-icon icon="solar:settings-bold-duotone" class="fs-5"></iconify-icon>
                                 </span>
-                                <span class="hide-menu">Empresa</span>
+                                <span class="hide-menu">Configuración</span>
                             </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a href="<?= base_url('settings/company') ?>" class="sidebar-link">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                        </div>
+                                        <span class="hide-menu">Empresa</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="<?= base_url('settings/smtp') ?>" class="sidebar-link">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                        </div>
+                                        <span class="hide-menu">SMTP Correo</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="<?= base_url('settings/maintenance') ?>" class="sidebar-link">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                        </div>
+                                        <span class="hide-menu">Mantenimiento</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <?php endif; ?>
                     </ul>

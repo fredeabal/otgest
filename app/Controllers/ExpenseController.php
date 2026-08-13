@@ -248,7 +248,7 @@ class ExpenseController extends BaseController
 
         // Verificar permisos (solo el propietario o admin puede ver)
         $userId = session()->get('user_id');
-        if ($expense['user_id'] != $userId && !in_array(session()->get('role'), ['admin']) && !in_array('expenses.manage', session()->get('user_permissions') ?? [])) {
+        if ($expense['user_id'] != $userId && !has_permission('expenses.manage')) {
             return redirect()->to('/expenses/my-expenses')->with('errors', ['No tienes permisos para ver este gasto.']);
         }
 

@@ -57,13 +57,13 @@
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary btn-icon me-2">
-                                <iconify-icon icon="solar:filter-bold-duotone"></iconify-icon>
+                                <i class="ti ti-filter"></i>
                             </button>
-                            <a href="<?= base_url('absences/manage') ?>" class="btn btn-outline-muted btn-icon me-2">
-                                <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon>
+                            <a href="<?= base_url('absences/manage') ?>" class="btn btn-outline-primary btn-icon me-2">
+                                <i class="ti ti-circle-x"></i>
                             </a>
-                            <a href="<?= base_url('absences/export-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-warning btn-icon">
-                                <iconify-icon icon="solar:file-bold-duotone"></iconify-icon>
+                            <a href="<?= base_url('absences/export-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-outline-primary btn-icon">
+                                <i class="ti ti-file"></i>
                             </a>
                         </div>
                     </form>
@@ -144,8 +144,7 @@
                                 ];
                                 ?>
                                         <span
-                                            class="badge bg-<?= $statusClass[$absence['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fs-2"
-                                            style="min-width: 70px; display: inline-block;">
+                                            class="badge bg-<?= $statusClass[$absence['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fs-2 w-70px-inline">
                                             <?= $statusLabels[$absence['status']] ?? $absence['status'] ?>
                                         </span>
                                     </td>
@@ -154,7 +153,7 @@
                                         <div class="dropdown dropstart">
                                             <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
-                                                <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                                <i class="ti ti-dots-vertical fs-7"></i>
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <?php if ($absence['status'] == 'pending'): ?>
@@ -163,20 +162,20 @@
                                                         href="#"
                                                         data-url="<?= base_url('absences/approve/' . $absence['id']) ?>"
                                                         data-method="post">
-                                                        <iconify-icon icon="solar:check-circle-bold-duotone"></iconify-icon> Aprobar
+                                                        <i class="ti ti-circle-check"></i> Aprobar
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item d-flex align-items-center gap-3 reject-absence-swal"
                                                         href="#" data-id="<?= $absence['id'] ?>">
-                                                        <iconify-icon icon="solar:close-circle-bold-duotone"></iconify-icon> Rechazar
+                                                        <i class="ti ti-circle-x"></i> Rechazar
                                                     </a>
                                                 </li>
                                                 <?php endif; ?>
                                                 <li>
                                                     <a class="dropdown-item d-flex align-items-center gap-3"
                                                         href="<?= base_url('absences/view/' . $absence['id']) ?>">
-                                                        <iconify-icon icon="solar:eye-bold-duotone"></iconify-icon> Ver detalles
+                                                        <i class="ti ti-eye"></i> Ver detalles
                                                     </a>
                                                 </li>
                                             </ul>

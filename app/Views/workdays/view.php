@@ -16,7 +16,7 @@
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
-                                        <iconify-icon icon="solar:calendar-bold-duotone" class="text-primary" style="font-size: 2rem;"></iconify-icon>
+                                        <i class="ti ti-calendar text-primary fs-2rem"></i>
                                     </div>
                                     <h6 class="text-muted mb-1">Fecha</h6>
                                     <h4 class="text-info mb-0"><?php echo date('d/m/Y', strtotime($workday_date)); ?>
@@ -28,7 +28,7 @@
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
-                                        <iconify-icon icon="solar:clock-circle-bold-duotone" class="text-primary" style="font-size: 2rem;"></iconify-icon>
+                                        <i class="ti ti-clock text-primary fs-2rem"></i>
                                     </div>
                                     <h6 class="text-muted mb-1">Horas Trabajadas</h6>
                                     <h4 class="text-primary mb-0"><?php 
@@ -42,7 +42,7 @@
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
-                                        <iconify-icon icon="solar:pause-circle-bold-duotone" class="text-warning" style="font-size: 2rem;"></iconify-icon>
+                                        <i class="ti ti-player-pause text-warning fs-2rem"></i>
                                     </div>
                                     <h6 class="text-muted mb-1">Tiempo de Pausas</h6>
                                     <h4 class="text-warning mb-0"><?php 
@@ -56,7 +56,7 @@
                             <div class="card border h-100">
                                 <div class="card-body text-center p-3">
                                     <div class="mb-2">
-                                        <iconify-icon icon="solar:add-circle-bold-duotone" class="text-primary" style="font-size: 2rem;"></iconify-icon>
+                                        <i class="ti ti-circle-plus text-primary fs-2rem"></i>
                                     </div>
                                     <h6 class="text-muted mb-1">Horas Extras</h6>
                                     <h4 class="text-primary mb-0"><?php 
@@ -120,13 +120,13 @@
                                         <!-- mostrar dirección usando Nominatim si existen coordenadas GPS -->
                                         <?php if ($event['latitude'] && $event['longitude']): ?>
                                         <p class="text-muted mb-0 small">
-                                            <iconify-icon icon="solar:map-point-bold-duotone" class="me-1"></iconify-icon>
+                                            <i class="ti ti-map-pin me-1"></i>
                                             Ubicación:
                                             <a href="https://www.google.com/maps/search/?api=1&query=<?= $event['latitude'] ?>,<?= $event['longitude'] ?>"
                                                target="_blank" class="text-decoration-none reverse-geocode" 
                                                data-lat="<?= $event['latitude'] ?>" data-lon="<?= $event['longitude'] ?>">
                                                 Cargando dirección...
-                                                <iconify-icon icon="solar:link-bold-duotone" class="ms-1 small"></iconify-icon>
+                                                <i class="ti ti-link ms-1 small"></i>
                                             </a>
                                         </p>
 
@@ -137,7 +137,7 @@
                                 <div class="text-end">
                                     <?php if ($event['event_type'] === 'out' && $event['autoclose']): ?>
                                     <span class="badge bg-warning-subtle text-warning">
-                                        <iconify-icon icon="solar:magic-stick-bold-duotone" class="me-1"></iconify-icon>Automático
+                                        <i class="ti ti-wand me-1"></i>Automático
                                     </span>
                                     <?php endif; ?>
                                 </div>

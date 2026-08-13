@@ -126,7 +126,7 @@
                                 <div class="form-check form-switch py-2">
                                     <input class="form-check-input" type="checkbox" id="themeSwitch" name="theme" value="dark" <?= $user['theme'] == 'dark' ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="themeSwitch">
-                                        <iconify-icon icon="solar:moon-bold-duotone" class="ms-2"></iconify-icon>
+                                        <i class="ti ti-moon ms-2"></i>
                                     </label>
                                 </div>
                             </div>

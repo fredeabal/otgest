@@ -66,7 +66,7 @@ class DocumentsController extends BaseController
         $user = $this->usersModel->find($userId);
 
         // si es un usuario con permiso 'documents.manage' o un admin mostramos todos los usuarios en el select
-        if (str_contains($user['permissions'] ?? '', 'documents.manage') || $user['role_id'] == 1) {
+        if (has_permission('documents.manage')) {
             $data['users'] = $this->usersModel->where('is_active', 1)->findAll();
         } else {
             // si no tiene permiso solo mostramos usuarios con documents.manage

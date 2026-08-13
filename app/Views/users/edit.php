@@ -144,7 +144,7 @@
                                     <div class="card mb-0 shadow-none border">
                                         <div class="card-header bg-primary-subtle">
                                             <h6 class="mb-0 text-primary d-flex align-items-center gap-2">
-                                                <iconify-icon icon="solar:stopwatch-bold-duotone" class="fs-5"></iconify-icon> Jornadas
+                                                <i class="ti ti-clock fs-5"></i> Jornadas
                                             </h6>
                                         </div>
                                         <div class="card-body p-3">
@@ -159,7 +159,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="workdays_manage" name="permissions[]" value="workdays.manage" <?= in_array('workdays.manage', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="workdays_manage">Gestión de jornadas</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                     <div class="card mb-0 shadow-none border">
                                         <div class="card-header bg-primary-subtle">
                                             <h6 class="mb-0 text-primary d-flex align-items-center gap-2">
-                                                <iconify-icon icon="solar:calendar-minimalistic-bold-duotone" class="fs-5"></iconify-icon> Ausencias
+                                                <i class="ti ti-calendar-event fs-5"></i> Ausencias
                                             </h6>
                                         </div>
                                         <div class="card-body p-3">
@@ -185,7 +185,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="absences_manage" name="permissions[]" value="absences.manage" <?= in_array('absences.manage', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="absences_manage">Gestión de ausencias</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +196,7 @@
                                     <div class="card mb-0 shadow-none border">
                                         <div class="card-header bg-primary-subtle">
                                             <h6 class="mb-0 text-primary d-flex align-items-center gap-2">
-                                                <iconify-icon icon="solar:bill-list-bold-duotone" class="fs-5"></iconify-icon> Gastos
+                                                <i class="ti ti-receipt fs-5"></i> Gastos
                                             </h6>
                                         </div>
                                         <div class="card-body p-3">
@@ -211,7 +211,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="expenses_manage" name="permissions[]" value="expenses.manage" <?= in_array('expenses.manage', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="expenses_manage">Gestión de gastos</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -222,7 +222,7 @@
                                     <div class="card mb-0 shadow-none border">
                                         <div class="card-header bg-primary-subtle">
                                             <h6 class="mb-0 text-primary d-flex align-items-center gap-2">
-                                                <iconify-icon icon="solar:document-text-bold-duotone" class="fs-5"></iconify-icon> Documentos
+                                                <i class="ti ti-file-text fs-5"></i> Documentos
                                             </h6>
                                         </div>
                                         <div class="card-body p-3">
@@ -241,7 +241,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="documents_manage" name="permissions[]" value="documents.manage" <?= in_array('documents.manage', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="documents_manage">Envíos masivos</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -252,24 +252,24 @@
                                     <div class="card mb-0 shadow-none border border-danger">
                                         <div class="card-header bg-danger-subtle">
                                             <h6 class="mb-0 text-danger d-flex align-items-center gap-2">
-                                                <iconify-icon icon="solar:shield-keyhole-bold-duotone" class="fs-5"></iconify-icon> Administración General
+                                                <i class="ti ti-shield-lock fs-5"></i> Administración General
                                             </h6>
                                         </div>
                                         <div class="card-body p-3">
                                             <div class="form-check form-switch mb-3">
                                                 <input class="form-check-input" type="checkbox" id="admin_users" name="permissions[]" value="admin.users" <?= in_array('admin.users', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="admin_users">Gestionar Usuarios</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                             <div class="form-check form-switch mb-3">
                                                 <input class="form-check-input" type="checkbox" id="admin_roles" name="permissions[]" value="admin.roles" <?= in_array('admin.roles', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="admin_roles">Gestionar Roles</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="admin_company" name="permissions[]" value="admin.company" <?= in_array('admin.company', $userPermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="admin_company">Ajustes de la empresa</label>
-                                                <iconify-icon icon="eos-icons:admin-outlined" class="ms-3 text-danger"></iconify-icon>
+                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
                                             </div>
                                         </div>
                                     </div>

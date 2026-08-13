@@ -7,7 +7,7 @@
         <div class="card-header bg-primary-subtle text-white">
             <h5 class="mb-0 text-primary">Listado de roles</h5>
         </div>
-        <div class="card-body ">
+        <div class="card-body">
             <!-- buscador de roles -->
             <div class="mb-3">
                 <input type="text" id="roleTableSearch" class="form-control" placeholder="Buscar rol...">
@@ -40,19 +40,19 @@
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                        <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('roles/edit/' . $role['id']) ?>">
-                                                <iconify-icon icon="solar:pen-bold-duotone"></iconify-icon> Editar
+                                                <i class="ti ti-pencil"></i> Editar
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3 delete-role-swal"
                                                 href="#" data-url="<?= base_url('roles/delete/' . $role['id']) ?>">
-                                                <iconify-icon icon="solar:trash-bin-trash-bold-duotone"></iconify-icon> Eliminar
+                                                <i class="ti ti-trash"></i> Eliminar
                                             </a>
                                         </li>
                                     </ul>

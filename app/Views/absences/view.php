@@ -203,7 +203,7 @@
                 <!-- =================================================================================
                 // Acciones (solo para administradores en ausencias pendientes)
                 // ================================================================================= -->
-                <?php if ($absence['status'] === 'pending' && (session()->get('user_role') == 1 || in_array('manage_absences', session()->get('user_permissions') ?? []))): ?>
+                <?php if ($absence['status'] === 'pending' && (has_permission('manage_absences'))): ?>
                 <div class="card-footer px-0">
                     <div class="row">
                         <div class="col-sm-12 text-center mt-3 mb-3">

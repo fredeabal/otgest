@@ -11,7 +11,7 @@ Vista: Iniciar Jornada Laboral
                 </div>
                 <div class="card-body text-center">
                     <div class="form-group">
-                        <iconify-icon icon="solar:stopwatch-bold-duotone" class="mb-3 text-primary" style="font-size: 4rem;"></iconify-icon><br>
+                        <i class="ti ti-clock mb-3 text-primary fs-4rem"></i><br>
                         <small>Haz clic en el botón para iniciar tu jornada laboral.</small>
                         <form action="<?= base_url('workdays/start') ?>" method="post" id="workday-form" class="my-4">
                             <?= csrf_field() ?>
@@ -21,7 +21,7 @@ Vista: Iniciar Jornada Laboral
                             <input type="hidden" name="longitud" id="longitud">
 
                             <button type="submit" class="btn d-block w-100 fw-medium btn-primary" id="start-workday-btn">
-                                <iconify-icon icon="solar:play-circle-bold-duotone"></iconify-icon>
+                                <i class="ti ti-player-play"></i>
                                 Iniciar Jornada
                             </button>
                         </form>

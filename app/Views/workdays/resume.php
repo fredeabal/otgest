@@ -11,7 +11,7 @@ Vista: Reanudar Jornada Laboral
                 </div>
                 <div class="card-body text-center">
                     <div class="form-group">
-                        <iconify-icon icon="solar:alarm-pause-bold-duotone" class="mb-3 text-primary" style="font-size: 4rem;"></iconify-icon><br>
+                        <i class="ti ti-player-pause mb-3 text-primary fs-4rem"></i><br>
                         <small>Tu jornada está en pausa. Selecciona una opción para continuar.</small>
                         <div class="row mt-4">
                             <!-- Formulario para reanudar jornada -->
@@ -24,7 +24,7 @@ Vista: Reanudar Jornada Laboral
                                     <input type="hidden" name="longitud" id="longitud-resume">
 
                                     <button type="submit" class="btn d-block w-100 fw-medium btn-primary" id="resume-workday-btn">
-                                        <iconify-icon icon="solar:play-circle-bold-duotone"></iconify-icon>
+                                        <i class="ti ti-player-play"></i>
                                         Reanudar Jornada
                                     </button>
                                 </form>
@@ -39,7 +39,7 @@ Vista: Reanudar Jornada Laboral
                                     <input type="hidden" name="longitud" id="longitud-end">
 
                                     <button type="submit" class="btn d-block w-100 fw-medium btn-danger" id="end-workday-btn">
-                                        <iconify-icon icon="solar:stop-circle-bold-duotone"></iconify-icon>
+                                        <i class="ti ti-player-stop"></i>
                                         Finalizar Jornada
                                     </button>
                                 </form>

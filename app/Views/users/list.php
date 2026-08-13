@@ -7,7 +7,7 @@
         <div class="card-header bg-primary-subtle text-white">
             <h5 class="mb-0 text-primary">Listado de usuarios</h5>
         </div>
-        <div class="card-body ">
+        <div class="card-body">
             <!-- buscador de usuarios -->
             <div class="mb-3">
                 <input type="text" id="userTableSearch" class="form-control" placeholder="Buscar usuario...">
@@ -44,18 +44,18 @@
                                 <?= esc($user['email']) ?>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
-                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2"
-                                    style="min-width: 80px; display: inline-block;">
+                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-70px-inline"
+                                    >
                                     <?= esc($user['role_name']) ?>
                                 </span>
                             </td>
                             <td class="text-center">
                                 <?php if ($user['is_active'] == 1): ?>
-                                <span class="badge bg-success-subtle text-success fw-semibold border border-success text-success fs-2"
-                                    style="min-width: 70px; display: inline-block;">Activo</span>
+                                <span class="badge bg-success-subtle text-success fw-semibold border border-success fs-2 w-70px-inline"
+                                    >Activo</span>
                                 <?php else: ?>
-                                <span class="badge bg-danger-subtle text-danger fw-semibold border border-danger text-danger fs-2"
-                                    style="min-width: 70px; display: inline-block;">Inactivo</span>
+                                <span class="badge bg-danger-subtle text-danger fw-semibold border border-danger fs-2 w-70px-inline"
+                                    >Inactivo</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
@@ -70,25 +70,25 @@
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <iconify-icon icon="solar:sort-bold-duotone" class="fs-7"></iconify-icon>
+                                        <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('users/edit/' . $user['id']) ?>">
-                                                <iconify-icon icon="solar:pen-bold-duotone"></iconify-icon> Editar
+                                                <i class="ti ti-pencil"></i> Editar
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="mailto:<?= esc($user['email']) ?>">
-                                                <iconify-icon icon="solar:letter-bold-duotone"></iconify-icon> Enviar correo
+                                                <i class="ti ti-mail"></i> Enviar correo
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3 delete-user-swal"
                                                 href="#" data-url="<?= base_url('users/delete/' . $user['id']) ?>">
-                                                <iconify-icon icon="solar:trash-bin-trash-bold-duotone"></iconify-icon> Eliminar
+                                                <i class="ti ti-trash"></i> Eliminar
                                             </a>
                                         </li>
                                     </ul>

@@ -77,7 +77,7 @@ class DashboardController extends BaseController
         $totalHours = 0;
         $workdaysCount = 0;
         foreach ($groupedEvents as $date => $events) {
-            $workday = $this->calculateWorkdayData($date, $events, $userDailyHours);
+            $workday = calculate_workday_data($date, $events, $userDailyHours);
             if ($workday && $workday['status'] === 'completed') {
                 $totalHours += $workday['total_hours'];
                 $workdaysCount++;
@@ -195,7 +195,7 @@ class DashboardController extends BaseController
                     ->where('start_date <=', $today)->where('end_date >=', $today)
                     ->countAllResults();
 
-                $stats['docs_pending_read'] = $this->documentsModel->where('read_at', null)->countAllResults();
+                $stats['docs_pending_read'] = $this->documentsModel->where('read_at', null)->where('receiver_id', $userId)->countAllResults();
                 $stats['absences_pending'] = $this->absenceModel->where('status', 'pending')->countAllResults();
                 $stats['expenses_pending'] = $this->expenseModel->where('status', 'pending')->countAllResults();
 
@@ -204,19 +204,48 @@ class DashboardController extends BaseController
                 $seriesAttendance = [];
                 $seriesAbsences = [];
 
+                $startDate = date('Y-m-d', strtotime('-6 days'));
+                $endDate = date('Y-m-d');
+
+                // Optimización 1: Consultar todas las asistencias de los últimos 7 días en una sola query
+                $attendanceData = $this->workdayModel->builder()
+                    ->select('workday_date, COUNT(*) as count')
+                    ->where('event_type', 'in')
+                    ->where('workday_date >=', $startDate)
+                    ->where('workday_date <=', $endDate)
+                    ->groupBy('workday_date')
+                    ->get()->getResultArray();
+                
+                // Mapear los resultados por fecha para acceso rápido
+                $attendanceByDate = [];
+                foreach ($attendanceData as $row) {
+                    $attendanceByDate[$row['workday_date']] = (int) $row['count'];
+                }
+
+                // Optimización 2: Consultar todas las ausencias que solapan con la ventana de 7 días
+                $absencesData = $this->absenceModel->builder()
+                    ->select('start_date, end_date')
+                    ->where('status', 'approved')
+                    ->where('end_date >=', $startDate)
+                    ->where('start_date <=', $endDate)
+                    ->get()->getResultArray();
+
+                // Llenar las series recorriendo los 7 días (0 consultas a BD dentro del bucle)
                 for ($i = 6; $i >= 0; $i--) {
                     $d = date('Y-m-d', strtotime("-$i days"));
                     $labels[] = date('d M', strtotime($d));
                     
-                    // Asistencia Real (Fichajes de entrada) - Forzamos a entero
-                    $seriesAttendance[] = (int) $this->workdayModel->where('workday_date', $d)->where('event_type', 'in')->countAllResults();
+                    // Asistencia Real
+                    $seriesAttendance[] = $attendanceByDate[$d] ?? 0;
                     
-                    // Ausencias Reales (Personal con ausencia aprobada activa en este día)
-                    $seriesAbsences[] = (int) $this->absenceModel
-                        ->where('status', 'approved')
-                        ->where('start_date <=', $d)
-                        ->where('end_date >=', $d)
-                        ->countAllResults();
+                    // Ausencias Reales (Contar cuántas ausencias activas solapan con este día)
+                    $absencesCount = 0;
+                    foreach ($absencesData as $abs) {
+                        if ($d >= $abs['start_date'] && $d <= $abs['end_date']) {
+                            $absencesCount++;
+                        }
+                    }
+                    $seriesAbsences[] = $absencesCount;
                 }
 
                 $stats['chart_labels'] = $labels;
@@ -260,10 +289,10 @@ class DashboardController extends BaseController
                 $stats['activity_timeline'] = array_slice($timeline, 0, 5);
             } else {
                 // Estadísticas para usuarios no admin con permisos limitados
-                if (in_array('absences.manage', $permissions)) {
+                if (has_permission('absences.manage')) {
                     $stats['absences_pending'] = $this->absenceModel->where('status', 'pending')->countAllResults();
                 }
-                if (in_array('expenses.manage', $permissions)) {
+                if (has_permission('expenses.manage')) {
                     $stats['expenses_pending'] = $this->expenseModel->where('status', 'pending')->countAllResults();
                 }
             }
@@ -337,98 +366,6 @@ class DashboardController extends BaseController
     // =================================================================================
     // Método helper para calcular datos de una jornada específica
     // =================================================================================
-    private function calculateWorkdayData($date, $events, $userDailyHours = null)
-    {
-        // Verificar que hay eventos para procesar
-        if (empty($events)) {
-            return null;
-        }
-
-        // Inicializar variables de cálculo
-        $startTime = null;      // Hora de entrada
-        $endTime = null;        // Hora de salida
-        $totalBreakTime = 0;    // Tiempo total de pausas en segundos
-        $breakStart = null;     // Inicio de pausa actual
-        $autoclose = false;     // Indica si fue cerrada automáticamente
-
-        // Procesar eventos cronológicamente
-        foreach ($events as $event) {
-            switch ($event['event_type']) {
-                case 'in':
-                    // Evento de entrada - registrar hora de inicio
-                    $startTime = $event['event_time'];
-                    break;
-
-                case 'out':
-                    // Evento de salida - registrar hora de fin
-                    $endTime = $event['event_time'];
-                    // Verificar si fue cierre automático
-                    if ($event['autoclose']) {
-                        $autoclose = true;
-                    }
-                    break;
-
-                case 'break_start':
-                    // Inicio de pausa - guardar hora de inicio
-                    $breakStart = $event['event_time'];
-                    break;
-
-                case 'break_end':
-                    // Fin de pausa - calcular duración y sumar al total
-                    if ($breakStart) {
-                        $breakDuration = strtotime($event['event_time']) - strtotime($breakStart);
-                        $totalBreakTime += $breakDuration;
-                        $breakStart = null;  // Resetear para próxima pausa
-                    }
-                    break;
-            }
-        }
-
-        // Determinar estado de la jornada
-        if ($startTime && $endTime) {
-            $status = 'completed';  // Jornada completa (entrada y salida)
-        } elseif ($startTime) {
-            $status = 'in_progress'; // Jornada en progreso (solo entrada)
-        } else {
-            return null;  // Jornada inválida (sin entrada)
-        }
-
-        // Calcular horas trabajadas
-        $totalHours = 0;
-        if ($startTime) {
-            // Si no hay salida, usar hora actual para cálculo en tiempo real
-            $endTimeForCalculation = $endTime ?? date('Y-m-d H:i:s');
-
-            // Calcular tiempo total en segundos
-            $totalSeconds = strtotime($endTimeForCalculation) - strtotime($startTime);
-
-            // Restar tiempo de pausas
-            $totalSeconds -= $totalBreakTime;
-
-            // Convertir a horas decimales
-            $totalHours = max(0, $totalSeconds / 3600);
-        }
-
-        // Calcular horas extras
-        $overtimeHours = 0;
-        if ($userDailyHours && $totalHours > $userDailyHours) {
-            $overtimeHours = $totalHours - $userDailyHours;
-        }
-
-        // Retornar datos calculados de la jornada
-        return [
-            'date' => $date,
-            'start_time' => $startTime ? date('H:i', strtotime($startTime)) : null,
-            'start_date' => $startTime ? date('d/m/Y', strtotime($startTime)) : null,
-            'end_time' => $endTime ? date('H:i', strtotime($endTime)) : null,
-            'end_date' => $endTime ? date('d/m/Y', strtotime($endTime)) : null,
-            'total_hours' => $totalHours,
-            'overtime_hours' => $overtimeHours,
-            'status' => $status,
-            'autoclose' => $autoclose,
-            'break_time' => $totalBreakTime / 3600  // Tiempo de pausas en horas
-        ];
-    }
 
     // =================================================================================
     // Endpoint para obtener eventos del calendario (AJAX)

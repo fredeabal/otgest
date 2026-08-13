@@ -83,7 +83,7 @@ class AbsenceController extends BaseController
 
         // Validar que las fechas no sean en el pasado (excepto para admins)
         $today = date('Y-m-d');
-        if (session()->get('user_role') != 1 && strtotime($startDate) < strtotime($today)) {
+        if (!has_permission('absences.manage') && strtotime($startDate) < strtotime($today)) {
             return redirect()->back()->withInput()->with('errors', ['No se pueden solicitar ausencias para fechas pasadas.']);
         }
 
@@ -250,9 +250,9 @@ class AbsenceController extends BaseController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        // Enviar PDF al navegador
-        $dompdf->stream('mis_ausencias.pdf', ['Attachment' => true]);
-        exit();
+        // Enviar PDF al navegador usando el response de CodeIgniter
+        $pdfContent = $dompdf->output();
+        return $this->response->download('mis_ausencias.pdf', $pdfContent);
     }
 
     /**
@@ -563,7 +563,7 @@ class AbsenceController extends BaseController
 
         // Validar que las fechas no sean en el pasado (excepto para admins)
         $today = date('Y-m-d');
-        if (session()->get('user_role') != 1 && strtotime($startDate) < strtotime($today)) {
+        if (!has_permission('absences.manage') && strtotime($startDate) < strtotime($today)) {
             return redirect()->back()->withInput()->with('errors', ['No se pueden solicitar ausencias para fechas pasadas.']);
         }
 
@@ -663,7 +663,7 @@ class AbsenceController extends BaseController
         }
 
         // Verificar permisos: solo el propietario o admin pueden ver
-        if (session()->get('user_role') != 1 && $absence['user_id'] != session()->get('user_id')) {
+        if (!has_permission('absences.manage') && $absence['user_id'] != session()->get('user_id')) {
             return redirect()->to('/absences/list')->with('errors', ['No tienes permiso para ver esta solicitud.']);
         }
 
@@ -898,7 +898,7 @@ class AbsenceController extends BaseController
         }
 
         // Verificar permisos: solo el propietario o admin pueden exportar
-        if (session()->get('user_role') != 1 && $absence['user_id'] != session()->get('user_id')) {
+        if (!has_permission('absences.manage') && $absence['user_id'] != session()->get('user_id')) {
             return redirect()->to('/absences/list')->with('errors', ['No tienes permiso para exportar esta solicitud.']);
         }
 
@@ -1087,7 +1087,7 @@ class AbsenceController extends BaseController
         }
 
         // Verificar permisos: solo el propietario o admin pueden descargar el archivo
-        if (session()->get('user_role') != 1 && $absence['user_id'] != session()->get('user_id')) {
+        if (!has_permission('absences.manage') && $absence['user_id'] != session()->get('user_id')) {
             return redirect()->to('/absences/list')->with('errors', ['No tienes permiso para descargar este archivo.']);
         }
 

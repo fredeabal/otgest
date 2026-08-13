@@ -18,12 +18,17 @@ function applyTheme(theme) {
 
 // Función para obtener el tema preferido
 function getPreferredTheme() {
-    // Usamos el tema del usuario de la sesión
+    // 1. Prioridad: Tema del usuario de la sesión
     const userTheme = document.documentElement.getAttribute('data-user-theme');
     if (userTheme) {
         return userTheme;
     }
-    // Fallback al sistema
+    // 2. Prioridad: Tema guardado localmente (para usuarios no logueados o antes de tener sesión)
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme) {
+        return localTheme;
+    }
+    // 3. Fallback al sistema
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 

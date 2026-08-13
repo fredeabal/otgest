@@ -43,6 +43,15 @@ class AuthController extends BaseController
     // =================================================================================
     public function loginPost()
     {
+        $throttler = \Config\Services::throttler();
+        
+        // Permitir 5 intentos por minuto (60 segundos) por cada IP
+        // Usamos md5() para evitar caracteres reservados como ':' en direcciones IPv6 (ej: ::1)
+        $ipAddress = md5($this->request->getIPAddress());
+        if ($throttler->check($ipAddress, 5, MINUTE) === false) {
+            return redirect()->back()->with('errors', ['Demasiados intentos de inicio de sesión. Por favor, espera un minuto.']);
+        }
+
         // Procesar el formulario
         $rules = [
             'email'    => [

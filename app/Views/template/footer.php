@@ -29,50 +29,112 @@
 <script src="<?= base_url('assets/js/theme/theme-switcher.js') ?>"></script>
 
 
-<!-- Script para ocultar los alerts después de x segundos -->
+<!-- =================================================================================
+// Alertas del Sistema (SweetAlert2 - FileCrew Style)
+// ================================================================================= -->
 <script>
-// Oculta automáticamente los alerts después de x segundos
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        document.querySelectorAll('.alert-success, .alert-danger').forEach(function(alert) {
-            alert.style.transition = 'opacity 0.5s';
-            alert.style.opacity = '0';
-            setTimeout(function() {
-                alert.style.display = 'none';
-            }, 500);
+    // SweetAlert2 global submit interceptor (for forms)
+    document.addEventListener("submit", function(e) {
+      let form = e.target;
+      if (form.hasAttribute("data-confirm") && !form.dataset.confirmed) {
+        e.preventDefault();
+        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+        Swal.fire({
+          title: '¿Confirmas esta acción?',
+          text: form.getAttribute("data-confirm"),
+          icon: 'warning',
+          background: isDark ? '#0b1114' : '#f8f9fa',
+          color: isDark ? '#ffffff' : '#0b1114',
+          iconColor: '#F38020',
+          showCancelButton: true,
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'btn btn-primary ms-2',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false,
+          confirmButtonText: 'Sí, confirmar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.dataset.confirmed = "true";
+            form.submit();
+          }
         });
-    }, 15000);
-});
-</script>
+      }
+    });
 
-
-<!-- =================================================================================
-// Alertas del Sistema
-// ================================================================================= -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
-    <?php if (session('success')): ?>
-    <div class="alert alert-success text-success fade show mb-2 text-center" role="alert" style="width: fit-content; margin-left: auto;">
-        <?= esc(session('success')) ?>
-    </div>
-    <?php endif; ?>
-    <?php if (session('errors')): ?>
-    <div class="alert alert-danger text-danger fade show mb-2" role="alert" style="width: fit-content; margin-left: auto;">
-        <?php
-            $errors = session('errors');
-            if (is_array($errors)) {
-                foreach ($errors as $error) {
-                    echo esc($error) . '<br>';
-                }
-            } else {
-                echo esc($errors);
+    // SweetAlert2 global click interceptor (for links/buttons con data-confirm)
+    document.addEventListener("click", function(e) {
+      let confirmEl = e.target.closest("[data-confirm]");
+      if (confirmEl) {
+        let form = confirmEl.closest("form");
+        
+        if (!form || !form.hasAttribute("data-confirm")) {
+          e.preventDefault();
+          const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+          Swal.fire({
+            title: '¿Confirmas esta acción?',
+            text: confirmEl.getAttribute("data-confirm"),
+            icon: 'warning',
+            background: isDark ? '#0b1114' : '#f8f9fa',
+            color: isDark ? '#ffffff' : '#0b1114',
+            iconColor: '#F38020',
+            showCancelButton: true,
+            reverseButtons: true,
+            customClass: {
+              confirmButton: 'btn btn-primary ms-2',
+              cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false,
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (form) {
+                form.dataset.confirmed = "true";
+                form.submit();
+              } else if (confirmEl.tagName === 'A') {
+                window.location.href = confirmEl.href;
+              }
             }
-            ?>
-    </div>
-    <?php endif; ?>
-</div>
-<!-- =================================================================================
-// Fin de alertas globales
-// ================================================================================= -->
+          });
+        }
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const toastMessage = <?= json_encode(session()->getFlashdata('message') ?? session()->getFlashdata('success')) ?>;
+      const toastError = <?= json_encode(session()->getFlashdata('error')) ?>;
+      const toastErrors = <?= json_encode(session()->getFlashdata('errors')) ?>;
+      
+      const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+      
+      window.systemAlert = Swal.mixin({
+        position: 'center',
+        showConfirmButton: false,
+        buttonsStyling: false,
+        timer: 5000,
+        timerProgressBar: true,
+        background: isDark ? '#0b1114' : '#f8f9fa',
+        color: isDark ? '#fff' : '#0b1114',
+        showCloseButton: false
+      });
+      
+      if (toastMessage) {
+        window.systemAlert.fire({ icon: 'success', title: '¡Completado!', html: `<div class="text-center">${toastMessage}</div>`, iconColor: '#10B981' });
+      }
+      if (toastError) {
+        window.systemAlert.fire({ icon: 'error', title: 'Error', html: `<div class="text-center">${toastError}</div>`, iconColor: '#b31b34' });
+      }
+      if (toastErrors) {
+        const errorContent = typeof toastErrors === 'object' && toastErrors !== null
+          ? (Array.isArray(toastErrors) ? toastErrors : Object.values(toastErrors)).join('<br>') 
+          : toastErrors;
+        window.systemAlert.fire({ icon: 'error', title: 'Error de Validación', html: `<div class="text-center">${errorContent}</div>`, iconColor: '#b31b34' });
+      }
+    });
+</script>
 
 
 
