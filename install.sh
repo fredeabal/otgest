@@ -134,7 +134,7 @@ PHP_SOCK="/var/run/php/php${PHP_VER}-fpm.sock"
 
 cat <<EOF > /etc/nginx/sites-available/otgest
 server {
-    listen 80 default_server;
+    listen 80;
     server_name ${DOMAIN};
 
     root ${INSTALL_DIR}/public;
