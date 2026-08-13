@@ -102,9 +102,14 @@ if [ ! -f ".env" ]; then
     fi
 fi
 
-# Crear directorio para SQLite si no existe
+# Crear directorios obligatorios para CodeIgniter 4
 DB_DIR="${INSTALL_DIR}/writable"
 mkdir -p "$DB_DIR"
+mkdir -p "${DB_DIR}/cache"
+mkdir -p "${DB_DIR}/session"
+mkdir -p "${DB_DIR}/logs"
+mkdir -p "${DB_DIR}/debugbar"
+mkdir -p "${DB_DIR}/uploads"
 DB_PATH="${DB_DIR}/database.db"
 
 # Ajustar valores en .env
