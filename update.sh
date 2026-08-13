@@ -100,6 +100,7 @@ mkdir -p "$INSTALL_DIR/writable/session"
 mkdir -p "$INSTALL_DIR/writable/logs"
 mkdir -p "$INSTALL_DIR/writable/debugbar"
 mkdir -p "$INSTALL_DIR/writable/uploads"
+mkdir -p "$INSTALL_DIR/writable/database"
 mkdir -p "$INSTALL_DIR/public/uploads"
 
 chown -R www-data:www-data "$INSTALL_DIR"

@@ -111,8 +111,9 @@ mkdir -p "${DB_DIR}/session"
 mkdir -p "${DB_DIR}/logs"
 mkdir -p "${DB_DIR}/debugbar"
 mkdir -p "${DB_DIR}/uploads"
+mkdir -p "${DB_DIR}/database"
 mkdir -p "${INSTALL_DIR}/public/uploads"
-DB_PATH="${DB_DIR}/database.db"
+DB_PATH="${DB_DIR}/database/database.sqlite"
 
 # Ajustar valores en .env
 sed -i "s|.*CI_ENVIRONMENT = .*|CI_ENVIRONMENT = development|g" .env
