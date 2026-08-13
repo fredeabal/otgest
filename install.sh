@@ -42,6 +42,8 @@ echo -e "${NC}"
 SERVER_IP=$(hostname -I | awk '{print $1}')
 read -p "👉 Ingresa la IP o Dominio del servidor [Predeterminado: ${SERVER_IP}]: " INPUT_DOMAIN
 DOMAIN=${INPUT_DOMAIN:-$SERVER_IP}
+# Eliminar protocolo (http/https) y trailing slashes si el usuario lo introdujo por error
+DOMAIN=$(echo "$DOMAIN" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 
 echo -e "\n${YELLOW}⏳ [1/6] Actualizando paquetes e instalando dependencias del sistema...${NC}"
 export DEBIAN_FRONTEND=noninteractive

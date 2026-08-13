@@ -39,9 +39,7 @@ yarn.lock
 .php-cs-fixer.cache
 
 # Archivos de configuración sensibles
-app/Config/Database.php
-app/Config/Encryption.php
-app/Config/App.php
+# Config files should be tracked, environment specifics go in .env
 
 # Archivos de backup
 *.bak
