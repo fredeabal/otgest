@@ -26,22 +26,24 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => '',
+        'hostname'     => 'localhost',
         'username'     => '',
         'password'     => '',
-        'database'     => '',
-        'DBDriver'     => 'MySQLi',
+        'database'     => WRITEPATH . 'database/database.sqlite',
+        'DBDriver'     => 'SQLite3',
         'DBPrefix'     => '',
         'pConnect'     => false,
         'DBDebug'      => true,
-        'charset'      => 'utf8mb4',
-        'DBCollat'     => 'utf8mb4_general_ci',
+        'charset'      => 'utf8',
+        'DBCollat'     => '',
         'swapPre'      => '',
         'encrypt'      => false,
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
         'port'         => 3306,
+        'foreignKeys'  => true,
+        'busyTimeout'  => 1000,
         'numberNative' => false,
         'foundRows'    => false,
         'dateFormat'   => [
@@ -97,10 +99,8 @@ class Database extends Config
         parent::__construct();
 
         // Ensure that we always set the database group to 'tests' if
-        // --- DINAMISMO PARA SQLITE ---
-        if ($this->default['DBDriver'] === 'SQLite3') {
-            $this->default['database'] = WRITEPATH . 'database/database.sqlite';
-        }
+        // we are currently running an automated test suite, so that
+        // we don't overwrite live data on accident.
 
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
