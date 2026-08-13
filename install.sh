@@ -106,13 +106,11 @@ mkdir -p "$DB_DIR"
 DB_PATH="${DB_DIR}/database.db"
 
 # Ajustar valores en .env
-sed -i "s|# CI_ENVIRONMENT = .*|CI_ENVIRONMENT = development|g" .env
-sed -i "s|CI_ENVIRONMENT = .*|CI_ENVIRONMENT = development|g" .env
-sed -i "s|# app.baseURL = .*|app.baseURL = 'http://${DOMAIN}/'|g" .env
-sed -i "s|app.baseURL = .*|app.baseURL = 'http://${DOMAIN}/'|g" .env
-sed -i "s|# database.default.hostname = .*|database.default.hostname = localhost|g" .env
-sed -i "s|# database.default.database = .*|database.default.database = ${DB_PATH}|g" .env
-sed -i "s|# database.default.DBDriver = .*|database.default.DBDriver = SQLite3|g" .env
+sed -i "s|.*CI_ENVIRONMENT = .*|CI_ENVIRONMENT = development|g" .env
+sed -i "s|.*app.baseURL = .*|app.baseURL = 'http://${DOMAIN}/'|g" .env
+sed -i "s|.*database.default.hostname = .*|database.default.hostname = localhost|g" .env
+sed -i "s|.*database.default.database = .*|database.default.database = ${DB_PATH}|g" .env
+sed -i "s|.*database.default.DBDriver = .*|database.default.DBDriver = SQLite3|g" .env
 
 # Generar llave de encriptación si no existe o usar la que genera spark
 php spark key:generate --force > /dev/null 2>&1 || true
@@ -136,7 +134,7 @@ PHP_SOCK="/var/run/php/php${PHP_VER}-fpm.sock"
 
 cat <<EOF > /etc/nginx/sites-available/otgest
 server {
-    listen 80;
+    listen 80 default_server;
     server_name ${DOMAIN};
 
     root ${INSTALL_DIR}/public;
