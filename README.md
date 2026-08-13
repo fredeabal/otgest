@@ -78,41 +78,46 @@ OtGest es un sistema integral de gestión empresarial que permite a las empresas
   - curl
   - gd (para procesamiento de imágenes)
 
-## Instalación
+## 🚀 Instalación en 1 Paso
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone [URL_DEL_REPOSITORIO]
-   cd app
-   ```
+En cualquier servidor **Debian 11/12** o **Ubuntu 20.04 / 22.04 / 24.04** limpio con acceso root (VPS o máquina virtual), ejecuta el siguiente comando en tu terminal:
 
-2. **Instalar dependencias**
-   ```bash
-   composer install
-   ```
+```bash
+bash <(curl -s https://raw.githubusercontent.com/fredeabal/otgest/main/install.sh)
+```
 
-3. **Configurar la base de datos**
-   - Copiar `app/Config/Database.php.example` a `app/Config/Database.php`
-   - Configurar los datos de conexión a la base de datos
+El script se encargará automáticamente de todo el proceso de instalación y configuración del servidor web, dependencias y base de datos.
 
-4. **Configurar variables de entorno**
-   - Copiar `.env.example` a `.env`
-   - Configurar las variables necesarias
+### 🔑 Credenciales por Defecto tras la Instalación
+* **URL:** `http://TU_IP_O_DOMINIO`
+* **Email:** `admin@demo.com`
+* **Password:** `12345678`
 
-5. **Ejecutar migraciones**
-   ```bash
-   php spark migrate
-   ```
+### ⚙️ Configuración Post-Instalación Recomendada
 
-6. **Ejecutar seeders (opcional)**
-   ```bash
-   php spark db:seed DatabaseSeeder
-   ```
+Para el correcto funcionamiento de todas las características de OtGest, se recomienda configurar:
 
-7. **Iniciar el servidor de desarrollo**
-   ```bash
-   php spark serve
-   ```
+#### 1. 📧 Configuración de Correo (SMTP)
+OtGest utiliza el servicio de correo para enviar notificaciones.
+1. Ve a **Ajustes** (o en la sección de administración del sistema) en la barra lateral/menú.
+2. Introduce los datos de tu servidor de correo (Host, Puerto, Usuario, Contraseña y tipo de encriptación TLS/SSL).
+
+#### 🔧 Archivo de Configuración Global (.env)
+El archivo `.env` se encuentra en la raíz de la instalación y almacena las variables principales del sistema (como la URL base del sitio `app.baseURL`, la ubicación de la base de datos SQLite y el entorno de ejecución). Puedes editarlo en cualquier momento desde la terminal mediante el comando:
+
+```bash
+nano /var/www/otgest/.env
+```
+
+---
+
+## 🔄 Actualizar a la última versión
+
+Para actualizar un servidor OtGest existente a la última versión disponible (sin perder tus datos, configuraciones o base de datos), simplemente ejecuta:
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/fredeabal/otgest/main/update.sh)
+```
 
 ## Estructura del Proyecto
 
