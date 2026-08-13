@@ -92,10 +92,10 @@ composer install --no-dev --optimize-autoloader --no-interaction
 # 5. Configurar archivo .env
 echo -e "\n${YELLOW}⏳ [4/6] Configurando archivo de entorno (.env)...${NC}"
 if [ ! -f ".env" ]; then
-    if [ -f "env" ]; then
-        cp env .env
+    if [ -f ".env.example" ]; then
+        cp .env.example .env
     else
-        echo -e "${RED}❌ Error: No se encontró la plantilla del archivo 'env'.${NC}"
+        echo -e "${RED}❌ Error: No se encontró la plantilla del archivo '.env.example'.${NC}"
         exit 1
     fi
 fi
