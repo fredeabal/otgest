@@ -22,20 +22,27 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSRF Token -->
+    <meta name="csrf-token-name" content="<?= csrf_token() ?>" />
+    <meta name="csrf-token" content="<?= csrf_hash() ?>" />
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/logos/favicon.png" />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/sweetalert2/dist/sweetalert2.min.css">
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/select2/dist/css/select2.min.css">
+    <!-- Daterangepicker -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/daterangepicker/daterangepicker.css">
+    <!-- Animations -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/animate.css/animate.min.css"/>
+
     <!-- CSS Principal -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css?v=<?= time() ?>" />
     <!-- solar icons -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/sweetalert2/dist/sweetalert2.min.css">
-    <!-- Datepicker -->
-    <link rel="stylesheet"
-        href="<?= base_url() ?>assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-    <!-- Animations -->
-    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/animate.css/animate.min.css"/>
     
     <title><?= esc($title) ?></title>
 

@@ -11,6 +11,12 @@
 <script src="<?= base_url() ?>assets/js/theme/sidebarmenu.js"></script>
 <!-- SweetAlert2 -->
 <script src="<?= base_url() ?>assets/libs/sweetalert2/dist/sweetalert2.min.js"></script>
+<!-- Select2 -->
+<script src="<?= base_url() ?>assets/libs/select2/dist/js/select2.min.js"></script>
+<script src="<?= base_url() ?>assets/js/forms/select2.init.js?v=<?= time() ?>"></script>
+<!-- Daterangepicker -->
+<script src="<?= base_url() ?>assets/js/extra-libs/moment/moment.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/daterangepicker/daterangepicker.js"></script>
 
 <!-- Librerías Gráficas -->
 <script src="<?= base_url() ?>assets/libs/apexcharts/dist/apexcharts.min.js"></script>
@@ -24,6 +30,14 @@
 <script src="<?= base_url() ?>assets/js/utils.js"></script>
 <script src="<?= base_url() ?>assets/js/absences.js"></script>
 <script src="<?= base_url() ?>assets/js/workdays.js"></script>
+
+<!-- Bootstrap Datepicker (formularios de creación/edición) -->
+<script src="<?= base_url() ?>assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="<?= base_url() ?>assets/js/datepicker-custom.js"></script>
+
+<!-- Daterangepicker - filtros de listado y formulario de ausencias -->
+<script src="<?= base_url() ?>assets/js/daterange-filter.js"></script>
+<script src="<?= base_url() ?>assets/js/daterange-absence.js"></script>
 
 <!-- Script para cambio de tema persistente -->
 <script src="<?= base_url('assets/js/theme/theme-switcher.js') ?>"></script>
@@ -99,6 +113,33 @@
               }
             }
           });
+        }
+      }
+    });
+
+    // Validar globalmente el peso de los archivos a subir
+    document.addEventListener("change", function(e) {
+      if (e.target && e.target.type === "file") {
+        const maxSize = 8 * 1024 * 1024; // 8MB para igualar el límite estándar de PHP
+        let totalSize = 0;
+        
+        for (let i = 0; i < e.target.files.length; i++) {
+            totalSize += e.target.files[i].size;
+        }
+
+        if (totalSize > maxSize) {
+            e.preventDefault();
+            e.target.value = ""; // Limpiar el input para prevenir que se envíe
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            Swal.fire({
+                title: 'Archivo demasiado pesado',
+                text: 'El tamaño de los archivos seleccionados excede el límite máximo de 8 MB. Por favor, selecciona un archivo más pequeño.',
+                icon: 'error',
+                background: isDark ? '#0b1114' : '#f8f9fa',
+                color: isDark ? '#ffffff' : '#0b1114',
+                confirmButtonColor: '#b31b34', // Color de error
+                confirmButtonText: 'Entendido'
+            });
         }
       }
     });

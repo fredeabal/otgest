@@ -1,7 +1,9 @@
 //
 // For select 2
 //
-$(".select2").select2();
+$(".select2").select2({
+    width: '100%'
+});
 
 // Single Select Placeholder
 $("#select2-with-placeholder").select2({

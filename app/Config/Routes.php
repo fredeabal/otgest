@@ -66,6 +66,7 @@ $routes->post('documents/bulk-store', 'DocumentsController::bulkStore', ['filter
 $routes->post('documents/store', 'DocumentsController::store', ['filter' => 'permission:documents.send,documents.manage']);
 $routes->get('documents/view/(:num)', 'DocumentsController::view/$1', ['filter' => 'permission:documents.received,documents.send,documents.manage']);
 $routes->get('documents/download/(:num)', 'DocumentsController::download/$1', ['filter' => 'permission:documents.received,documents.send,documents.manage']);
+$routes->get('documents/delete/(:num)', 'DocumentsController::delete/$1', ['filter' => 'permission:documents.sent,documents.manage']);
 
 
 // =================================================================================
@@ -99,7 +100,7 @@ $routes->get('absences/list', 'AbsenceController::list', ['filter' => 'permissio
 $routes->get('absences/export-list-pdf', 'AbsenceController::exportListPdf', ['filter' => 'permission:absences.list,absences.manage']);
 $routes->get('absences/manage', 'AbsenceController::manage', ['filter' => 'permission:absences.manage']);
 $routes->get('absences/export-pdf', 'AbsenceController::exportPdf', ['filter' => 'permission:absences.manage']);
-$routes->get('absences/approve/(:num)', 'AbsenceController::approve/$1', ['filter' => 'permission:absences.manage']);
+$routes->post('absences/approve/(:num)', 'AbsenceController::approve/$1', ['filter' => 'permission:absences.manage']);
 $routes->post('absences/reject/(:num)', 'AbsenceController::reject/$1', ['filter' => 'permission:absences.manage']);
 $routes->get('absences/edit/(:num)', 'AbsenceController::edit/$1', ['filter' => 'permission:absences.request,absences.list,absences.manage']);
 $routes->post('absences/update/(:num)', 'AbsenceController::update/$1', ['filter' => 'permission:absences.request,absences.manage']);

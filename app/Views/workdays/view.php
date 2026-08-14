@@ -79,19 +79,19 @@
                                     <?php
                                     $iconName = '';
                                     switch ($event['event_type']) {
-                                        case 'in':
+                                        case 'start':
                                             $iconName = 'solar:login-bold-duotone';
                                             $iconClass = 'text-success';
                                             break;
-                                        case 'break_start':
+                                        case 'pause':
                                             $iconName = 'solar:pause-circle-bold-duotone';
                                             $iconClass = 'text-warning';
                                             break;
-                                        case 'break_end':
+                                        case 'resume':
                                             $iconName = 'solar:play-bold-duotone';
                                             $iconClass = 'text-info';
                                             break;
-                                        case 'out':
+                                        case 'stop':
                                             $iconName = 'solar:logout-bold-duotone';
                                             $iconClass = 'text-danger';
                                             break;
@@ -99,17 +99,18 @@
                                             $iconName = 'solar:clock-circle-bold-duotone';
                                             $iconClass = 'text-secondary';
                                     }
+
                                     ?>
                                         <iconify-icon icon="<?= $iconName ?>" class="<?= $iconClass ?> fs-5"></iconify-icon>
                                     </div>
                                     <div>
                                         <h6 class="mb-1">
-                                            <?php
+                                        <?php
                                         $eventNames = [
-                                            'in' => 'Entrada al trabajo',
-                                            'break_start' => 'Inicio de pausa',
-                                            'break_end' => 'Fin de pausa',
-                                            'out' => 'Salida del trabajo'
+                                            'start' => 'Entrada al trabajo',
+                                            'pause' => 'Inicio de pausa',
+                                            'resume' => 'Fin de pausa',
+                                            'stop' => 'Salida del trabajo'
                                         ];
                                         echo $eventNames[$event['event_type']] ?? $event['event_type'];
                                         ?>
@@ -135,7 +136,7 @@
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <?php if ($event['event_type'] === 'out' && $event['autoclose']): ?>
+                                    <?php if ($event['event_type'] === 'stop' && $event['autoclose']): ?>
                                     <span class="badge bg-warning-subtle text-warning">
                                         <i class="ti ti-wand me-1"></i>Automático
                                     </span>

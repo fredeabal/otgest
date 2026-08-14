@@ -179,12 +179,12 @@ class DashboardController extends BaseController
                 $stats['users_active'] = 0;
                 $stats['users_break'] = 0;
                 foreach ($liveEvents as $event) {
-                    // Si el último evento es entrada o fin de pausa, el usuario está activo
-                    if ($event['event_type'] == 'in' || $event['event_type'] == 'break_end') {
+                    // Si el último evento es entrada o retoma, el usuario está activo
+                    if ($event['event_type'] == 'start' || $event['event_type'] == 'resume') {
                         $stats['users_active']++;
                     }
                     // Si el último evento es inicio de pausa, el usuario está en pausa
-                    if ($event['event_type'] == 'break_start') {
+                    if ($event['event_type'] == 'pause') {
                         $stats['users_break']++;
                     }
                 }
@@ -210,7 +210,7 @@ class DashboardController extends BaseController
                 // Optimización 1: Consultar todas las asistencias de los últimos 7 días en una sola query
                 $attendanceData = $this->workdayModel->builder()
                     ->select('workday_date, COUNT(*) as count')
-                    ->where('event_type', 'in')
+                    ->where('event_type', 'start')
                     ->where('workday_date >=', $startDate)
                     ->where('workday_date <=', $endDate)
                     ->groupBy('workday_date')
@@ -325,6 +325,7 @@ class DashboardController extends BaseController
         // Buscar la jornada laboral más reciente del usuario
         $lastRecord = $this->workdayModel->where('user_id', $userId)
             ->orderBy('event_time', 'DESC')
+            ->orderBy('id', 'DESC')
             ->first();
 
         // Si no hay registros, retornar null
@@ -332,8 +333,8 @@ class DashboardController extends BaseController
             return null;
         }
 
-        // Si el último evento es 'out', la jornada está finalizada
-        if ($lastRecord['event_type'] === 'out') {
+        // Si el último evento es 'stop', la jornada está finalizada
+        if ($lastRecord['event_type'] === 'stop') {
             return [
                 'end_time' => $lastRecord['event_time'],
                 'autoclose' => $lastRecord['autoclose'] ?? false,
@@ -341,11 +342,11 @@ class DashboardController extends BaseController
             ];
         }
 
-        // Si el último evento es 'in', 'break_start' o 'break_end', la jornada está activa
-        if (in_array($lastRecord['event_type'], ['in', 'break_start', 'break_end'])) {
-            // Buscar el evento de inicio ('in') más reciente para obtener la hora de inicio
+        // Si el último evento es 'start', 'pause' o 'resume', la jornada está activa
+        if (in_array($lastRecord['event_type'], ['start', 'pause', 'resume'])) {
+            // Buscar el evento de inicio ('start') más reciente para obtener la hora de inicio
             $startRecord = $this->workdayModel->where('user_id', $userId)
-                ->where('event_type', 'in')
+                        ->where('event_type', 'start')
                 ->where('workday_date', $lastRecord['workday_date'])
                 ->orderBy('event_time', 'DESC')
                 ->first();

@@ -10,9 +10,9 @@
         <div class="card-body">
             <!-- Filtros -->
             <form method="get" class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <label for="user_filter" class="form-label">Usuario</label> 
-                    <select name="user_id" id="user_filter" class="form-select">
+                <div class="col-md-6">
+                    <label for="user_filter" class="form-label fw-semibold text-muted small uppercase">Usuario</label> 
+                    <select name="user_id" id="user_filter" class="select2">
                         <option value="">Todos los usuarios</option>
                         <?php foreach ($users as $user): ?>
                             <option value="<?= $user['id'] ?>" <?= (isset($_GET['user_id']) && $_GET['user_id'] == $user['id']) ? 'selected' : '' ?>>
@@ -21,22 +21,21 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label for="date_from" class="form-label">Fecha desde</label>
-                    <input type="date" name="date_from" id="date_from" class="form-control"
-                           value="<?= esc($_GET['date_from'] ?? '') ?>">
+                <div class="col-md-4">
+                    <label for="daterange" class="form-label fw-semibold text-muted small uppercase">Rango de Fechas</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent"><i class="ti ti-calendar fs-5"></i></span>
+                        <input type="text" id="daterange" class="form-control" placeholder="Selecciona el rango de fechas" readonly>
+                    </div>
+                    <input type="hidden" name="date_from" id="date_from" value="<?= esc($_GET['date_from'] ?? '') ?>">
+                    <input type="hidden" name="date_to" id="date_to" value="<?= esc($_GET['date_to'] ?? '') ?>">
                 </div>
-                <div class="col-md-3">
-                    <label for="date_to" class="form-label">Fecha hasta</label>
-                    <input type="date" name="date_to" id="date_to" class="form-control"
-                           value="<?= esc($_GET['date_to'] ?? '') ?>">
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary btn-icon me-2">
-                        <i class="ti ti-filter"></i>
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary btn-icon-lg" title="Filtrar">
+                        <i class="ti ti-filter fs-5"></i>
                     </button>
-                    <a href="<?= base_url('documents/list') ?>" class="btn btn-outline-primary btn-icon">
-                        <i class="ti ti-circle-x"></i>
+                    <a href="<?= base_url('documents/list') ?>" class="btn btn-outline-primary btn-icon-lg" title="Limpiar">
+                        <i class="ti ti-refresh fs-5"></i>
                     </a>
                 </div>
             </form>

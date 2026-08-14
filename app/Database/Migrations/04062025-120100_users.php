@@ -86,6 +86,11 @@ class Users extends Migration
                 'null' => true,
                 'check' => 'max_daily_hours BETWEEN 1 AND 12',
             ],
+            'vacation_days' => [
+                'type' => 'INT',
+                'null' => true,
+                'default' => 22,
+            ],
             'last_login' => [
                 'type' => 'DATETIME',
                 'null' => true,

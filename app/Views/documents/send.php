@@ -18,12 +18,12 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="receiver_id" class="form-label">Destinatario</label>
-                                <select class="form-select" id="receiver_id" name="receiver_id">
+                                <select class="select2" id="receiver_id" name="receiver_id">
                                     <option value="">Selecciona un destinatario</option>
                                     <?php foreach ($users as $user): ?>
                                     <option value="<?= esc($user['id']) ?>"
                                         <?= old('receiver_id') == $user['id'] ? 'selected' : '' ?>>
-                                        <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
+                                        <?= esc($user['name']) ?><?= !empty($user['identification']) ? ' - DNI: ' . esc($user['identification']) : '' ?> (<?= esc($user['email']) ?>)
                                     </option>
                                     <?php endforeach; ?>
                                 </select>

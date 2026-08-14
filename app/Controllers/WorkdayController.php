@@ -41,30 +41,30 @@ class WorkdayController extends BaseController
 
         // Revisar si la jornada excede las horas máximas y cerrarla automáticamente
         $openWorkday = $this->getOpenWorkdayType($userId);
-        if ($openWorkday && $openWorkday['event_type'] === 'in') {
+        if ($openWorkday && $openWorkday['event_type'] === 'start') {
             $this->autoCloseWorkday($userId, $openWorkday['workday_date']);
         }
 
         // si la jornada esta abierta mostramos pausa y cierre
-        if ($this->getOpenWorkdayType($userId)['event_type'] === 'in') {
+        if ($this->getOpenWorkdayType($userId)['event_type'] === 'start') {
             echo view('template/header', $data);
             echo view('workdays/active', $data);
             echo view('template/footer');
         }
         // si la jornada esta en pausa mostramos reanudar y cierre
-        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'break_start') {
+        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'pause') {
             echo view('template/header', $data);
             echo view('workdays/resume', $data);
             echo view('template/footer');
         }
         // si la jornada esta reanudada mostramos pausa y cierre
-        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'break_end') {
+        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'resume') {
             echo view('template/header', $data);
             echo view('workdays/active', $data);
             echo view('template/footer');
         }
         // si la jornada esta cerrada mostramos iniciar
-        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'out') {
+        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'stop') {
             echo view('template/header', $data);
             echo view('workdays/start', $data);
             echo view('template/footer');
@@ -108,8 +108,8 @@ class WorkdayController extends BaseController
             return redirect()->back()->with('errors', ['Ya finalizaste tu jornada de hoy']);
         }
 
-        // comprobamos que no se inicie una jornada si ya hay una abierta (operador null coalescing)
-        if (($openWorkday['event_type'] ?? 'out') !== 'out') {
+        // Comprobar que no se inicie una jornada si ya hay una abierta (operador null coalescing)
+        if (($openWorkday['event_type'] ?? 'stop') !== 'stop') {
             return redirect()->back()->with('errors', ['Ya tienes una jornada laboral activa.']);
         }
 
@@ -122,7 +122,7 @@ class WorkdayController extends BaseController
         $data = [
             'user_id' => $userId,
             'workday_date' => $currentDate,      // Fecha de la jornada (siempre la fecha del 'in')
-            'event_type' => 'in',                // Tipo de evento: entrada
+            'event_type' => 'start',                // Tipo de evento: entrada
             'event_time' => $currentDateTime,    // Hora exacta del evento
             'latitude' => $latitude,             // Coordenada GPS (opcional)
             'longitude' => $longitude,           // Coordenada GPS (opcional)
@@ -171,7 +171,7 @@ class WorkdayController extends BaseController
         $openWorkday = $this->getOpenWorkdayType($userId);
 
         // Verificar que la jornada está activa para poder pausar
-        if (!in_array($openWorkday['event_type'], ['in', 'break_end'])) {
+        if (!in_array($openWorkday['event_type'], ['start', 'resume'])) {
             return redirect()->back()->with('errors', ['No tienes una jornada activa para pausar.']);
         }
 
@@ -185,7 +185,7 @@ class WorkdayController extends BaseController
         $data = [
             'user_id' => $userId,
             'workday_date' => $openWorkday['workday_date'],
-            'event_type' => 'break_start',
+            'event_type' => 'pause',
             'event_time' => $currentDateTime,
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -233,7 +233,7 @@ class WorkdayController extends BaseController
         // Verificar que está en pausa
         $openWorkday = $this->getOpenWorkdayType($userId);
 
-        if ($openWorkday['event_type'] !== 'break_start') {
+        if ($openWorkday['event_type'] !== 'pause') {
             return redirect()->back()->with('errors', ['No tienes una jornada en pausa para reanudar.']);
         }
 
@@ -246,7 +246,7 @@ class WorkdayController extends BaseController
         $data = [
             'user_id' => $userId,
             'workday_date' => $openWorkday['workday_date'],
-            'event_type' => 'break_end',
+            'event_type' => 'resume',
             'event_time' => $currentDateTime,
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -295,7 +295,7 @@ class WorkdayController extends BaseController
         $openWorkday = $this->getOpenWorkdayType($userId);
 
         // Verificar que la jornada está activa (iniciada o reanudada) para poder finalizar
-        if (!in_array($openWorkday['event_type'], ['in', 'break_start', 'break_end'])) {
+        if (!in_array($openWorkday['event_type'], ['start', 'pause', 'resume'])) {
             return redirect()->back()->with('errors', ['No tienes una jornada activa para finalizar.']);
         }
         
@@ -309,7 +309,7 @@ class WorkdayController extends BaseController
         $data = [
             'user_id' => $userId,
             'workday_date' => $openWorkday['workday_date'],
-            'event_type' => 'out',
+            'event_type' => 'stop',
             'event_time' => $currentDateTime,
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -360,7 +360,7 @@ class WorkdayController extends BaseController
         foreach ($groupedEvents as $date => $events) {
             // Obtener daily_hours específico de esta jornada desde el evento 'in'
             $inEvent = array_filter($events, function($event) {
-                return $event['event_type'] === 'in';
+                return $event['event_type'] === 'start';
             });
             $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
             $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
@@ -453,7 +453,7 @@ class WorkdayController extends BaseController
             foreach ($dates as $date => $events) {
                 // Obtener daily_hours específico de esta jornada desde el evento 'in'
                 $inEvent = array_filter($events, function($event) {
-                    return $event['event_type'] === 'in';
+                    return $event['event_type'] === 'start';
                 });
                 $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
                 $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
@@ -538,7 +538,7 @@ class WorkdayController extends BaseController
 
         // Obtener daily_hours específico de esta jornada desde el evento 'in'
         $inEvent = array_filter($events, function($event) {
-            return $event['event_type'] === 'in';
+            return $event['event_type'] === 'start';
         });
         $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
         $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
@@ -598,7 +598,7 @@ class WorkdayController extends BaseController
         foreach ($groupedEvents as $date => $events) {
             // Obtener daily_hours específico de esta jornada desde el evento 'in'
             $inEvent = array_filter($events, function($event) {
-                return $event['event_type'] === 'in';
+                return $event['event_type'] === 'start';
             });
             $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
             $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
@@ -677,7 +677,7 @@ class WorkdayController extends BaseController
             foreach ($dates as $date => $events) {
                 // Obtener daily_hours específico de esta jornada desde el evento 'in'
                 $inEvent = array_filter($events, function($event) {
-                    return $event['event_type'] === 'in';
+                    return $event['event_type'] === 'start';
                 });
                 $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
                 $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
@@ -1027,11 +1027,12 @@ class WorkdayController extends BaseController
             ->select('event_type, workday_date')
             ->where('user_id', $userId)
             ->orderBy('event_time', 'DESC')
+            ->orderBy('id', 'DESC')
             ->first();
 
-        //Si no hay registros, devolver un array con event_type 'out'
+        //Si no hay registros, devolver un array con event_type 'stop'
         if (!$lastRecord) {
-            return ['event_type' => 'out'];
+            return ['event_type' => 'stop'];
         }
         return $lastRecord;
     }
@@ -1045,11 +1046,11 @@ class WorkdayController extends BaseController
     // =================================================================================
     private function autoCloseWorkday($userId, $workdayDate)
     {
-        // Verificar si ya existe un registro 'out' para esta jornada para evitar dobles cierres automáticos
+        // Verificar si ya existe un registro 'stop' para esta jornada para evitar dobles cierres automáticos
         $existingOut = $this->workdayModel
             ->where('user_id', $userId)
             ->where('workday_date', $workdayDate)
-            ->where('event_type', 'out')
+            ->where('event_type', 'stop')
             ->first();
 
         // Si ya existe un registro de salida, no hacer nada
@@ -1084,7 +1085,7 @@ class WorkdayController extends BaseController
             $data = [
                 'user_id' => $userId,
                 'workday_date' => $workdayDate,
-                'event_type' => 'out',
+                'event_type' => 'stop',
                 'event_time' => $endDateTime,
                 'latitude' => null,  // No hay coordenadas para cierre automático
                 'longitude' => null,

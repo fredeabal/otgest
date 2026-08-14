@@ -34,8 +34,12 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="birthdate" class="form-label">Fecha de nacimiento</label>
-                                <input type="date" class="form-control" id="birthdate" name="birthdate"
-                                    value="<?= old('birthdate') ?>" placeholder="Selecciona una fecha">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="expense_date_display"
+                                        value="<?= old('birthdate') ? date('d/m/Y', strtotime(old('birthdate'))) : '' ?>" placeholder="dd/mm/yyyy" autocomplete="off" readonly>
+                                    <span class="input-group-text bg-transparent"><i class="ti ti-calendar fs-5"></i></span>
+                                </div>
+                                <input type="hidden" name="birthdate" id="expense_date" value="<?= old('birthdate') ?>">
                             </div>
                             <div class="col-md-6">
                                 <label for="email" class="form-label">Correo electrónico</label>

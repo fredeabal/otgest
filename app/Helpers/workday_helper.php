@@ -26,12 +26,12 @@ if (!function_exists('calculate_workday_data')) {
         // Procesar eventos cronológicamente
         foreach ($events as $event) {
             switch ($event['event_type']) {
-                case 'in':
+                case 'start':
                     // Evento de entrada - registrar hora de inicio
                     $startTime = $event['event_time'];
                     break;
 
-                case 'out':
+                case 'stop':
                     // Evento de salida - registrar hora de fin
                     $endTime = $event['event_time'];
                     // Verificar si fue cierre automático
@@ -40,12 +40,12 @@ if (!function_exists('calculate_workday_data')) {
                     }
                     break;
 
-                case 'break_start':
+                case 'pause':
                     // Inicio de pausa - guardar hora de inicio
                     $breakStart = $event['event_time'];
                     break;
 
-                case 'break_end':
+                case 'resume':
                     // Fin de pausa - calcular duración y sumar al total
                     if ($breakStart) {
                         $breakDuration = strtotime($event['event_time']) - strtotime($breakStart);

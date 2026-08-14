@@ -380,6 +380,39 @@ class DocumentsController extends BaseController
     }
 
     // =================================================================================
+    // Eliminar documento
+    // =================================================================================
+    public function delete($id)
+    {
+        $userId = session()->get('user_id');
+        
+        // Solo el remitente o alguien con permiso de administración puede borrar
+        if (has_permission('documents.manage')) {
+            $document = $this->documentsModel->where('id', $id)->first();
+        } else {
+            $document = $this->documentsModel->where('id', $id)->where('sender_id', $userId)->first();
+        }
+
+        if (!$document) {
+            return redirect()->to('/documents/sent')->with('errors', ['Documento no encontrado o no tienes permisos para eliminarlo.']);
+        }
+
+        // Ruta del archivo físico
+        $filePath = WRITEPATH . 'uploads/documents/' . $document['receiver_id'] . '/' . $document['file_path'];
+
+        // Eliminar archivo físico si existe
+        if (is_file($filePath)) {
+            unlink($filePath);
+        }
+
+        // Eliminar registro de la base de datos
+        $this->documentsModel->delete($id);
+
+        return redirect()->to('/documents/sent')->with('success', 'Documento eliminado correctamente.');
+    }
+
+
+    // =================================================================================
     // Enviar notificación de documento recibido por correo
     // =================================================================================
     private function sendDocumentNotification($documentId)

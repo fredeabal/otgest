@@ -179,24 +179,27 @@ class AbsenceController extends BaseController
         }
 
         // Filtro de estado con default 'pending'
-        $status = $this->request->getGet('status') ?: 'pending';
+        $status = $this->request->getGet('status');
+        if ($status === null) {
+            $status = 'pending';
+        }
         if ($status !== '') {
             $query->where('status', $status);
         }
 
         if ($this->request->getGet('date_from')) {
-            $query->where('start_date >=', $this->request->getGet('date_from'));
+            $query->where('end_date >=', $this->request->getGet('date_from'));
         }
 
         if ($this->request->getGet('date_to')) {
-            $query->where('end_date <=', $this->request->getGet('date_to'));
+            $query->where('start_date <=', $this->request->getGet('date_to'));
         }
 
         $data['absences'] = $query->orderBy('created_at', 'DESC')->paginate(10);
         $data['pager'] = $this->absenceModel->pager;
         $data['absenceTypes'] = $this->absenceModel->getAbsenceTypes();
         $data['statusLabels'] = $this->absenceModel->getStatusLabels();
-        $data['current_status'] = $this->request->getGet('status') ?: 'pending';
+        $data['current_status'] = $status;
         $data['title'] = 'Mis Solicitudes de Ausencia';
 
         echo view('template/header', $data);
@@ -219,16 +222,20 @@ class AbsenceController extends BaseController
             $query->where('absences.type', $this->request->getGet('type'));
         }
 
-        if ($this->request->getGet('status')) {
-            $query->where('absences.status', $this->request->getGet('status'));
+        $status = $this->request->getGet('status');
+        if ($status === null) {
+            $status = 'pending';
+        }
+        if ($status !== '') {
+            $query->where('absences.status', $status);
         }
 
         if ($this->request->getGet('date_from')) {
-            $query->where('absences.start_date >=', $this->request->getGet('date_from'));
+            $query->where('absences.end_date >=', $this->request->getGet('date_from'));
         }
 
         if ($this->request->getGet('date_to')) {
-            $query->where('absences.end_date <=', $this->request->getGet('date_to'));
+            $query->where('absences.start_date <=', $this->request->getGet('date_to'));
         }
 
         // Obtener resultados
@@ -370,11 +377,11 @@ class AbsenceController extends BaseController
         }
 
         if ($this->request->getGet('date_from')) {
-            $query->where('absences.start_date >=', $this->request->getGet('date_from'));
+            $query->where('absences.end_date >=', $this->request->getGet('date_from'));
         }
 
         if ($this->request->getGet('date_to')) {
-            $query->where('absences.end_date <=', $this->request->getGet('date_to'));
+            $query->where('absences.start_date <=', $this->request->getGet('date_to'));
         }
 
         $data['absences'] = $query->orderBy('absences.created_at', 'DESC')->paginate(100);
@@ -717,12 +724,12 @@ class AbsenceController extends BaseController
 
         $dateFrom = $this->request->getGet('date_from');
         if ($dateFrom) {
-            $query->where('absences.start_date >=', $dateFrom);
+            $query->where('absences.end_date >=', $dateFrom);
         }
 
         $dateTo = $this->request->getGet('date_to');
         if ($dateTo) {
-            $query->where('absences.end_date <=', $dateTo);
+            $query->where('absences.start_date <=', $dateTo);
         }
 
         $absences = $query->orderBy('absences.created_at', 'DESC')->findAll();

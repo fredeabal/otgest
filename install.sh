@@ -9,6 +9,11 @@
 
 set -e
 
+# Registrar trampa de limpieza del script temporal si se ejecuta desde /tmp
+if [ "$OTGEST_SELF_RUN" = "1" ] && [ -f "$0" ] && [[ "$0" == /tmp/otgest_install.* ]]; then
+    trap "rm -f '$0'" EXIT
+fi
+
 # Si se ejecuta mediante curl/pipe, guardar en un archivo temporal y reconectar la terminal
 if [ ! -t 0 ] && [ -z "$OTGEST_SELF_RUN" ]; then
     TMP_SCRIPT=$(mktemp /tmp/otgest_install.XXXXXX.sh)
@@ -68,12 +73,30 @@ if [ ! -f "./spark" ]; then
         cd /tmp
         rm -rf "$INSTALL_DIR"
     fi
-    git clone https://github.com/fredeabal/otgest.git "$INSTALL_DIR"
+    if ! git clone https://github.com/fredeabal/otgest.git "$INSTALL_DIR"; then
+        echo -e "\n${RED}❌ Error: No se pudo clonar el repositorio desde GitHub.${NC}"
+        echo -e "${YELLOW}Verifica tu conexión a internet o asegúrate de que el repositorio sea público.${NC}\n"
+        exit 1
+    fi
 else
-    echo -e "${YELLOW}⏳ [2/6] Preparando el directorio del proyecto en ${INSTALL_DIR}...${NC}"
-    mkdir -p "$INSTALL_DIR"
-    cp -r ./* "$INSTALL_DIR/"
-    cp -r ./.env* "$INSTALL_DIR/" 2>/dev/null || true
+    # Resolver rutas absolutas
+    ABS_CURRENT_DIR=$(pwd -P)
+    ABS_INSTALL_DIR=$(mkdir -p "$INSTALL_DIR" && cd "$INSTALL_DIR" && pwd -P)
+    
+    if [ "$ABS_CURRENT_DIR" != "$ABS_INSTALL_DIR" ]; then
+        echo -e "${YELLOW}⏳ [2/6] Preparando el directorio del proyecto en ${INSTALL_DIR}...${NC}"
+        if [ -f "$INSTALL_DIR/.env" ]; then
+            echo -e "${YELLOW}⚠️ Se detectó un archivo .env existente en el destino. Se conservará su configuración.${NC}"
+            mv "$INSTALL_DIR/.env" "$INSTALL_DIR/.env.backup"
+            cp -r ./* "$INSTALL_DIR/"
+            mv "$INSTALL_DIR/.env.backup" "$INSTALL_DIR/.env"
+        else
+            cp -r ./* "$INSTALL_DIR/"
+            cp -r ./.env* "$INSTALL_DIR/" 2>/dev/null || true
+        fi
+    else
+        echo -e "${YELLOW}⏳ [2/6] Ya se encuentra en el directorio de instalación ${INSTALL_DIR}. Omitiendo copia.${NC}"
+    fi
 fi
 
 cd "$INSTALL_DIR"
@@ -116,11 +139,11 @@ mkdir -p "${INSTALL_DIR}/public/uploads"
 DB_PATH="${DB_DIR}/database/database.sqlite"
 
 # Ajustar valores en .env
-sed -i "s|.*CI_ENVIRONMENT = .*|CI_ENVIRONMENT = development|g" .env
-sed -i "s|.*app.baseURL = .*|app.baseURL = 'http://${DOMAIN}/'|g" .env
-sed -i "s|.*database.default.hostname = .*|database.default.hostname = localhost|g" .env
-sed -i "s|.*database.default.database = .*|database.default.database = ${DB_PATH}|g" .env
-sed -i "s|.*database.default.DBDriver = .*|database.default.DBDriver = SQLite3|g" .env
+sed -i "s|^[# ]*CI_ENVIRONMENT[[:space:]]*=.*|CI_ENVIRONMENT = development|g" .env
+sed -i "s|^[# ]*app.baseURL[[:space:]]*=.*|app.baseURL = 'http://${DOMAIN}/'|g" .env
+sed -i "s|^[# ]*database.default.hostname[[:space:]]*=.*|database.default.hostname = localhost|g" .env
+sed -i "s|^[# ]*database.default.database[[:space:]]*=.*|database.default.database = ${DB_PATH}|g" .env
+sed -i "s|^[# ]*database.default.DBDriver[[:space:]]*=.*|database.default.DBDriver = SQLite3|g" .env
 
 # Generar llave de encriptación si no existe o usar la que genera spark
 php spark key:generate --force > /dev/null 2>&1 || true
@@ -128,7 +151,7 @@ php spark key:generate --force > /dev/null 2>&1 || true
 # 6. Ejecutar Migraciones y Semilla de Base de Datos
 echo -e "\n${YELLOW}⏳ [5/6] Configurando la base de datos y creando usuario inicial...${NC}"
 # Permisos temporales para migrar
-chmod -R 777 writable/
+chmod -R 775 writable/
 
 php spark migrate --all
 php spark db:seed DatabaseSeeder
@@ -150,8 +173,8 @@ server {
     root ${INSTALL_DIR}/public;
     index index.php index.html index.htm;
 
-    # Permitir la subida de archivos grandes (hasta 10 Gigabytes)
-    client_max_body_size 10G;
+    # Permitir la subida de archivos grandes (hasta 100 Megabytes)
+    client_max_body_size 100M;
 
     location / {
         try_files \$uri \$uri/ /index.php\$is_args\$args;

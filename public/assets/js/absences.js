@@ -83,8 +83,11 @@ function submitViaPost(url) {
     form.action = url;
 
     // Buscar el token CSRF en el sitio (usualmente en meta o en formularios existentes)
-    const csrfName = 'csrf_test_name';
-    const csrfHash = document.querySelector('input[name="csrf_test_name"]')?.value || '';
+    const csrfNameMeta = document.querySelector('meta[name="csrf-token-name"]');
+    const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+    
+    const csrfName = csrfNameMeta ? csrfNameMeta.content : 'csrf_test_name';
+    const csrfHash = csrfTokenMeta ? csrfTokenMeta.content : (document.querySelector('input[name="csrf_test_name"]')?.value || '');
 
     if (csrfHash) {
         const csrfInput = document.createElement('input');

@@ -49,8 +49,12 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="expense_date" class="form-label">Fecha del gasto</label>
-                                <input type="date" class="form-control" id="expense_date" name="expense_date"
-                                    value="<?= old('expense_date', date('Y-m-d')) ?>">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="expense_date_display"
+                                        value="<?= old('expense_date') ? date('d/m/Y', strtotime(old('expense_date'))) : date('d/m/Y') ?>" placeholder="dd/mm/yyyy" autocomplete="off" readonly>
+                                    <span class="input-group-text bg-transparent"><i class="ti ti-calendar fs-5"></i></span>
+                                </div>
+                                <input type="hidden" name="expense_date" id="expense_date" value="<?= old('expense_date', date('Y-m-d')) ?>">
                             </div>
                             <div class="col-md-6">
                                 <label for="amount" class="form-label">Importe (€)</label>

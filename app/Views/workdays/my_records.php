@@ -13,33 +13,32 @@
         <div class="card-body">
             <!-- Filtros -->
             <form method="get" class="row g-3 mb-4">
-                <div class="col-md-2">
-                    <label for="date_from" class="form-label">Fecha desde</label>
-                    <input type="date" name="date_from" id="date_from" class="form-control"
-                           value="<?= esc($date_from) ?>">
+                <div class="col-md-6">
+                    <label for="daterange" class="form-label fw-semibold text-muted small uppercase">Rango de Fechas</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent"><i class="ti ti-calendar fs-5"></i></span>
+                        <input type="text" id="daterange" class="form-control" placeholder="Selecciona el rango de fechas" readonly>
+                    </div>
+                    <input type="hidden" name="date_from" id="date_from" value="<?= esc($date_from) ?>">
+                    <input type="hidden" name="date_to" id="date_to" value="<?= esc($date_to) ?>">
                 </div>
-                <div class="col-md-2">
-                    <label for="date_to" class="form-label">Fecha hasta</label>
-                    <input type="date" name="date_to" id="date_to" class="form-control"
-                           value="<?= esc($date_to) ?>">
-                </div>
-                <div class="col-md-2">
-                    <label for="status" class="form-label">Estado</label>
+                <div class="col-md-3">
+                    <label for="status" class="form-label fw-semibold text-muted small uppercase">Estado</label>
                     <select name="status" id="status" class="form-select">
                         <option value="">Todos los estados</option>
                         <option value="completed" <?= ($status ?? '') === 'completed' ? 'selected' : '' ?>>Completada</option>
                         <option value="in_progress" <?= ($status ?? '') === 'in_progress' ? 'selected' : '' ?>>En progreso</option>
                     </select>
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary btn-icon me-2">
-                        <i class="ti ti-filter"></i>
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary btn-icon-lg" title="Filtrar">
+                        <i class="ti ti-filter fs-5"></i>
                     </button>
-                    <a href="<?= base_url('workdays/my-records') ?>" class="btn btn-outline-primary btn-icon me-2">
-                        <i class="ti ti-circle-x"></i>
+                    <a href="<?= base_url('workdays/my-records') ?>" class="btn btn-outline-primary btn-icon-lg" title="Limpiar">
+                        <i class="ti ti-refresh fs-5"></i>
                     </a>
-                    <a href="<?= base_url('workdays/export-my-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-outline-primary btn-icon">
-                        <i class="ti ti-file"></i>
+                    <a href="<?= base_url('workdays/export-my-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-outline-primary btn-icon-lg" title="Exportar PDF">
+                        <i class="ti ti-file fs-5"></i>
                     </a>
                 </div>
             </form>

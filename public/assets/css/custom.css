@@ -223,6 +223,21 @@
     transform: scale(1.1);
 }
 
+.btn-icon-lg {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-icon-lg:hover {
+    transform: scale(1.05);
+}
+
+
 /* --- Indicador circular para badges (estilo Modernize) --- */
 .round-8 {
     width: 8px;
@@ -883,3 +898,45 @@
     background: none !important;
     background-color: rgba(11, 17, 20, 0.8) !important;
 }
+/* =============================================
+   Fix global Select2 UX (Height, Caret, Padding)
+   ============================================= */
+.select2-container .select2-selection--single {
+    height: 40px !important;
+    line-height: 40px !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: var(--bs-border-radius, 7px) !important;
+    background-color: transparent !important;
+    display: flex;
+    align-items: center;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 40px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    color: var(--bs-body-color) !important;
+    width: 100%;
+}
+.select2-container .select2-selection__arrow {
+    display: none !important;
+}
+
+/* Unificar inputs de filtros en gestión de jornadas y ausencias ocultando también el caret de Estado y Tipo */
+#status.form-select,
+#type_filter.form-select {
+    background-image: none !important;
+    padding-right: 15px !important;
+}
+
+
+
+/* =============================================
+   Fix global input-group-text borders (Light & Dark)
+   ============================================= */
+.input-group-text {
+    border: 1px solid var(--bs-border-color) !important;
+}
+[data-bs-theme="dark"] .input-group-text {
+    border: 1px solid #1a262d !important;
+}
+

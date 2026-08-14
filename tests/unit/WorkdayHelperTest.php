@@ -19,8 +19,8 @@ class WorkdayHelperTest extends TestCase
     public function test_jornada_completa_sin_pausa()
     {
         $events = [
-            ['event_type' => 'in', 'event_time' => '2025-01-15 09:00:00', 'autoclose' => false],
-            ['event_type' => 'out', 'event_time' => '2025-01-15 18:00:00', 'autoclose' => false],
+            ['event_type' => 'start', 'event_time' => '2025-01-15 09:00:00', 'autoclose' => false],
+            ['event_type' => 'stop', 'event_time' => '2025-01-15 18:00:00', 'autoclose' => false],
         ];
 
         $result = calculate_workday_data('2025-01-15', $events, 8);
@@ -34,10 +34,10 @@ class WorkdayHelperTest extends TestCase
     public function test_jornada_con_pausa()
     {
         $events = [
-            ['event_type' => 'in', 'event_time' => '2025-01-15 09:00:00', 'autoclose' => false],
-            ['event_type' => 'break_start', 'event_time' => '2025-01-15 13:00:00', 'autoclose' => false],
-            ['event_type' => 'break_end', 'event_time' => '2025-01-15 13:30:00', 'autoclose' => false],
-            ['event_type' => 'out', 'event_time' => '2025-01-15 18:00:00', 'autoclose' => false],
+            ['event_type' => 'start', 'event_time' => '2025-01-15 09:00:00', 'autoclose' => false],
+            ['event_type' => 'pause', 'event_time' => '2025-01-15 13:00:00', 'autoclose' => false],
+            ['event_type' => 'resume', 'event_time' => '2025-01-15 13:30:00', 'autoclose' => false],
+            ['event_type' => 'stop', 'event_time' => '2025-01-15 18:00:00', 'autoclose' => false],
         ];
 
         $result = calculate_workday_data('2025-01-15', $events, 8);
@@ -50,7 +50,7 @@ class WorkdayHelperTest extends TestCase
     public function test_jornada_activa_sin_salida()
     {
         $events = [
-            ['event_type' => 'in', 'event_time' => '2025-01-15 09:00:00', 'autoclose' => false],
+            ['event_type' => 'start', 'event_time' => '2025-01-15 09:00:00', 'autoclose' => false],
         ];
 
         $result = calculate_workday_data('2025-01-15', $events, 8);
@@ -62,7 +62,7 @@ class WorkdayHelperTest extends TestCase
     public function test_jornada_invalida_sin_entrada()
     {
         $events = [
-            ['event_type' => 'out', 'event_time' => '2025-01-15 18:00:00', 'autoclose' => false],
+            ['event_type' => 'stop', 'event_time' => '2025-01-15 18:00:00', 'autoclose' => false],
         ];
 
         $result = calculate_workday_data('2025-01-15', $events);

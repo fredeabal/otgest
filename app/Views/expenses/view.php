@@ -164,7 +164,7 @@
             <!-- =================================================================================
                 // Acciones (solo para administradores en gastos pendientes)
                 // ================================================================================= -->
-            <?php if ($expense['status'] === 'pending' && (has_permission('manage_expenses'))): ?>
+            <?php if ($expense['status'] === 'pending' && (has_permission('expenses.manage'))): ?>
             <div class="col-md-12 mt-5 mb-3 text-center">
                 <a href="<?= base_url('expenses/approve/' . $expense['id']) ?>"
                     class="btn bg-success-subtle text-success me-2 approve-expense-swal"
