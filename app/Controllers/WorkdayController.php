@@ -730,6 +730,10 @@ class WorkdayController extends BaseController
         $userId = session()->get('user_id');
         $user = model('App\Models\UsersModel')->find($userId);
 
+        // Obtener información de la empresa
+        $company = $this->companyModel->getCompany();
+        $companyName = $company ? $company['name'] : 'OtGest';
+
         // Calcular totales
         $totalHours       = 0;
         $totalOvertime    = 0;
@@ -775,6 +779,7 @@ class WorkdayController extends BaseController
         $html .= '
         <div class="header-info">
             <div class="header-left">
+                <strong>' . esc($companyName) . '</strong><br>
                 <strong>Reporte de Mis Jornadas Laborales</strong><br>
                 <strong>Período:</strong> ' . date('d/m/Y', strtotime($date_from)) . ' - ' . date('d/m/Y', strtotime($date_to)) . '<br>
                 <strong>Estado:</strong> ' . ($statusText[$status] ?? 'Filtrado') . '<br>
@@ -863,6 +868,10 @@ class WorkdayController extends BaseController
     // =================================================================================
     private function generateManagePdfHtml($workdays, $date_from, $date_to, $status, $user_id = null)
     {
+        // Obtener información de la empresa
+        $company = $this->companyModel->getCompany();
+        $companyName = $company ? $company['name'] : 'OtGest';
+
         // Calcular totales
         $totalHours      = 0;
         $totalOvertime   = 0;
@@ -923,6 +932,7 @@ class WorkdayController extends BaseController
         $html .= '
         <div class="header-info">
             <div class="header-left">
+                <strong>' . esc($companyName) . '</strong><br>
                 <strong>Reporte de Gesti&oacute;n de Jornadas Laborales</strong><br>
                 <strong>Per&iacute;odo:</strong> ' . date('d/m/Y', strtotime($date_from)) . ' - ' . date('d/m/Y', strtotime($date_to)) . '<br>
                 <strong>Estado:</strong> ' . ($statusText[$status] ?? 'Filtrado') . '<br>
