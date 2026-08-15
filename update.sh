@@ -50,6 +50,11 @@ echo -e "(${YELLOW}Pulsa Enter si sigue siendo exactamente igual para no cambiar
 read -p "Nueva URL Base: " NEW_URL
 
 if [ ! -z "$NEW_URL" ]; then
+    # Añadir protocolo por defecto si el usuario no lo ingresó
+    if [[ "$NEW_URL" != http://* ]] && [[ "$NEW_URL" != https://* ]]; then
+        NEW_URL="http://${NEW_URL}"
+    fi
+
     # Añadir barra final si no la tiene
     if [[ "$NEW_URL" != */ ]]; then
         NEW_URL="${NEW_URL}/"

@@ -48,6 +48,12 @@ SERVER_IP=$(hostname -I | awk '{print $1}')
 read -p "👉 Ingresa la IP o Dominio del servidor [Predeterminado: ${SERVER_IP}]: " INPUT_DOMAIN
 DOMAIN=${INPUT_DOMAIN:-$SERVER_IP}
 
+# Detectar protocolo
+PROTOCOL="http"
+if [[ "$DOMAIN" == https://* ]]; then
+    PROTOCOL="https"
+fi
+
 # Limpiar protocolo e IP si se incluyó http/https por error
 DOMAIN=$(echo "$DOMAIN" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 
@@ -140,7 +146,7 @@ DB_PATH="${DB_DIR}/database/database.sqlite"
 
 # Ajustar valores en .env
 sed -i "s|^[# ]*CI_ENVIRONMENT[[:space:]]*=.*|CI_ENVIRONMENT = development|g" .env
-sed -i "s|^[# ]*app.baseURL[[:space:]]*=.*|app.baseURL = 'http://${DOMAIN}/'|g" .env
+sed -i "s|^[# ]*app.baseURL[[:space:]]*=.*|app.baseURL = '${PROTOCOL}://${DOMAIN}/'|g" .env
 sed -i "s|^[# ]*database.default.hostname[[:space:]]*=.*|database.default.hostname = localhost|g" .env
 sed -i "s|^[# ]*database.default.database[[:space:]]*=.*|database.default.database = ${DB_PATH}|g" .env
 sed -i "s|^[# ]*database.default.DBDriver[[:space:]]*=.*|database.default.DBDriver = SQLite3|g" .env
@@ -217,7 +223,7 @@ echo "======================================================================"
 echo "         🎉 ¡INSTALACIÓN DE OTGEST COMPLETADA CON ÉXITO!           "
 echo "======================================================================"
 echo -e "${NC}"
-echo -e "👉 **Acceso Web:** http://${DOMAIN}"
+echo -e "👉 **Acceso Web:** ${PROTOCOL}://${DOMAIN}"
 echo -e "👉 **Usuario Admin:** admin@demo.com"
 echo -e "👉 **Contraseña:** 12345678"
 echo -e "----------------------------------------------------------------------"
