@@ -47,17 +47,18 @@ class WorkdayController extends BaseController
         
         $currentEventType = $this->getOpenWorkdayType($userId)['event_type'];
         
-        // Calcular tiempo transcurrido si la jornada está activa o reanudada
+        // Calcular tiempo transcurrido exacto restando pausas
         $data['elapsed_seconds'] = 0;
-        if ($currentEventType === 'start' || $currentEventType === 'resume') {
-            $startRecord = $this->workdayModel->where('user_id', $userId)
-                ->where('event_type', 'start')
+        if (in_array($currentEventType, ['start', 'pause', 'resume'])) {
+            helper('workday');
+            $events = $this->workdayModel->where('user_id', $userId)
                 ->where('workday_date', $openWorkday['workday_date'] ?? date('Y-m-d'))
-                ->orderBy('event_time', 'DESC')
-                ->first();
-            
-            if ($startRecord) {
-                $data['elapsed_seconds'] = max(0, time() - strtotime($startRecord['event_time']));
+                ->orderBy('event_time', 'ASC')
+                ->findAll();
+                
+            $workdayData = calculate_workday_data($openWorkday['workday_date'] ?? date('Y-m-d'), $events);
+            if ($workdayData) {
+                $data['elapsed_seconds'] = round($workdayData['total_hours'] * 3600);
             }
         }
 

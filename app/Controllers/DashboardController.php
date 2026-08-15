@@ -344,22 +344,21 @@ class DashboardController extends BaseController
 
         // Si el último evento es 'start', 'pause' o 'resume', la jornada está activa
         if (in_array($lastRecord['event_type'], ['start', 'pause', 'resume'])) {
-            // Buscar el evento de inicio ('start') más reciente para obtener la hora de inicio
-            $startRecord = $this->workdayModel->where('user_id', $userId)
-                        ->where('event_type', 'start')
+            $events = $this->workdayModel->where('user_id', $userId)
                 ->where('workday_date', $lastRecord['workday_date'])
-                ->orderBy('event_time', 'DESC')
-                ->first();
+                ->orderBy('event_time', 'ASC')
+                ->findAll();
 
-            if ($startRecord) {
-                $elapsedSeconds = max(0, time() - strtotime($startRecord['event_time']));
-                
+            $workdayData = calculate_workday_data($lastRecord['workday_date'], $events);
+
+            if ($workdayData) {
                 return [
-                    'start_time' => $startRecord['event_time'],
-                    'start_date' => $startRecord['workday_date'],
-                    'elapsed_seconds' => $elapsedSeconds,
+                    'start_time' => $workdayData['start_time'],
+                    'start_date' => $workdayData['start_date'],
+                    'elapsed_seconds' => round($workdayData['total_hours'] * 3600),
                     'end_time' => null,
-                    'autoclose' => false
+                    'autoclose' => false,
+                    'status' => $lastRecord['event_type']
                 ];
             }
         }

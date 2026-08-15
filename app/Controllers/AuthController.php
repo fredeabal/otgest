@@ -96,7 +96,7 @@ class AuthController extends BaseController
             ]);
             
             // Redirigir siempre a dashboard único
-            return redirect()->to('/user/dashboard')->with('success', 'Bienvenido ' . $user['name']);
+            return redirect()->to('/user/dashboard');
         } else {
             // Usuario o contraseña incorrectos
             return redirect()->back()->with('errors', ['Correo o contraseña incorrectos.']);

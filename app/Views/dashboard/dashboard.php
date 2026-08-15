@@ -65,8 +65,13 @@
                                     <?php elseif ($current_workday['autoclose']): ?>
                                         <i class="ti ti-player-pause text-info"></i> Jornada cerrada automaticamente
                                     <?php else: ?>
-                                        <i class="ti ti-player-play text-warning"></i> Jornada activa: 
-                                        <span class="fw-bold text-warning fs-3" id="active-workday-timer" data-elapsed="<?= $current_workday['elapsed_seconds'] ?>"></span>
+                                        <?php if (($current_workday['status'] ?? '') === 'pause'): ?>
+                                            <i class="ti ti-player-pause text-info"></i> Jornada en pausa: 
+                                            <span class="fw-bold text-info fs-3" id="active-workday-timer" data-elapsed="<?= $current_workday['elapsed_seconds'] ?>" data-status="pause"></span>
+                                        <?php else: ?>
+                                            <i class="ti ti-player-play text-warning"></i> Jornada activa: 
+                                            <span class="fw-bold text-warning fs-3" id="active-workday-timer" data-elapsed="<?= $current_workday['elapsed_seconds'] ?>" data-status="active"></span>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php else: ?>
                                     <i class="ti ti-player-pause text-danger"></i> <span>Sin jornada hoy</span>
@@ -234,13 +239,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const timerElement = document.getElementById('active-workday-timer');
     if (timerElement) {
         let elapsedSeconds = parseInt(timerElement.getAttribute('data-elapsed'), 10) || 0;
+        let isPaused = timerElement.getAttribute('data-status') === 'pause';
         
         function updateTimer() {
             let totalMinutes = Math.floor(elapsedSeconds / 60);
             let hours = Math.floor(totalMinutes / 60);
             let minutes = totalMinutes % 60;
             timerElement.textContent = hours + ':' + minutes.toString().padStart(2, '0');
-            elapsedSeconds++;
+            if (!isPaused) elapsedSeconds++;
         }
         
         updateTimer();
