@@ -352,8 +352,12 @@ class DashboardController extends BaseController
                 ->first();
 
             if ($startRecord) {
+                $elapsedSeconds = max(0, time() - strtotime($startRecord['event_time']));
+                
                 return [
                     'start_time' => $startRecord['event_time'],
+                    'start_date' => $startRecord['workday_date'],
+                    'elapsed_seconds' => $elapsedSeconds,
                     'end_time' => null,
                     'autoclose' => false
                 ];

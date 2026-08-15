@@ -44,27 +44,43 @@ class WorkdayController extends BaseController
         if ($openWorkday && $openWorkday['event_type'] === 'start') {
             $this->autoCloseWorkday($userId, $openWorkday['workday_date']);
         }
+        
+        $currentEventType = $this->getOpenWorkdayType($userId)['event_type'];
+        
+        // Calcular tiempo transcurrido si la jornada está activa o reanudada
+        $data['elapsed_seconds'] = 0;
+        if ($currentEventType === 'start' || $currentEventType === 'resume') {
+            $startRecord = $this->workdayModel->where('user_id', $userId)
+                ->where('event_type', 'start')
+                ->where('workday_date', $openWorkday['workday_date'] ?? date('Y-m-d'))
+                ->orderBy('event_time', 'DESC')
+                ->first();
+            
+            if ($startRecord) {
+                $data['elapsed_seconds'] = max(0, time() - strtotime($startRecord['event_time']));
+            }
+        }
 
         // si la jornada esta abierta mostramos pausa y cierre
-        if ($this->getOpenWorkdayType($userId)['event_type'] === 'start') {
+        if ($currentEventType === 'start') {
             echo view('template/header', $data);
             echo view('workdays/active', $data);
             echo view('template/footer');
         }
         // si la jornada esta en pausa mostramos reanudar y cierre
-        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'pause') {
+        elseif ($currentEventType === 'pause') {
             echo view('template/header', $data);
             echo view('workdays/resume', $data);
             echo view('template/footer');
         }
         // si la jornada esta reanudada mostramos pausa y cierre
-        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'resume') {
+        elseif ($currentEventType === 'resume') {
             echo view('template/header', $data);
             echo view('workdays/active', $data);
             echo view('template/footer');
         }
         // si la jornada esta cerrada mostramos iniciar
-        elseif ($this->getOpenWorkdayType($userId)['event_type'] === 'stop') {
+        elseif ($currentEventType === 'stop') {
             echo view('template/header', $data);
             echo view('workdays/start', $data);
             echo view('template/footer');

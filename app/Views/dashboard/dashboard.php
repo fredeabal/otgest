@@ -65,8 +65,8 @@
                                     <?php elseif ($current_workday['autoclose']): ?>
                                         <i class="ti ti-player-pause text-info"></i> Jornada cerrada automaticamente
                                     <?php else: ?>
-                                        <i class="ti ti-player-play text-warning"></i> Jornada activa desde
-                                        <?= esc($current_workday['start_time']) ?>
+                                        <i class="ti ti-player-play text-warning"></i> Jornada activa: 
+                                        <span class="fw-bold text-warning fs-3" id="active-workday-timer" data-elapsed="<?= $current_workday['elapsed_seconds'] ?>"></span>
                                     <?php endif; ?>
                                 <?php else: ?>
                                     <i class="ti ti-player-pause text-danger"></i> <span>Sin jornada hoy</span>
@@ -228,4 +228,23 @@
     </div>
 </div>
 
-
+<!-- Script para el contador de jornada en vivo -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const timerElement = document.getElementById('active-workday-timer');
+    if (timerElement) {
+        let elapsedSeconds = parseInt(timerElement.getAttribute('data-elapsed'), 10) || 0;
+        
+        function updateTimer() {
+            let totalMinutes = Math.floor(elapsedSeconds / 60);
+            let hours = Math.floor(totalMinutes / 60);
+            let minutes = totalMinutes % 60;
+            timerElement.textContent = hours + ':' + minutes.toString().padStart(2, '0');
+            elapsedSeconds++;
+        }
+        
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
+});
+</script>
