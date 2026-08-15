@@ -119,6 +119,7 @@ fi
 # 4. Instalación de librerías PHP mediante Composer
 echo -e "\n${YELLOW}⏳ [3/6] Instalando dependencias PHP de Composer...${NC}"
 export COMPOSER_ALLOW_SUPERUSER=1
+git config --global --add safe.directory "$INSTALL_DIR"
 composer install --no-dev --optimize-autoloader --no-interaction
 
 # 5. Configurar archivo .env
