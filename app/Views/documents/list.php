@@ -47,7 +47,7 @@
             <!-- Fin de buscador de documentos -->
 
             <div class="mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Título</th>
@@ -64,7 +64,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($documents as $doc): ?>
-                        <tr>
+                        <tr onclick="this.querySelector('.view-doc').click();" class="cursor-pointer">
                             <td>
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($doc['title']) ?></h6>
@@ -97,7 +97,7 @@
                                     >Pendiente</span>
                                 <?php endif; ?>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"

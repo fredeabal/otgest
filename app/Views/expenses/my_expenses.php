@@ -49,7 +49,7 @@
             <!-- Fin de buscador de gastos -->
 
             <div class="mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Fecha del gasto</th>
@@ -67,7 +67,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($expenses as $expense): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('expenses/view/' . $expense['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <h6 class="fw-semibold mb-0 mb-1">
                                     <?= esc(date('d/m/Y', strtotime($expense['expense_date']))) ?>
@@ -120,7 +120,7 @@
                                     <?= esc(date('H:i', strtotime($expense['created_at']))) ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"

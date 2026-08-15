@@ -59,7 +59,7 @@
 
             <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
             <div class="mb-4 border rounded-1 table-responsive">
-                <table class="table text-nowrap mb-0 align-middle">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Usuario</th>
@@ -79,7 +79,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($workdays as $workday): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('workdays/view/' . $workday['date'] . '?user_id=' . $workday['user_id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
                                     <strong><?= esc($workday['user_name']) ?></strong><br>
@@ -142,7 +142,7 @@
                                     <?= $statusText[$workday['status']] ?? $workday['status'] ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"

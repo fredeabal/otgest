@@ -45,7 +45,7 @@
             <!-- Fin de buscador de jornadas -->
 
             <div class="mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Fecha</th>
@@ -64,7 +64,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($workdays as $workday): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('workdays/view/' . $workday['date']) ?>'" class="cursor-pointer">
                             <!-- Fecha -->
                             <td>
                                 <?= esc(date('d/m/Y', strtotime($workday['date']))) ?>
@@ -131,7 +131,7 @@
                                 </span>
                             </td>
 
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"

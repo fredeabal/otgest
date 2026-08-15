@@ -125,8 +125,8 @@
                                 <label class="form-label">Tema</label>
                                 <div class="form-check form-switch py-2">
                                     <input class="form-check-input" type="checkbox" id="themeSwitch" name="theme" value="dark" <?= $user['theme'] == 'dark' ? 'checked' : '' ?>>
-                                    <label class="form-check-label" for="themeSwitch">
-                                        <i class="ti ti-moon ms-2"></i>
+                                    <label class="form-check-label ms-2" for="themeSwitch">
+                                        Oscuro
                                     </label>
                                 </div>
                             </div>

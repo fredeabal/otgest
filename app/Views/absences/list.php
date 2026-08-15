@@ -59,7 +59,7 @@
             <!-- Fin de buscador de solicitudes -->
 
             <div class="mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Tipo</th>
@@ -72,7 +72,7 @@
                     <tbody>
                         <?php if (!empty($absences)): ?>
                         <?php foreach ($absences as $absence): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('absences/view/' . $absence['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1">
@@ -118,7 +118,7 @@
                                     <?= $statusLabels[$absence['status']] ?? $absence['status'] ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"

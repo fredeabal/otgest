@@ -66,7 +66,7 @@
             <!-- Fin de buscador de gastos -->
 
             <div class="mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Solicitante</th>
@@ -96,7 +96,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($expenses as $expense): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('expenses/view/' . $expense['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($expense['user_name']) ?></h6>
@@ -156,7 +156,7 @@
                                 ?>
                                 <span class="<?= $statusClass ?> w-70px-inline" ><?= $statusText ?></span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
