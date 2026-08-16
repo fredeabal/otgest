@@ -137,7 +137,7 @@ $routes->get('expenses/export-pending-pdf', 'ExpenseController::exportPendingPdf
 $routes->post('expenses/approve/(:num)', 'ExpenseController::approve/$1', ['filter' => 'permission:expenses.manage']);
 $routes->post('expenses/reject/(:num)', 'ExpenseController::reject/$1', ['filter' => 'permission:expenses.manage']);
 $routes->get('expenses/view/(:num)', 'ExpenseController::view/$1', ['filter' => 'permission:expenses.create,expenses.my,expenses.manage']);
-
+$routes->get('expenses/download/(:num)', 'ExpenseController::download/$1', ['filter' => 'permission:expenses.create,expenses.my,expenses.manage']);
 $routes->post('expenses/delete/(:num)', 'ExpenseController::delete/$1', ['filter' => 'permission:expenses.create,expenses.my,expenses.manage']);
 $routes->get('expenses/receipt/(:num)/(:any)', 'ExpenseController::receipt/$1/$2', ['filter' => 'permission:expenses.create,expenses.my,expenses.manage']);
 

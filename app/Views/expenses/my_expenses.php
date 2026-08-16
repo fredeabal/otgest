@@ -134,6 +134,14 @@
                                                 <i class="ti ti-eye"></i> Ver detalle
                                             </a>
                                         </li>
+                                        <?php if ($expense['receipt_image']): ?>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-3"
+                                                href="<?= base_url('expenses/download/' . $expense['id']) ?>">
+                                                <i class="ti ti-download"></i> Descargar justificante
+                                            </a>
+                                        </li>
+                                        <?php endif; ?>
                                         <?php if ($expense['status'] === 'pending'): ?>
                                         <li>
                                             <form action="<?= base_url('expenses/delete/' . $expense['id']) ?>" method="post" class="d-inline confirm-delete-form" data-confirm="¿Estás seguro de que deseas eliminar esta justificación de gasto?">

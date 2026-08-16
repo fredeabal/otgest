@@ -613,6 +613,32 @@ class ExpenseController extends BaseController
     // =================================================================================
     // Servir imagen del recibo desde writable
     // =================================================================================
+    // Descargar justificante
+    // =================================================================================
+    public function download($id)
+    {
+        $expense = $this->expenseModel->find($id);
+        
+        if (!$expense || !$expense['receipt_image']) {
+            return redirect()->back()->with('errors', ['Justificante no encontrado.']);
+        }
+
+        // Verificar permisos (solo el propietario o admin puede descargar)
+        $userId = session()->get('user_id');
+        if ($expense['user_id'] != $userId && !has_permission('expenses.manage')) {
+            return redirect()->back()->with('errors', ['No tienes permisos para descargar este justificante.']);
+        }
+
+        $path = WRITEPATH . 'uploads/receipts/' . $expense['user_id'] . '/' . $expense['receipt_image'];
+        
+        if (!is_file($path)) {
+            return redirect()->back()->with('errors', ['El archivo físico no se encuentra en el servidor.']);
+        }
+
+        return $this->response->download($path, null)->setFileName('Gasto_' . date('Ymd', strtotime($expense['expense_date'])) . '_' . $expense['id'] . '.' . pathinfo($expense['receipt_image'], PATHINFO_EXTENSION));
+    }
+
+    // =================================================================================
     public function receipt($userId, $filename)
     {
         $path = WRITEPATH . 'uploads/receipts/' . $userId . '/' . $filename;
