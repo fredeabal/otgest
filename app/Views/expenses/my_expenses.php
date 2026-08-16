@@ -138,7 +138,7 @@
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('expenses/download/' . $expense['id']) ?>">
-                                                <i class="ti ti-download"></i> Descargar justificante
+                                                <i class="ti ti-download"></i> Descargar
                                             </a>
                                         </li>
                                         <?php endif; ?>
