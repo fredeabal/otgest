@@ -32,40 +32,28 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group mb-3">
-                                    <label for="start_date" class="form-label">Fecha de Inicio</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" value="<?= esc($absence['start_date']) ?>">
+                                    <label for="daterange" class="form-label">Rango de Fechas</label>
+                                    <div class="input-group">
+                                        <input type="text" id="daterange" class="form-control" placeholder="Selecciona las fechas de tu ausencia">
+                                        <span class="input-group-text bg-primary-subtle text-primary border-primary border-opacity-25">
+                                            <i class="ti ti-calendar fs-5"></i>
+                                        </span>
+                                    </div>
+                                    <input type="hidden" name="start_date" id="start_date" value="<?= old('start_date', esc($absence['start_date'])) ?>">
+                                    <input type="hidden" name="end_date" id="end_date" value="<?= old('end_date', esc($absence['end_date'])) ?>">
+                                    <input type="hidden" name="start_time" id="start_time" value="<?= old('start_time', esc($absence['start_time'])) ?>">
+                                    <input type="hidden" name="end_time" id="end_time" value="<?= old('end_time', esc($absence['end_time'])) ?>">
                                     <?php if (isset($errors['start_date'])): ?>
                                         <div class="text-danger small"><?= $errors['start_date'] ?></div>
                                     <?php endif; ?>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="end_date" class="form-label">Fecha de Fin</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" value="<?= esc($absence['end_date']) ?>">
                                     <?php if (isset($errors['end_date'])): ?>
                                         <div class="text-danger small"><?= $errors['end_date'] ?></div>
                                     <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="start_time" class="form-label">Hora de Inicio (opcional)</label>
-                                    <input type="time" name="start_time" id="start_time" class="form-control" value="<?= esc($absence['start_time']) ?>">
                                     <?php if (isset($errors['start_time'])): ?>
                                         <div class="text-danger small"><?= $errors['start_time'] ?></div>
                                     <?php endif; ?>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="end_time" class="form-label">Hora de Fin (opcional)</label>
-                                    <input type="time" name="end_time" id="end_time" class="form-control" value="<?= esc($absence['end_time']) ?>">
                                     <?php if (isset($errors['end_time'])): ?>
                                         <div class="text-danger small"><?= $errors['end_time'] ?></div>
                                     <?php endif; ?>
@@ -119,3 +107,6 @@
 
     </div>
 </div>
+
+<!-- Daterange Picker CSS -->
+<link rel="stylesheet" href="<?= base_url('assets/libs/daterangepicker/daterangepicker.css') ?>">
