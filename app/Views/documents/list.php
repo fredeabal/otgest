@@ -14,9 +14,14 @@
                     <label for="user_filter" class="form-label fw-semibold text-muted small uppercase">Usuario</label> 
                     <select name="user_id" id="user_filter" class="select2">
                         <option value="">Todos los usuarios</option>
+                        <?php $canManageDocs = has_permission('documents.manage'); ?>
                         <?php foreach ($users as $user): ?>
                             <option value="<?= $user['id'] ?>" <?= (isset($_GET['user_id']) && $_GET['user_id'] == $user['id']) ? 'selected' : '' ?>>
-                                <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
+                                <?php if ($canManageDocs && !empty($user['identification'])): ?>
+                                    <?= esc($user['name']) ?> - DNI: <?= esc($user['identification']) ?> (<?= esc($user['email']) ?>)
+                                <?php else: ?>
+                                    <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
+                                <?php endif; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -73,7 +78,13 @@
                             <td class="d-none d-md-table-cell">
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($doc['sender_name']) ?></h6>
-                                    <span class="fw-normal text-muted small"><?= esc($doc['sender_email']) ?></span>
+                                    <span class="fw-normal text-muted small">
+                                        <?php if (has_permission('documents.manage') && !empty($doc['sender_identification'])): ?>
+                                            ID: <?= esc($doc['sender_identification']) ?> (<?= esc($doc['sender_email']) ?>)
+                                        <?php else: ?>
+                                            <?= esc($doc['sender_email']) ?>
+                                        <?php endif; ?>
+                                    </span>
                                 </div>
                             </td>
                             <td class="text-center d-none d-md-table-cell">

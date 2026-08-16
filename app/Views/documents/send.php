@@ -20,10 +20,15 @@
                                 <label for="receiver_id" class="form-label">Destinatario</label>
                                 <select class="select2" id="receiver_id" name="receiver_id">
                                     <option value="">Selecciona un destinatario</option>
+                                    <?php $canManageDocs = has_permission('documents.manage'); ?>
                                     <?php foreach ($users as $user): ?>
                                     <option value="<?= esc($user['id']) ?>"
                                         <?= old('receiver_id') == $user['id'] ? 'selected' : '' ?>>
-                                        <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
+                                        <?php if ($canManageDocs && !empty($user['identification'])): ?>
+                                            <?= esc($user['name']) ?> - DNI: <?= esc($user['identification']) ?> (<?= esc($user['email']) ?>)
+                                        <?php else: ?>
+                                            <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
+                                        <?php endif; ?>
                                     </option>
                                     <?php endforeach; ?>
                                 </select>
