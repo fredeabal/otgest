@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical" data-user-theme="<?= session()->get('user_theme') ?: 'light' ?>">
+<html lang="es" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical" data-user-theme="<?= session()->get('user_theme') ?: 'system' ?>">
 
 <head>
     <!-- =================================================================================
@@ -9,7 +9,13 @@
     (function() {
         var userTheme = '<?= session()->get('user_theme') ?? '' ?>';
         var localTheme = localStorage.getItem('theme');
-        var theme = userTheme || localTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        // El tema del usuario tiene prioridad absoluta
+        var preferredTheme = userTheme ? userTheme : (localTheme || 'system');
+        var theme = preferredTheme;
+        
+        if (theme === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
         
         document.documentElement.setAttribute('data-bs-theme', theme);
         if (userTheme) {

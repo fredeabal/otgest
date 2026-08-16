@@ -344,7 +344,10 @@ class UsersController extends BaseController
         }
         // datos a actualizar
         $permissions = $this->request->getPost('permissions');
-        $theme = $this->request->getPost('theme') ? 'dark' : 'light';
+        $theme = $this->request->getPost('theme');
+        if (!in_array($theme, ['light', 'dark', 'system'])) {
+            $theme = 'system';
+        }
         $data = [
             'name' => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),

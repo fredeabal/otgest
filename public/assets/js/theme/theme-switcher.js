@@ -4,15 +4,22 @@
 
 // Función para aplicar el tema
 function applyTheme(theme) {
-    document.documentElement.setAttribute('data-bs-theme', theme);
+    let resolvedTheme = theme;
+    if (theme === 'system') {
+        resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    document.documentElement.setAttribute('data-bs-theme', resolvedTheme);
     localStorage.setItem('theme', theme);
 
     // Sincronizar visualmente los botones activos (opcional)
-    document.querySelectorAll('.dark-layout, .light-layout').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.dark-layout, .light-layout, .system-layout').forEach(btn => btn.classList.remove('active'));
     if (theme === 'dark') {
         document.querySelectorAll('.dark-layout').forEach(btn => btn.classList.add('active'));
-    } else {
+    } else if (theme === 'light') {
         document.querySelectorAll('.light-layout').forEach(btn => btn.classList.add('active'));
+    } else {
+        document.querySelectorAll('.system-layout').forEach(btn => btn.classList.add('active'));
     }
 }
 
@@ -20,7 +27,7 @@ function applyTheme(theme) {
 function getPreferredTheme() {
     // 1. Prioridad: Tema del usuario de la sesión
     const userTheme = document.documentElement.getAttribute('data-user-theme');
-    if (userTheme) {
+    if (userTheme && userTheme !== '') {
         return userTheme;
     }
     // 2. Prioridad: Tema guardado localmente (para usuarios no logueados o antes de tener sesión)
@@ -29,7 +36,7 @@ function getPreferredTheme() {
         return localTheme;
     }
     // 3. Fallback al sistema
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'system';
 }
 
 // Aplicar tema al cargar la página

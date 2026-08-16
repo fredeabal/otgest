@@ -122,13 +122,12 @@
                         // ================================================================================= -->
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <label class="form-label">Tema</label>
-                                <div class="form-check form-switch py-2">
-                                    <input class="form-check-input" type="checkbox" id="themeSwitch" name="theme" value="dark" <?= $user['theme'] == 'dark' ? 'checked' : '' ?>>
-                                    <label class="form-check-label ms-2" for="themeSwitch">
-                                        Oscuro
-                                    </label>
-                                </div>
+                                <label class="form-label" for="theme">Tema</label>
+                                <select class="form-select" id="theme" name="theme">
+                                    <option value="system" <?= (empty($user['theme']) || $user['theme'] == 'system') ? 'selected' : '' ?>>Sistema (Predeterminado)</option>
+                                    <option value="light" <?= $user['theme'] == 'light' ? 'selected' : '' ?>>Claro</option>
+                                    <option value="dark" <?= $user['theme'] == 'dark' ? 'selected' : '' ?>>Oscuro</option>
+                                </select>
                             </div>
                         </div>
                         <!-- =================================================================================
