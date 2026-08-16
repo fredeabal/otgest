@@ -154,7 +154,7 @@
                                         break;
                                 }
                                 ?>
-                                <span class="<?= $statusClass ?> w-70px-inline" ><?= $statusText ?></span>
+                                <span class="<?= $statusClass ?> w-100px-inline" ><?= $statusText ?></span>
                             </td>
                             <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->

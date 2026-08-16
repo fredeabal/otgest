@@ -114,7 +114,7 @@
                                     ];
                                     ?>
                                 <span
-                                    class="badge bg-<?= $statusClass[$absence['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fs-2 w-70px-inline">
+                                    class="badge bg-<?= $statusClass[$absence['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$absence['status']] ?? 'secondary' ?> fs-2 w-100px-inline">
                                     <?= $statusLabels[$absence['status']] ?? $absence['status'] ?>
                                 </span>
                             </td>

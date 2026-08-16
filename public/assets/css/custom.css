@@ -19,7 +19,7 @@
 .text-xxs { font-size: 0.6rem !important; }
 .text-xs { font-size: 0.65rem !important; }
 .w-100px { width: 100px !important; }
-.w-70px-inline { min-width: 70px !important; display: inline-block !important; }
+.w-100px-inline { width: 100px !important; display: inline-block !important; text-align: center; }
 .debug-container { max-height: 150px; overflow-y: auto; font-size: 0.8em; text-align: left; }
 
 /* Timeline (Dashboard Admin) */

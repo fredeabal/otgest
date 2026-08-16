@@ -93,7 +93,7 @@
                                     <?= esc(date('H:i', strtotime($doc['read_at']))) ?>
                                 </span>
                                 <?php else: ?>
-                                <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-70px-inline"
+                                <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-100px-inline"
                                     >Pendiente</span>
                                 <?php endif; ?>
                             </td>

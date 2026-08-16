@@ -110,7 +110,7 @@
                                         break;
                                 }
                                 ?>
-                                <span class="<?= $statusClass ?> w-70px-inline" ><?= $statusText ?></span>
+                                <span class="<?= $statusClass ?> w-100px-inline" ><?= $statusText ?></span>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
                                 <h6 class="fw-semibold mb-0 mb-1">

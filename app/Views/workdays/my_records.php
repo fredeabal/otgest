@@ -84,7 +84,7 @@
                                     <?= esc($workday['end_time']) ?><br>
                                     <small class="text-muted"><?= esc($workday['end_date']) ?></small>
                                 <?php elseif ($workday['autoclose']): ?>
-                                    <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-70px-inline"
+                                    <span class="badge bg-warning-subtle text-warning fw-semibold border border-warning fs-2 w-100px-inline"
                                         >Automático</span><br>
                                     <small class="text-muted"><?= esc($workday['end_date']) ?></small>
                                 <?php else: ?>
@@ -93,7 +93,7 @@
                             </td>
                             <!-- Horas totales -->
                             <td class="text-center">
-                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-70px-inline"
+                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-100px-inline"
                                     >
                                     <?php
                                     $totalMinutes = round($workday['total_hours'] * 60);
@@ -104,7 +104,7 @@
                                 </span>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
-                                <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2 w-70px-inline"
+                                <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2 w-100px-inline"
                                     >
                                     <?php
                                     $overtimeMinutes = round(($workday['overtime_hours'] ?? 0) * 60);
@@ -126,7 +126,7 @@
                                     'in_progress' => 'En curso'
                                 ];
                                 ?>
-                                <span class="badge bg-<?= $statusClass[$workday['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fs-2 w-70px-inline">
+                                <span class="badge bg-<?= $statusClass[$workday['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fs-2 w-100px-inline">
                                     <?= $statusText[$workday['status']] ?? $workday['status'] ?>
                                 </span>
                             </td>

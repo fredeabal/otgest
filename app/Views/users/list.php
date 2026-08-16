@@ -44,17 +44,17 @@
                                 <?= esc($user['email']) ?>
                             </td>
                             <td class="text-center d-none d-md-table-cell">
-                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-70px-inline"
+                                <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-100px-inline"
                                     >
                                     <?= esc($user['role_name']) ?>
                                 </span>
                             </td>
                             <td class="text-center">
                                 <?php if ($user['is_active'] == 1): ?>
-                                <span class="badge bg-success-subtle text-success fw-semibold border border-success fs-2 w-70px-inline"
+                                <span class="badge bg-success-subtle text-success fw-semibold border border-success fs-2 w-100px-inline"
                                     >Activo</span>
                                 <?php else: ?>
-                                <span class="badge bg-danger-subtle text-danger fw-semibold border border-danger fs-2 w-70px-inline"
+                                <span class="badge bg-danger-subtle text-danger fw-semibold border border-danger fs-2 w-100px-inline"
                                     >Inactivo</span>
                                 <?php endif; ?>
                             </td>
