@@ -134,13 +134,7 @@
                                                 <i class="ti ti-eye"></i> Ver detalle
                                             </a>
                                         </li>
-                                        <?php if ($expense['status'] === 'pending'): ?>
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center gap-3"
-                                                href="<?= base_url('expenses/edit/' . $expense['id']) ?>">
-                                                <i class="ti ti-edit"></i> Editar
-                                            </a>
-                                        </li>
+
                                         <li>
                                             <form action="<?= base_url('expenses/delete/' . $expense['id']) ?>" method="post" class="d-inline confirm-delete-form" data-confirm="¿Estás seguro de que deseas eliminar esta justificación de gasto?">
                                                 <button type="submit" class="dropdown-item d-flex align-items-center gap-3 text-danger">
