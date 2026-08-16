@@ -30,7 +30,7 @@
                         <option value="">Todos los usuarios</option>
                         <?php foreach ($users as $user): ?>
                             <option value="<?= $user['id'] ?>" <?= (isset($_GET['user_id']) && $_GET['user_id'] == $user['id']) ? 'selected' : '' ?>>
-                                <?= esc($user['name']) ?> (<?= esc($user['identification']) ?>)
+                                <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -87,7 +87,7 @@
                             <td class="d-none d-md-table-cell">
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($doc['receiver_name']) ?></h6>
-                                    <span class="fw-normal text-muted small">ID: <?= esc($doc['receiver_identification']) ?></span>
+                                    <span class="fw-normal text-muted small"><?= esc($doc['receiver_email']) ?></span>
                                 </div>
                             </td>
                             <td class="text-center d-none d-md-table-cell">

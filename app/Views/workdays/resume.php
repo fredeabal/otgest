@@ -12,6 +12,7 @@ Vista: Reanudar Jornada Laboral
                 <div class="card-body text-center">
                     <div class="form-group">
                         <i class="ti ti-player-pause mb-3 text-primary fs-4rem"></i><br>
+                        <div class="h3 mb-3 text-primary fw-bold" id="paused-time-display">00:00:00</div>
                         <small>Tu jornada está en pausa. Selecciona una opción para continuar.</small>
                         <div class="row mt-4">
                             <!-- Formulario para reanudar jornada -->
@@ -52,9 +53,31 @@ Vista: Reanudar Jornada Laboral
     </div>
 </div>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    let seconds = <?= isset($workdayData) ? floor($workdayData['break_time'] * 3600) : 0 ?>;
+    const display = document.getElementById('paused-time-display');
+
+    function updateTime() {
+        let hrs = Math.floor(seconds / 3600);
+        let mins = Math.floor((seconds % 3600) / 60);
+        let secs = seconds % 60;
+
+        let formatted = 
+            String(hrs).padStart(2, '0') + ':' + 
+            String(mins).padStart(2, '0') + ':' + 
+            String(secs).padStart(2, '0');
+
+        display.textContent = formatted;
+        seconds++;
+    }
+
+    // Call once to format initial time properly
+    updateTime();
+    
+    // Update every second
+    setInterval(updateTime, 1000);
+
     // Función para obtener ubicación GPS
     function getLocation() {
         if (navigator.geolocation) {

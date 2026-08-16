@@ -49,6 +49,17 @@ class WorkdayController extends BaseController
         
         $currentEventType = $openWorkday['event_type'];
 
+        // Obtener datos de la jornada para pasarlos a la vista (tiempo trabajado y tiempo de pausa)
+        if ($openWorkday && isset($openWorkday['workday_date'])) {
+            $events = $this->workdayModel->where('user_id', $userId)
+                                         ->where('workday_date', $openWorkday['workday_date'])
+                                         ->orderBy('event_time', 'ASC')
+                                         ->findAll();
+            $user = $this->userModel->find($userId);
+            $userDailyHours = $user['daily_hours'] ?? 8;
+            $data['workdayData'] = calculate_workday_data($openWorkday['workday_date'], $events, $userDailyHours);
+        }
+
         // si la jornada esta abierta mostramos pausa y cierre
         if ($currentEventType === 'start') {
             echo view('template/header', $data);

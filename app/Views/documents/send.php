@@ -23,7 +23,7 @@
                                     <?php foreach ($users as $user): ?>
                                     <option value="<?= esc($user['id']) ?>"
                                         <?= old('receiver_id') == $user['id'] ? 'selected' : '' ?>>
-                                        <?= esc($user['name']) ?><?= !empty($user['identification']) ? ' - DNI: ' . esc($user['identification']) : '' ?> (<?= esc($user['email']) ?>)
+                                        <?= esc($user['name']) ?> (<?= esc($user['email']) ?>)
                                     </option>
                                     <?php endforeach; ?>
                                 </select>
