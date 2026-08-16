@@ -65,9 +65,13 @@ class RolesController extends BaseController
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        // Guardar array de permisos como JSON
+        $permissions = $this->request->getPost('permissions') ?? [];
+
         // Crear el rol
         $this->rolesModel->save([
             'name' => $this->request->getPost('name'),
+            'permissions' => json_encode($permissions),
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
         return redirect()->to('/roles/list')->with('success', 'Rol creado correctamente.');
@@ -106,10 +110,7 @@ class RolesController extends BaseController
         if (!$role) {
             return redirect()->to('/roles/list')->with('errors', ['Rol no encontrado.']);
         }
-        // No se puede editar el rol de administrador o supervisor
-        if ($id == 1 || $id == 2) {
-            return redirect()->to('/roles/list')->with('errors', ['No se puede editar este rol.']);
-        }
+
         // Validar los datos
         $rules = [
             'name' => [
@@ -121,9 +122,13 @@ class RolesController extends BaseController
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        // Guardar array de permisos como JSON
+        $permissions = $this->request->getPost('permissions') ?? [];
+
         // Actualizar el rol
         $this->rolesModel->update($id, [
             'name' => $this->request->getPost('name'),
+            'permissions' => json_encode($permissions),
             'updated_by' => session()->get('user_id')
         ]);
         return redirect()->to('/roles/list')->with('success', 'Rol actualizado correctamente.');

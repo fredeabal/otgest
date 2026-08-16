@@ -12,7 +12,6 @@ Vista: Jornada Activa (Después de Reanudar)
                 <div class="card-body text-center">
                     <div class="form-group">
                         <i class="ti ti-player-play mb-3 text-primary fs-4rem"></i><br>
-                        <h4 class="fw-bold text-primary mb-3">Tiempo transcurrido: <span id="active-workday-timer" data-elapsed="<?= esc($elapsed_seconds ?? 0) ?>">--:--</span></h4>
                         <small>Tu jornada laboral está activa. Selecciona una opción para continuar.</small>
                         <div class="row mt-4">
                             <!-- Formulario para pausar jornada -->
@@ -53,23 +52,4 @@ Vista: Jornada Activa (Después de Reanudar)
     </div>
 </div>
 
-<!-- Script para el contador de jornada en vivo -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const timerElement = document.getElementById('active-workday-timer');
-    if (timerElement) {
-        let elapsedSeconds = parseInt(timerElement.getAttribute('data-elapsed'), 10) || 0;
-        
-        function updateTimer() {
-            let totalMinutes = Math.floor(elapsedSeconds / 60);
-            let hours = Math.floor(totalMinutes / 60);
-            let minutes = totalMinutes % 60;
-            timerElement.textContent = hours + ':' + minutes.toString().padStart(2, '0');
-            elapsedSeconds++;
-        }
-        
-        updateTimer();
-        setInterval(updateTimer, 1000);
-    }
-});
-</script>
+

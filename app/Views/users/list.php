@@ -33,7 +33,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($users as $user): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('users/edit/' . $user['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($user['name']) ?></h6>
@@ -65,7 +65,7 @@
                                     class="fw-normal text-muted small"><?= esc(date('H:i', strtotime($user['last_login']))) ?></span>
                             </td>
 
-                            <td class="text-center">
+                            <td class="text-center" onclick="event.stopPropagation();">
                                 <!-- Acciones como dropdown Modernize/CoreUI -->
                                 <div class="dropdown dropstart">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
@@ -73,24 +73,28 @@
                                         <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <?php if ($user['id'] != 1 || session('user_id') == 1): ?>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('users/edit/' . $user['id']) ?>">
                                                 <i class="ti ti-pencil"></i> Editar
                                             </a>
                                         </li>
+                                        <?php endif; ?>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="mailto:<?= esc($user['email']) ?>">
                                                 <i class="ti ti-mail"></i> Enviar correo
                                             </a>
                                         </li>
+                                        <?php if ($user['id'] != 1): ?>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3 delete-user-swal"
                                                 href="#" data-url="<?= base_url('users/delete/' . $user['id']) ?>">
                                                 <i class="ti ti-trash"></i> Eliminar
                                             </a>
                                         </li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div>
                             </td>

@@ -285,3 +285,37 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('role_id');
+    
+    // Generar plantillas de permisos desde la base de datos (PHP a JS)
+    const allPermissions = {};
+    <?php foreach ($roles as $rol): ?>
+        allPermissions["<?= esc($rol['id']) ?>"] = <?= !empty($rol['permissions']) ? $rol['permissions'] : '[]' ?>;
+    <?php endforeach; ?>
+
+    if (roleSelect) {
+        roleSelect.addEventListener('change', function() {
+            if (this.selectedIndex === 0) return; // No selection
+            
+            const roleId = this.options[this.selectedIndex].value;
+            const preset = allPermissions[roleId] || [];
+            
+            if (preset.length > 0) {
+                // Uncheck all first
+                document.querySelectorAll('input[name="permissions[]"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                
+                // Check preset permissions
+                preset.forEach(perm => {
+                    const cb = document.querySelector(`input[name="permissions[]"][value="${perm}"]`);
+                    if (cb) cb.checked = true;
+                });
+            }
+        });
+    }
+});
+</script>

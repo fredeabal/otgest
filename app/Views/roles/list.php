@@ -29,7 +29,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($roles as $role): ?>
-                        <tr>
+                        <tr style="cursor: pointer;" onclick="window.location.href='<?= base_url('roles/edit/' . $role['id']) ?>'">
                             <td>
                                 <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($role['name']) ?></h6>
                             </td>
@@ -37,7 +37,7 @@
                                 <?= esc(date('d/m/Y', strtotime($role['created_at']))) ?>
                             </td>
                             <td class="text-center">
-                                <div class="dropdown dropstart">
+                                <div class="dropdown dropstart" onclick="event.stopPropagation();">
                                     <a href="javascript:void(0)" class="text-muted" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="ti ti-dots-vertical fs-7"></i>

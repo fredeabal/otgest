@@ -46,21 +46,6 @@ class WorkdayController extends BaseController
         }
         
         $currentEventType = $this->getOpenWorkdayType($userId)['event_type'];
-        
-        // Calcular tiempo transcurrido exacto restando pausas
-        $data['elapsed_seconds'] = 0;
-        if (in_array($currentEventType, ['start', 'pause', 'resume'])) {
-            helper('workday');
-            $events = $this->workdayModel->where('user_id', $userId)
-                ->where('workday_date', $openWorkday['workday_date'] ?? date('Y-m-d'))
-                ->orderBy('event_time', 'ASC')
-                ->findAll();
-                
-            $workdayData = calculate_workday_data($openWorkday['workday_date'] ?? date('Y-m-d'), $events);
-            if ($workdayData) {
-                $data['elapsed_seconds'] = round($workdayData['total_hours'] * 3600);
-            }
-        }
 
         // si la jornada esta abierta mostramos pausa y cierre
         if ($currentEventType === 'start') {

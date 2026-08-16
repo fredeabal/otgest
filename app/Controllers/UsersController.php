@@ -162,6 +162,12 @@ class UsersController extends BaseController
         if (!$user) {
             return redirect()->to('/users/list')->with('errors', ['Usuario no encontrado.']);
         }
+
+        // Proteger al Administrador Principal (ID = 1) de ser editado por otros
+        if ($id == 1 && session()->get('user_id') != 1) {
+            return redirect()->to('/users/list')->with('errors', ['No tienes permiso para editar al Administrador Principal.']);
+        }
+
         $data['user'] = $user;
         $data['roles'] = $this->rolesModel->findAll();
         $data['title'] = 'Editar usuario';
@@ -179,6 +185,12 @@ class UsersController extends BaseController
         if (!$user) {
             return redirect()->to('/users/list')->with('errors', ['Usuario no encontrado.']);
         }
+
+        // Proteger al Administrador Principal (ID = 1) de ser editado por otros
+        if ($id == 1 && session()->get('user_id') != 1) {
+            return redirect()->to('/users/list')->with('errors', ['No tienes permiso para editar al Administrador Principal.']);
+        }
+
         $rules = [
             'identification' => [
                 'label' => 'número de identificación',
@@ -499,6 +511,11 @@ class UsersController extends BaseController
     // =================================================================================
     public function delete($id)
     {
+        // Proteger al Administrador Principal (ID = 1)
+        if ($id == 1) {
+            return redirect()->to('/users/list')->with('errors', ['No se puede eliminar al Administrador Principal.']);
+        }
+
         $user = session()->get('user_id');
         $data = [
             'updated_by' => $user,

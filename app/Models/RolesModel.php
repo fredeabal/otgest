@@ -15,7 +15,7 @@ class RolesModel extends Model
     protected $primaryKey = 'id';
     // Campos permitidos para inserción/actualización masiva
     protected $allowedFields = [
-        'name', 'created_at', 'updated_at', 'updated_by'
+        'name', 'permissions', 'created_at', 'updated_at', 'updated_by'
     ];
     // Activar timestamps automáticos
     protected $useTimestamps = true;
