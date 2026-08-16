@@ -199,7 +199,7 @@ class AuthController extends BaseController
         $user = $this->usersModel->findByResetToken($token);
         
         // Si el usuario no existe o el token ha expirado
-        if (!$user || $user['reset_token_expiration'] < Time::now('Europe/Madrid', 'es_ES')) {
+        if (!$user || $user['reset_token_expiration'] < Time::now('Europe/Madrid', 'es_ES')->format('Y-m-d H:i:s')) {
             return redirect()->to('/login')->with('errors', ['El enlace no es válido o ha expirado.']);
         }
         return view('auth/reset_password', ['token' => $token]);
@@ -218,7 +218,7 @@ class AuthController extends BaseController
         $user = $this->usersModel->findByResetToken($token);
 
         // Si el usuario no existe o el token ha expirado
-        if (!$user || $user['reset_token_expiration'] < Time::now('Europe/Madrid', 'es_ES')) {
+        if (!$user || $user['reset_token_expiration'] < Time::now('Europe/Madrid', 'es_ES')->format('Y-m-d H:i:s')) {
             return redirect()->to('/login')->with('errors', ['El enlace no es válido o ha expirado.']);
         }
         // Validar los datos del formulario

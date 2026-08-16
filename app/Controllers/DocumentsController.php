@@ -233,16 +233,12 @@ class DocumentsController extends BaseController
 
         if ($successCount > 0) {
             $successMessage = "Se procesaron {$successCount} archivos correctamente.";
-            $redirect = $redirect->with('message', $successMessage);
+            $redirect = $redirect->with('success', $successMessage);
         }
 
         if (!empty($errors)) {
             $errorMessage = "Errores encontrados:<br>" . implode('<br>', array_map(function($error) { return '- ' . $error; }, $errors));
-            if ($successCount > 0) {
-                $redirect = $redirect->with('warning', $errorMessage);
-            } else {
-                $redirect = $redirect->with('warning', $errorMessage);
-            }
+            $redirect = $redirect->with('warning', $errorMessage);
         }
 
         return $redirect;

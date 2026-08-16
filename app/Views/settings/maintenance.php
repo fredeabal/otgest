@@ -89,38 +89,7 @@
             </div>
         </div>
 
-        <!-- ================= SECCIÓN: PRUEBAS ================= -->
-        <!-- Resultados de Tests -->
-        <?php if(session()->getFlashdata('test_output')): ?>
-        <div class="col-12 mb-4">
-            <div class="card border border-primary">
-                <div class="card-header bg-primary">
-                    <h5 class="mb-0 text-white">Resultados de Pruebas Unitarias (PHPUnit)</h5>
-                </div>
-                <div class="card-body bg-dark text-light p-3">
-                    <pre class="mb-0 text-light text-wrap" style="font-family: monospace; font-size: 0.85rem;"><?= esc(session()->getFlashdata('test_output')) ?></pre>
-                </div>
-            </div>
-        </div>
-        <?php endif; ?>
 
-        <!-- Tests Unitarios -->
-        <div class="col-12 mb-4">
-            <div class="card border bg-light-primary">
-                <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3">
-                    <div>
-                        <h5 class="card-title fw-bold text-primary mb-1">Pruebas Unitarias</h5>
-                        <p class="card-text text-muted mb-0">Ejecuta las pruebas automatizadas para validar que las funciones críticas del sistema operan correctamente.</p>
-                    </div>
-                    <form action="<?= base_url('settings/run-tests') ?>" method="POST" class="d-inline">
-                        <?= csrf_field() ?>
-                        <button type="submit" class="btn btn-primary px-4 py-2">
-                            Ejecutar Tests
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
 
         </div>
     </div>

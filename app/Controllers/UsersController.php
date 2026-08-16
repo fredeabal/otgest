@@ -132,8 +132,6 @@ class UsersController extends BaseController
     // =================================================================================
     public function list()
     {
-        // Obtener el usuario logueado
-        $user = session()->get('user');
         // Obtener todos los usuarios y roles
         $data['users'] = $this->usersModel->select('users.*, roles.name as role_name')
             ->join('roles', 'roles.id = users.role_id', 'left')
@@ -439,6 +437,11 @@ class UsersController extends BaseController
     // =================================================================================
     public function avatar($filename)
     {
+        // Prevenir vulnerabilidad de path traversal validando el nombre del archivo
+        if (!preg_match('/^[a-zA-Z0-9._-]+$/', $filename)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
         // 1. Intentar en el directorio writable (donde se suben los archivos)
         $path = WRITEPATH . 'uploads/profiles/' . $filename;
 

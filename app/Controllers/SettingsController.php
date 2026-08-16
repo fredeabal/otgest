@@ -245,24 +245,7 @@ class SettingsController extends BaseController
         return redirect()->to('/settings/maintenance')->with('success', 'Mantenimiento completo ejecutado correctamente.');
     }
 
-    public function runTests()
-    {
-        if (!has_permission('admin.company')) { return redirect()->to('/')->with('errors', ['No tienes permisos.']); }
-        
-        $output = [];
-        $return_var = 0;
-        // Cambiar al directorio raíz para que PHPUnit encuentre phpunit.xml.dist
-        exec('cd ' . ROOTPATH . ' && ./vendor/bin/phpunit 2>&1', $output, $return_var);
-        
-        $outputStr = implode("\n", $output);
-        session()->setFlashdata('test_output', $outputStr);
-        
-        if ($return_var === 0 || strpos($outputStr, 'OK') !== false) {
-            return redirect()->to('/settings/maintenance')->with('success', 'Pruebas unitarias ejecutadas correctamente.');
-        } else {
-            return redirect()->to('/settings/maintenance')->with('errors', ['Algunas pruebas han fallado. Revisa el registro.']);
-        }
-    }
+
 
     public function downloadDatabase()
     {

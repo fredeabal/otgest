@@ -34,7 +34,7 @@ $routes->post('users/store', 'UsersController::store', ['filter' => 'permission:
 $routes->get('users/list', 'UsersController::list', ['filter' => 'permission:admin.users']);
 $routes->get('users/edit/(:num)', 'UsersController::edit/$1', ['filter' => 'permission:admin.users']);
 $routes->post('users/update/(:num)', 'UsersController::update/$1', ['filter' => 'permission:admin.users']);
-$routes->get('users/delete/(:num)', 'UsersController::delete/$1', ['filter' => 'permission:admin.users']);
+$routes->post('users/delete/(:num)', 'UsersController::delete/$1', ['filter' => 'permission:admin.users']);
 
 // Rutas de perfil
 $routes->post('users/update-avatar/(:num)', 'UsersController::updateAvatar/$1', ['filter' => 'auth']);
@@ -43,7 +43,7 @@ $routes->post('users/update-profile/(:num)', 'UsersController::updateProfile/$1'
 
 // Rutas de avatar
 $routes->get('users/avatar/(:any)', 'UsersController::avatar/$1');
-$routes->get('users/delete-avatar/(:num)', 'UsersController::deleteAvatar/$1', ['filter' => 'auth']);
+$routes->post('users/delete-avatar/(:num)', 'UsersController::deleteAvatar/$1', ['filter' => 'auth']);
 
 // =================================================================================
 // Rutas de gestión de roles (solo admin)
@@ -53,7 +53,7 @@ $routes->post('roles/store', 'RolesController::store', ['filter' => 'permission:
 $routes->get('roles/list', 'RolesController::list', ['filter' => 'permission:admin.roles']);
 $routes->get('roles/edit/(:num)', 'RolesController::edit/$1', ['filter' => 'permission:admin.roles']);
 $routes->post('roles/update/(:num)', 'RolesController::update/$1', ['filter' => 'permission:admin.roles']);
-$routes->get('roles/delete/(:num)', 'RolesController::delete/$1', ['filter' => 'permission:admin.roles']);
+$routes->post('roles/delete/(:num)', 'RolesController::delete/$1', ['filter' => 'permission:admin.roles']);
 
 // =================================================================================
 // Rutas de gestión de documentos
@@ -66,7 +66,7 @@ $routes->post('documents/bulk-store', 'DocumentsController::bulkStore', ['filter
 $routes->post('documents/store', 'DocumentsController::store', ['filter' => 'permission:documents.send,documents.manage']);
 $routes->get('documents/view/(:num)', 'DocumentsController::view/$1', ['filter' => 'permission:documents.received,documents.send,documents.manage']);
 $routes->get('documents/download/(:num)', 'DocumentsController::download/$1', ['filter' => 'permission:documents.received,documents.send,documents.manage']);
-$routes->get('documents/delete/(:num)', 'DocumentsController::delete/$1', ['filter' => 'permission:documents.sent,documents.manage']);
+$routes->post('documents/delete/(:num)', 'DocumentsController::delete/$1', ['filter' => 'permission:documents.sent,documents.manage']);
 
 
 // =================================================================================
@@ -86,7 +86,7 @@ $routes->group('settings', ['filter' => 'permission:admin.company'], function($r
     $routes->post('clear-logs', 'SettingsController::clearLogs');
     $routes->post('clear-debugbar', 'SettingsController::clearDebugbar');
     $routes->post('clear-all', 'SettingsController::clearAll');
-    $routes->post('run-tests', 'SettingsController::runTests');
+
     
     $routes->get('download-db', 'SettingsController::downloadDatabase');
     $routes->post('restore-db', 'SettingsController::restoreDatabase');
@@ -134,8 +134,8 @@ $routes->get('expenses/my-expenses', 'ExpenseController::my', ['filter' => 'perm
 $routes->get('expenses/export-my-pdf', 'ExpenseController::exportMyPdf', ['filter' => 'permission:expenses.my,expenses.manage']);
 $routes->get('expenses/manage', 'ExpenseController::manage', ['filter' => 'permission:expenses.manage']);
 $routes->get('expenses/export-pending-pdf', 'ExpenseController::exportPendingPdf', ['filter' => 'permission:expenses.manage']);
-$routes->get('expenses/approve/(:num)', 'ExpenseController::approve/$1', ['filter' => 'permission:expenses.manage']);
-$routes->get('expenses/reject/(:num)', 'ExpenseController::reject/$1', ['filter' => 'permission:expenses.manage']);
+$routes->post('expenses/approve/(:num)', 'ExpenseController::approve/$1', ['filter' => 'permission:expenses.manage']);
+$routes->post('expenses/reject/(:num)', 'ExpenseController::reject/$1', ['filter' => 'permission:expenses.manage']);
 $routes->get('expenses/view/(:num)', 'ExpenseController::view/$1', ['filter' => 'permission:expenses.create,expenses.my,expenses.manage']);
 $routes->get('expenses/receipt/(:num)/(:any)', 'ExpenseController::receipt/$1/$2', ['filter' => 'permission:expenses.create,expenses.my,expenses.manage']);
 

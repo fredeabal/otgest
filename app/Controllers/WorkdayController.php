@@ -43,9 +43,11 @@ class WorkdayController extends BaseController
         $openWorkday = $this->getOpenWorkdayType($userId);
         if ($openWorkday && in_array($openWorkday['event_type'], ['start', 'pause', 'resume'])) {
             $this->autoCloseWorkday($userId, $openWorkday['workday_date']);
+            // Refrescar el estado después de un posible auto-cierre
+            $openWorkday = $this->getOpenWorkdayType($userId);
         }
         
-        $currentEventType = $this->getOpenWorkdayType($userId)['event_type'];
+        $currentEventType = $openWorkday['event_type'];
 
         // si la jornada esta abierta mostramos pausa y cierre
         if ($currentEventType === 'start') {
@@ -170,7 +172,7 @@ class WorkdayController extends BaseController
         $longitude = $this->request->getPost('longitud');
 
         // Verificar que hay una jornada abierta
-        $openWorkday = $this->getOpenWorkdayType($userId);
+        // (ya obtenido arriba)
 
         // Verificar que la jornada está activa para poder pausar
         if (!in_array($openWorkday['event_type'], ['start', 'resume'])) {
@@ -233,7 +235,7 @@ class WorkdayController extends BaseController
         $longitude = $this->request->getPost('longitud');
 
         // Verificar que está en pausa
-        $openWorkday = $this->getOpenWorkdayType($userId);
+        // (ya obtenido arriba)
 
         if ($openWorkday['event_type'] !== 'pause') {
             return redirect()->back()->with('errors', ['No tienes una jornada en pausa para reanudar.']);
@@ -294,7 +296,7 @@ class WorkdayController extends BaseController
         $longitude = $this->request->getPost('longitud');
 
         // Verificar que hay una jornada abierta o en pausa
-        $openWorkday = $this->getOpenWorkdayType($userId);
+        // (ya obtenido arriba)
 
         // Verificar que la jornada está activa (iniciada o reanudada) para poder finalizar
         if (!in_array($openWorkday['event_type'], ['start', 'pause', 'resume'])) {

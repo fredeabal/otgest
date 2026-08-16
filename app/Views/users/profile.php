@@ -174,7 +174,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url;
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+                    const csrf = document.createElement('input');
+                    csrf.type = 'hidden';
+                    csrf.name = '<?= csrf_token() ?>';
+                    csrf.value = '<?= csrf_hash() ?>';
+                    form.appendChild(csrf);
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         });
