@@ -58,8 +58,8 @@ if (!function_exists('calculate_workday_data')) {
 
         // Si hay una pausa activa sin break_end (jornada aún en pausa), contabilizar ese tiempo también
         if ($breakStart) {
-            $now = date('Y-m-d H:i:s');
-            $totalBreakTime += strtotime($now) - strtotime($breakStart);
+            $endTimeForBreak = $endTime ?? date('Y-m-d H:i:s');
+            $totalBreakTime += strtotime($endTimeForBreak) - strtotime($breakStart);
         }
 
         // Determinar estado de la jornada

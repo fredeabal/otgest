@@ -41,7 +41,7 @@ class WorkdayController extends BaseController
 
         // Revisar si la jornada excede las horas máximas y cerrarla automáticamente
         $openWorkday = $this->getOpenWorkdayType($userId);
-        if ($openWorkday && $openWorkday['event_type'] === 'start') {
+        if ($openWorkday && in_array($openWorkday['event_type'], ['start', 'pause', 'resume'])) {
             $this->autoCloseWorkday($userId, $openWorkday['workday_date']);
         }
         
@@ -367,8 +367,8 @@ class WorkdayController extends BaseController
             $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
             $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-            // Calcular datos de la jornada usando el método helper
-            $workday = calculate_workday_data($date, $events, $userDailyHours);
+            // Calcular datos de la jornada usando el método helper con auto-cierre
+            $workday = $this->processWorkdayWithAutoClose($userId, $date, $events, $userDailyHours);
             if ($workday) {
                 // Agregar daily_hours y información del usuario para PDFs
                 $workday['daily_hours'] = $userDailyHours;
@@ -460,8 +460,8 @@ class WorkdayController extends BaseController
                 $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
                 $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-                // Calcular datos de la jornada usando el método helper
-                $workday = calculate_workday_data($date, $events, $userDailyHours);
+                // Calcular datos de la jornada usando el método helper con auto-cierre
+                $workday = $this->processWorkdayWithAutoClose($uid, $date, $events, $userDailyHours);
                 if ($workday) {
                     $workday['user_id'] = $uid;
                     $workday['daily_hours'] = $userDailyHours;
@@ -545,8 +545,8 @@ class WorkdayController extends BaseController
         $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
         $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-        // Calcular datos de la jornada
-        $workday = calculate_workday_data($date, $events, $userDailyHours);
+        // Calcular datos de la jornada con auto-cierre
+        $workday = $this->processWorkdayWithAutoClose($userId, $date, $events, $userDailyHours);
 
         // Preparar datos para la vista
         // Invertir el orden para mostrar en la vista (más reciente primero)
@@ -605,7 +605,7 @@ class WorkdayController extends BaseController
             $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
             $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-            $workday = calculate_workday_data($date, $events, $userDailyHours);
+            $workday = $this->processWorkdayWithAutoClose($userId, $date, $events, $userDailyHours);
             if ($workday) {
                 $workday['daily_hours'] = $userDailyHours;
                 $workdays[] = $workday;
@@ -684,7 +684,7 @@ class WorkdayController extends BaseController
                 $inEvent = reset($inEvent); // Obtener el primer (y único) evento 'in'
                 $userDailyHours = $inEvent ? ($inEvent['daily_hours'] ?? null) : null;
 
-                $workday = calculate_workday_data($date, $events, $userDailyHours);
+                $workday = $this->processWorkdayWithAutoClose($uid, $date, $events, $userDailyHours);
                 if ($workday) {
                     $workday['user_id'] = $uid;
                     $workday['daily_hours'] = $userDailyHours;
@@ -1112,6 +1112,30 @@ class WorkdayController extends BaseController
             }
         }
         return false; // No excedió las horas
+    }
+
+    // =================================================================================
+    // Método auxiliar para procesar una jornada y cerrarla automáticamente si aplica
+    // =================================================================================
+    private function processWorkdayWithAutoClose($userId, $date, &$events, $userDailyHours)
+    {
+        $workday = calculate_workday_data($date, $events, $userDailyHours);
+        
+        if ($workday && $workday['status'] === 'in_progress' && !$workday['autoclose']) {
+            $user = $this->userModel->find($userId);
+            $maxDailyHours = $user['max_daily_hours'] ?? 8;
+            if ($workday['total_hours'] >= $maxDailyHours) {
+                if ($this->autoCloseWorkday($userId, $date)) {
+                    // Recargar eventos y recalcular si se cerró exitosamente
+                    $events = $this->workdayModel->where('user_id', $userId)
+                                                 ->where('workday_date', $date)
+                                                 ->orderBy('event_time', 'ASC')
+                                                 ->findAll();
+                    $workday = calculate_workday_data($date, $events, $userDailyHours);
+                }
+            }
+        }
+        return $workday;
     }
 
 }
