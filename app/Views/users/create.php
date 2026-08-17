@@ -106,7 +106,7 @@
                         // Fila: Rol y Estado
                         // ================================================================================= -->
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="role_id" class="form-label">Rol</label>
                                 <select class="form-select" id="role_id" name="role_id">
                                     <option value="">Selecciona un rol</option>
@@ -117,13 +117,18 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="is_active" class="form-label">Estado</label>
                                 <select class="form-select" id="is_active" name="is_active">
                                     <option value="1" <?= old('is_active', '1') == '1' ? 'selected' : '' ?>>Activo
                                     </option>
                                     <option value="0" <?= old('is_active') == '0' ? 'selected' : '' ?>>Inactivo</option>
                                 </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="kiosk_token" class="form-label">Credencial Kiosco (NFC/QR)</label>
+                                <input type="text" class="form-control font-monospace" id="kiosk_token" name="kiosk_token" placeholder="Ej. A1B2C3D4" value="<?= old('kiosk_token') ?>">
+                                <div class="form-text">Si se deja vacío, se autogenerará uno.</div>
                             </div>
                         </div>
                         <!-- =================================================================================

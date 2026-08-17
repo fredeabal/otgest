@@ -104,7 +104,7 @@
                             </div>
                         </div>
                         <!-- =================================================================================
-                        // Fila: Rol y Estado
+                        // Fila: Rol, Estado y Credencial de Kiosco
                         // ================================================================================= -->
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -138,7 +138,7 @@
                             <div class="col-md-12">
                                 <label class="form-label text-primary"><i class="ti ti-id-badge"></i> Credencial de Kiosco (NFC / QR)</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control font-monospace text-muted bg-light" id="kiosk_token" value="<?= esc($user['kiosk_token'] ?? '') ?>" readonly>
+                                    <input type="text" class="form-control font-monospace" name="kiosk_token" id="kiosk_token" value="<?= old('kiosk_token', esc($user['kiosk_token'] ?? '')) ?>">
                                     <button class="btn btn-outline-primary" type="button" onclick="navigator.clipboard.writeText(document.getElementById('kiosk_token').value).then(() => { Swal.fire({icon: 'success', title: 'Token copiado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000}) })"><i class="ti ti-copy"></i> Copiar</button>
                                     <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#qrModal"><i class="ti ti-qrcode"></i> Ver QR</button>
                                 </div>

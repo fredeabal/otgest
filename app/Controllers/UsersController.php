@@ -82,6 +82,10 @@ class UsersController extends BaseController
                 'label' => 'estado',
                 'rules' => 'required|in_list[0,1]'
             ],
+            'kiosk_token' => [
+                'label' => 'credencial de kiosco',
+                'rules' => 'permit_empty|is_unique[users.kiosk_token]'
+            ],
             'daily_hours' => [
                 'label' => 'horas diarias',
                 'rules' => 'permit_empty|integer|greater_than_equal_to[1]|less_than_equal_to[24]'
@@ -118,7 +122,7 @@ class UsersController extends BaseController
             'daily_hours' => $this->request->getPost('daily_hours'),
             'max_daily_hours' => $this->request->getPost('max_daily_hours'),
             'vacation_days' => $this->request->getPost('vacation_days'),
-            'kiosk_token' => bin2hex(random_bytes(16)),
+            'kiosk_token' => $this->request->getPost('kiosk_token') ?: bin2hex(random_bytes(16)),
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
             'permissions' => $permissions ? json_encode($permissions) : null, // Guardar como JSON
             'updated_by' => session()->get('user_id'),
@@ -228,6 +232,10 @@ class UsersController extends BaseController
                 'label' => 'estado',
                 'rules' => 'required|in_list[0,1]'
             ],
+            'kiosk_token' => [
+                'label' => 'credencial de kiosco',
+                'rules' => 'permit_empty|is_unique[users.kiosk_token,id,'.$id.']'
+            ],
             'email' => [
                 'label' => 'correo electrónico',
                 'rules' => 'required|valid_email|is_unique[users.email,id,'.$id.']'
@@ -273,6 +281,7 @@ class UsersController extends BaseController
             'name' => $this->request->getPost('name'),
             'role_id' => $this->request->getPost('role_id'),
             'is_active' => $this->request->getPost('is_active'),
+            'kiosk_token' => $this->request->getPost('kiosk_token'),
             'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
             'permissions' => $permissions ? json_encode($permissions) : null, // Guardar como JSON
             'address' => $this->request->getPost('address'),
