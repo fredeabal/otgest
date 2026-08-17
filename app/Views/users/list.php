@@ -33,7 +33,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($users as $user): ?>
-                        <tr onclick="window.location='<?= base_url('users/edit/' . $user['id']) ?>'" class="cursor-pointer">
+                        <tr onclick="window.location='<?= base_url('users/show/' . $user['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($user['name']) ?></h6>
@@ -74,6 +74,12 @@
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <?php if ($user['id'] != 1 || session('user_id') == 1): ?>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-3"
+                                                href="<?= base_url('users/show/' . $user['id']) ?>">
+                                                <i class="ti ti-eye"></i> Ver detalles
+                                            </a>
+                                        </li>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('users/edit/' . $user['id']) ?>">

@@ -32,6 +32,7 @@ $routes->get('user/dashboard', 'DashboardController::index', ['filter' => 'auth'
 $routes->get('users/create', 'UsersController::create', ['filter' => 'permission:admin.users']);
 $routes->post('users/store', 'UsersController::store', ['filter' => 'permission:admin.users']);
 $routes->get('users/list', 'UsersController::list', ['filter' => 'permission:admin.users']);
+$routes->get('users/show/(:num)', 'UsersController::show/$1', ['filter' => 'permission:admin.users']);
 $routes->get('users/edit/(:num)', 'UsersController::edit/$1', ['filter' => 'permission:admin.users']);
 $routes->post('users/update/(:num)', 'UsersController::update/$1', ['filter' => 'permission:admin.users']);
 $routes->post('users/delete/(:num)', 'UsersController::delete/$1', ['filter' => 'permission:admin.users']);
@@ -143,4 +144,10 @@ $routes->get('expenses/receipt/(:num)/(:any)', 'ExpenseController::receipt/$1/$2
 
 
 
-
+// =================================================================================
+// Rutas del Kiosco de Fichaje
+// =================================================================================
+$routes->get('kiosk', 'KioskController::index');
+$routes->post('kiosk/scan', 'KioskController::scan');
+$routes->get('kiosk/action/(:any)', 'KioskController::action/$1');
+$routes->post('kiosk/action', 'KioskController::processAction');

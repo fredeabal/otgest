@@ -80,28 +80,28 @@
                                     $iconName = '';
                                     switch ($event['event_type']) {
                                         case 'start':
-                                            $iconName = 'solar:login-bold-duotone';
+                                            $iconName = 'ti ti-player-play';
                                             $iconClass = 'text-success';
                                             break;
                                         case 'pause':
-                                            $iconName = 'solar:pause-circle-bold-duotone';
+                                            $iconName = 'ti ti-player-pause';
                                             $iconClass = 'text-warning';
                                             break;
                                         case 'resume':
-                                            $iconName = 'solar:play-bold-duotone';
+                                            $iconName = 'ti ti-player-play';
                                             $iconClass = 'text-info';
                                             break;
                                         case 'stop':
-                                            $iconName = 'solar:logout-bold-duotone';
+                                            $iconName = 'ti ti-player-stop';
                                             $iconClass = 'text-danger';
                                             break;
                                         default:
-                                            $iconName = 'solar:clock-circle-bold-duotone';
+                                            $iconName = 'ti ti-clock';
                                             $iconClass = 'text-secondary';
                                     }
 
                                     ?>
-                                        <iconify-icon icon="<?= $iconName ?>" class="<?= $iconClass ?> fs-5"></iconify-icon>
+                                        <i class="<?= $iconName ?> <?= $iconClass ?> fs-5"></i>
                                     </div>
                                     <div>
                                         <h6 class="mb-1">

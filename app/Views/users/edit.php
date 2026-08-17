@@ -132,6 +132,20 @@
                             </div>
                         </div>
                         <!-- =================================================================================
+                        // Kiosco / Token NFC
+                        // ================================================================================= -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label text-primary"><i class="ti ti-id-badge"></i> Credencial de Kiosco (NFC / QR)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control font-monospace text-muted bg-light" id="kiosk_token" value="<?= esc($user['kiosk_token'] ?? '') ?>" readonly>
+                                    <button class="btn btn-outline-primary" type="button" onclick="navigator.clipboard.writeText(document.getElementById('kiosk_token').value).then(() => { Swal.fire({icon: 'success', title: 'Token copiado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000}) })"><i class="ti ti-copy"></i> Copiar</button>
+                                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#qrModal"><i class="ti ti-qrcode"></i> Ver QR</button>
+                                </div>
+                                <small class="text-muted mt-1 d-block">Este código es único para este usuario. Úsalo para programar su tarjeta NFC o imprimir su código QR.</small>
+                            </div>
+                        </div>
+                        <!-- =================================================================================
                         // Permisos modulares (Granulares)
                         // ================================================================================= -->
                         <?php
@@ -289,6 +303,28 @@
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal QR Kiosco -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pt-0 pb-4">
+                <h5 class="modal-title mb-4 text-primary">Credencial Kiosco</h5>
+                <?php if(!empty($user['kiosk_token'])): ?>
+                    <div class="bg-white p-3 rounded-4 d-inline-block shadow-sm border mb-3">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=<?= esc($user['kiosk_token']) ?>" alt="QR Kiosco" class="img-fluid" style="width: 200px; height: 200px;">
+                    </div>
+                    <p class="mb-0 text-muted small px-3">Imprime este QR para que <?= esc($user['name']) ?> pueda fichar escaneándolo en el terminal.</p>
+                <?php else: ?>
+                    <p class="text-danger mb-0">Este usuario aún no tiene un token generado.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>

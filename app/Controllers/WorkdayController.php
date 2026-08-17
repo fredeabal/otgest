@@ -1047,18 +1047,25 @@ class WorkdayController extends BaseController
     // =================================================================================
     private function getOpenWorkdayType($userId)
     {
-        // Buscar el último registro del usuario seleccionando solo campos necesarios
+        // Buscar el último registro del usuario ordenando por fecha y hora
         $lastRecord = $this->workdayModel
             ->select('event_type, workday_date')
             ->where('user_id', $userId)
+            ->orderBy('workday_date', 'DESC')
             ->orderBy('event_time', 'DESC')
             ->orderBy('id', 'DESC')
             ->first();
 
-        //Si no hay registros, devolver un array con event_type 'stop'
+        // Si no hay registros, devolver un array con event_type 'stop'
         if (!$lastRecord) {
             return ['event_type' => 'stop'];
         }
+
+        // Si el último registro es de días anteriores y no fue cerrado, se trata como cerrado para el día de hoy
+        if ($lastRecord['event_type'] !== 'stop' && $lastRecord['workday_date'] < date('Y-m-d')) {
+            return ['event_type' => 'stop'];
+        }
+
         return $lastRecord;
     }
 

@@ -118,6 +118,7 @@ class UsersController extends BaseController
             'daily_hours' => $this->request->getPost('daily_hours'),
             'max_daily_hours' => $this->request->getPost('max_daily_hours'),
             'vacation_days' => $this->request->getPost('vacation_days'),
+            'kiosk_token' => bin2hex(random_bytes(16)),
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
             'permissions' => $permissions ? json_encode($permissions) : null, // Guardar como JSON
             'updated_by' => session()->get('user_id'),
@@ -146,7 +147,28 @@ class UsersController extends BaseController
     }
 
     // =================================================================================
-    // Mostrar formulario de edición de usuario
+    // Ver detalles del usuario
+    // =================================================================================
+    public function show($id)
+    {
+        $user = $this->usersModel->select('users.*, roles.name as role_name, updater.name as updated_by_name')
+            ->join('roles', 'roles.id = users.role_id', 'left')
+            ->join('users as updater', 'updater.id = users.updated_by', 'left')
+            ->find($id);
+
+        if (!$user) {
+            return redirect()->to('/users/list')->with('errors', ['Usuario no encontrado.']);
+        }
+
+        $data['user'] = $user;
+        $data['title'] = 'Detalles de usuario';
+        echo view('template/header', $data);
+        echo view('users/show', $data);
+        echo view('template/footer');
+    }
+
+    // =================================================================================
+    // Mostrar formulario de edición
     // =================================================================================
     public function edit($id)
     {
@@ -531,8 +553,6 @@ class UsersController extends BaseController
         if (!empty($data)) {
             $this->usersModel->update($id, $data);
         }
-        // Si usas soft deletes, esto es suficiente. Si no, elimina físicamente:
-        // $this->usersModel->delete($id);
         return redirect()->to('/users/list')->with('success', 'Usuario eliminado correctamente.');
     }
 
