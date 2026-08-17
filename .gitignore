@@ -131,3 +131,6 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+# Archivos de documentación temporal
+manual_tecnico.md
