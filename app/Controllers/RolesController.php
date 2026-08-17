@@ -1,9 +1,10 @@
 <?php
+
+namespace App\Controllers;
+
 // =================================================================================
 // Controlador: RolesController
 // =================================================================================
-
-namespace App\Controllers;
 
 use App\Models\RolesModel;
 use App\Models\UsersModel;
