@@ -22,6 +22,10 @@ class DocumentsModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
+    // Soft delete
+    protected $useSoftDeletes = true;
+    protected $deletedField  = 'deleted_at';
+
     // =================================================================================
     // Métodos personalizados para documentos
     // =================================================================================

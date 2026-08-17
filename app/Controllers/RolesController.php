@@ -151,8 +151,8 @@ class RolesController extends BaseController
             return redirect()->to('/roles/list')->with('errors', ['No se puede eliminar este rol.']);
         }
 
-        // Verificar si hay usuarios asignados a este rol
-        $usersCount = $this->usersModel->where('role_id', $id)->countAll();
+        // Verificar si hay usuarios asignados a este rol (incluyendo los borrados lógicamente)
+        $usersCount = $this->usersModel->withDeleted()->where('role_id', $id)->countAllResults();
         if ($usersCount > 0) {
             return redirect()->to('/roles/list')->with('errors', ['No se puede eliminar el rol porque tiene usuarios asignados.']);
         }

@@ -10,7 +10,8 @@ class AbsenceModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
+    protected $deletedField     = 'deleted_at';
     protected $protectFields    = true;
     protected $allowedFields    = ['user_id', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'comments', 'status', 'processed_by', 'admin_comments', 'attachment'];
 
