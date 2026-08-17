@@ -16,7 +16,8 @@
                 <div class="row g-3 mb-3">
                     <div class="col-md-8">
                         <label for="user_id" class="form-label fw-semibold text-muted small uppercase">Usuario</label>
-                        <select name="user_id" id="user_id" class="select2" required>
+                        <select name="user_id" id="user_id" class="select2">
+                            <option value="">Todos los usuarios</option>
                             <?php foreach ($users as $user): ?>
                             <option value="<?= esc($user['id']) ?>" <?= ($user_id == $user['id']) ? 'selected' : '' ?>>
                                 <?= esc($user['name']) ?> (<?= esc($user['identification']) ?>)

@@ -495,6 +495,11 @@ class WorkdayController extends BaseController
         // Reindexar array después del filtro
         $workdays = array_values($workdays);
 
+        // Ordenar por fecha de la más actual a la más antigua
+        usort($workdays, function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']) ? strtotime($b['date']) - strtotime($a['date']) : $a['user_id'] - $b['user_id'];
+        });
+
         // Configurar paginación
         $perPage = 15;  // Registros por página
         $currentPage = $this->request->getGet('page') ?? 1;
@@ -715,6 +720,11 @@ class WorkdayController extends BaseController
             });
         }
         $workdays = array_values($workdays);
+
+        // Ordenar por fecha de la más actual a la más antigua
+        usort($workdays, function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']) ? strtotime($b['date']) - strtotime($a['date']) : $a['user_id'] - $b['user_id'];
+        });
 
         // Configurar DomPDF
         $options = new \Dompdf\Options();
