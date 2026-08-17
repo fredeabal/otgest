@@ -11,9 +11,41 @@ Vista: Reanudar Jornada Laboral
                 </div>
                 <div class="card-body text-center">
                     <div class="form-group">
-                        <i class="ti ti-player-pause mb-3 text-primary fs-4rem"></i><br>
-                        <div class="h3 mb-3 text-primary fw-bold" id="paused-time-display">00:00:00</div>
-                        <small>Tu jornada está en pausa. Selecciona una opción para continuar.</small>
+                        <!-- Reloj de hora actual -->
+                        <div class="mb-4 mt-2">
+                            <div class="h1 fw-bolder mb-0" id="current-time-display" style="font-family: monospace; font-size: 3.5rem;">--:--:--</div>
+                            <div class="text-muted small text-uppercase fw-semibold mt-1" id="current-date-display">--</div>
+                        </div>
+
+                        <?php 
+                            $staticWorkSeconds = isset($workdayData) ? floor($workdayData['total_hours'] * 3600) : 0;
+                            $wHrs = str_pad(floor($staticWorkSeconds / 3600), 2, '0', STR_PAD_LEFT);
+                            $wMins = str_pad(floor(($staticWorkSeconds % 3600) / 60), 2, '0', STR_PAD_LEFT);
+                            $wSecs = str_pad($staticWorkSeconds % 60, 2, '0', STR_PAD_LEFT);
+                            $formattedWorkedTime = "$wHrs:$wMins:$wSecs";
+                        ?>
+                        
+                        <!-- Panel de Tiempos (Resumen pequeño) -->
+                        <div class="d-flex justify-content-center gap-4 mb-4">
+                            <!-- Tiempo Trabajado (Estático) -->
+                            <div class="text-start">
+                                <p class="text-muted mb-1 small text-uppercase fw-semibold"><i class="ti ti-briefcase"></i> Trabajado</p>
+                                <div class="fw-bold text-muted" style="font-family: monospace; font-size: 1.25rem; opacity: 0.7;"><?= $formattedWorkedTime ?></div>
+                            </div>
+
+                            <div class="border-start"></div>
+
+                            <!-- Tiempo en Pausa (Activo) -->
+                            <div class="text-start">
+                                <p class="text-warning mb-1 small text-uppercase fw-bold">
+                                    <span class="spinner-grow spinner-grow-sm align-middle me-1 text-warning" style="width: 8px; height: 8px;" role="status"></span>
+                                    En Pausa
+                                </p>
+                                <div class="fw-bolder text-warning" id="paused-time-display" style="font-family: monospace; font-size: 1.25rem;">00:00:00</div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted small mb-4">Tu jornada está en pausa. Selecciona una opción para continuar.</p>
                         <div class="row mt-4">
                             <!-- Formulario para reanudar jornada -->
                             <div class="col-md-6">
@@ -72,11 +104,23 @@ document.addEventListener('DOMContentLoaded', function() {
         seconds++;
     }
 
+    // Reloj de hora actual
+    function updateRealTimeClock() {
+        const now = new Date();
+        const timeDisplay = document.getElementById('current-time-display');
+        const dateDisplay = document.getElementById('current-date-display');
+        
+        if (timeDisplay) timeDisplay.textContent = now.toLocaleTimeString('es-ES', { hour12: false });
+        if (dateDisplay) dateDisplay.textContent = now.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
     // Call once to format initial time properly
     updateTime();
+    updateRealTimeClock();
     
     // Update every second
     setInterval(updateTime, 1000);
+    setInterval(updateRealTimeClock, 1000);
 
     // Función para obtener ubicación GPS
     function getLocation() {
