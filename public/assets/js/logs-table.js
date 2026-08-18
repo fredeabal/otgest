@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!dynamicNoRecordsRow) {
                 dynamicNoRecordsRow = document.createElement('tr');
                 dynamicNoRecordsRow.className = 'dynamic-no-records';
-                dynamicNoRecordsRow.innerHTML = '<td colspan="6" class="text-center">No hay registros que coincidan con la búsqueda.</td>';
+                dynamicNoRecordsRow.innerHTML = '<td colspan="5" class="text-center">No hay registros que coincidan con la búsqueda.</td>';
                 tbody.appendChild(dynamicNoRecordsRow);
             } else {
                 dynamicNoRecordsRow.style.display = '';

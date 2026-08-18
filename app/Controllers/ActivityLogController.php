@@ -136,7 +136,6 @@ class ActivityLogController extends BaseController
                     <th>Fecha y Hora</th>
                     <th>Usuario</th>
                     <th>Módulo</th>
-                    <th>Acción</th>
                     <th>Descripción</th>
                     <th>IP</th>
                 </tr>
@@ -144,14 +143,13 @@ class ActivityLogController extends BaseController
             <tbody>';
 
         if (empty($logs)) {
-            $html .= '<tr><td colspan="6" style="text-align: center;">No hay registros de actividad.</td></tr>';
+            $html .= '<tr><td colspan="5" style="text-align: center;">No hay registros de actividad.</td></tr>';
         } else {
             foreach ($logs as $log) {
                 $html .= '<tr>
                     <td>' . date('d/m/Y H:i:s', strtotime($log['created_at'])) . '</td>
                     <td>' . esc($log['user_name'] ?? 'Sistema / Anónimo') . '</td>
                     <td>' . esc($log['module']) . '</td>
-                    <td>' . esc($log['action']) . '</td>
                     <td>' . esc($log['description']) . '</td>
                     <td>' . esc($log['ip_address']) . '</td>
                 </tr>';

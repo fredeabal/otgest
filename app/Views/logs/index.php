@@ -74,7 +74,6 @@
                             <th>Fecha</th>
                             <th>Usuario</th>
                             <th class="text-center">Módulo</th>
-                            <th class="text-center">Acción</th>
                             <th>Descripción</th>
                             <th>IP</th>
                         </tr>
@@ -82,7 +81,7 @@
                     <tbody>
                         <?php if (empty($logs)): ?>
                         <tr>
-                            <td colspan="6" class="text-center">No hay registros que coincidan con los filtros.</td>
+                            <td colspan="5" class="text-center">No hay registros que coincidan con los filtros.</td>
                         </tr>
                         <?php else: ?>
                         <?php foreach ($logs as $log): ?>
@@ -97,27 +96,6 @@
                             <td class="text-center">
                                 <span class="badge bg-secondary-subtle text-secondary fw-semibold text-small border border-secondary fs-2 w-100px-inline">
                                     <?= esc($log['module']) ?>
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <?php
-                                    $actionClass = 'bg-primary-subtle text-primary border-primary';
-                                    switch($log['action']) {
-                                        case 'CREATE':         $actionClass = 'bg-success-subtle text-success border-success'; break;
-                                        case 'UPDATE':         $actionClass = 'bg-info-subtle text-info border-info'; break;
-                                        case 'DELETE':         $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
-                                        case 'LOGIN':          $actionClass = 'bg-primary-subtle text-primary border-primary'; break;
-                                        case 'START_WORKDAY':  $actionClass = 'bg-success-subtle text-success border-success'; break;
-                                        case 'PAUSE_WORKDAY':  $actionClass = 'bg-warning-subtle text-warning border-warning'; break;
-                                        case 'RESUME_WORKDAY': $actionClass = 'bg-info-subtle text-info border-info'; break;
-                                        case 'END_WORKDAY':    $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
-                                        case 'AUTO_CLOSE':     $actionClass = 'bg-secondary-subtle text-secondary border-secondary'; break;
-                                        case 'APPROVE':        $actionClass = 'bg-success-subtle text-success border-success'; break;
-                                        case 'REJECT':         $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
-                                    }
-                                ?>
-                                <span class="badge <?= $actionClass ?> fw-semibold text-small border fs-2 w-100px-inline">
-                                    <?= esc($log['action']) ?>
                                 </span>
                             </td>
                             <td>
