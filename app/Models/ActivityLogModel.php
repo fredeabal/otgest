@@ -14,14 +14,14 @@ class ActivityLogModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['user_id', 'module', 'action', 'description', 'ip_address', 'created_at'];
 
-    // Dates
+    // Fechas
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = '';
     protected $deletedField  = '';
 
-    // Relationship with Users
+    // Relación con Usuarios
     public function getLogsWithUsers()
     {
         return $this->select('activity_logs.*, users.name as user_name, users.avatar')

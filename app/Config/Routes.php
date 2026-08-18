@@ -94,7 +94,7 @@ $routes->group('settings', ['filter' => 'permission:admin.company'], function($r
 });
 
 // =================================================================================
-// ACTIVITY LOGS
+// Registro de Actividad
 // =================================================================================
 $routes->group('logs', ['filter' => 'auth'], function ($routes) {
     $routes->get('list', 'ActivityLogController::index', ['filter' => 'permission:admin.logs']);

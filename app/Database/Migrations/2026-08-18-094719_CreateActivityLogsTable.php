@@ -19,7 +19,7 @@ class CreateActivityLogsTable extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
-                'null'       => true, // In case it's a system action
+                'null'       => true, // En caso de que sea una acción del sistema
             ],
             'module' => [
                 'type'       => 'VARCHAR',
