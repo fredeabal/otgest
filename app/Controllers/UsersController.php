@@ -127,6 +127,9 @@ class UsersController extends BaseController
             'permissions' => $permissions ? json_encode($permissions) : null, // Guardar como JSON
         ]);
 
+        $newUserId = $this->usersModel->getInsertID();
+        log_activity('Usuarios', 'CREATE', "Creó un nuevo usuario: {$this->request->getPost('name')}");
+
         // Redirigir con mensaje de éxito
         return redirect()->to('/users/list')->with('success', 'Usuario registrado correctamente.');
     }
@@ -291,6 +294,8 @@ class UsersController extends BaseController
             $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
         }
         $this->usersModel->update($id, $data);
+
+        log_activity('Usuarios', 'UPDATE', "Actualizó los datos del usuario: {$this->request->getPost('name')}");
         return redirect()->to('/users/list')->with('success', 'Usuario actualizado correctamente.');
     }
 
@@ -394,6 +399,8 @@ class UsersController extends BaseController
 
         // actualizar el usuario
         $this->usersModel->update($id, $data);
+
+        log_activity('Perfil', 'UPDATE', "Actualizó su perfil personal");
         return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
     }
 
@@ -458,6 +465,8 @@ class UsersController extends BaseController
 
         // actualizar el usuario
         $this->usersModel->update($id, ['avatar' => $fileName]);
+
+        log_activity('Perfil', 'UPDATE', "Actualizó su imagen de avatar");
 
         return redirect()->back()->with('success', 'Avatar actualizado correctamente.');
     }
@@ -533,6 +542,8 @@ class UsersController extends BaseController
 
         // Actualizar base de datos y sesión
         $this->usersModel->update($id, ['avatar' => 'user-default.png']);
+
+        log_activity('Perfil', 'UPDATE', "Eliminó su imagen de avatar");
         session()->set('user_avatar', 'user-default.png');
 
         return redirect()->back()->with('success', 'Avatar eliminado correctamente.');
@@ -554,6 +565,7 @@ class UsersController extends BaseController
         // Solo actualiza si hay datos válidos
         if (!empty($data)) {
             $this->usersModel->update($id, $data);
+            log_activity('Usuarios', 'DELETE', "Eliminó al usuario ID: {$id}");
         }
         return redirect()->to('/users/list')->with('success', 'Usuario eliminado correctamente.');
     }

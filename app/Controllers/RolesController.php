@@ -75,6 +75,9 @@ class RolesController extends BaseController
             'permissions' => json_encode($permissions),
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
+
+        log_activity('Roles', 'CREATE', "Creó el rol: {$this->request->getPost('name')}");
+
         return redirect()->to('/roles/list')->with('success', 'Rol creado correctamente.');
     }
 
@@ -129,6 +132,9 @@ class RolesController extends BaseController
             'name' => $this->request->getPost('name'),
             'permissions' => json_encode($permissions)
         ]);
+
+        log_activity('Roles', 'UPDATE', "Actualizó el rol: {$this->request->getPost('name')}");
+
         return redirect()->to('/roles/list')->with('success', 'Rol actualizado correctamente.');
     }
 
@@ -157,6 +163,9 @@ class RolesController extends BaseController
 
         // Eliminar el rol
         $this->rolesModel->delete($id);
+
+        log_activity('Roles', 'DELETE', "Eliminó el rol ID: {$id}");
+
         return redirect()->to('/roles/list')->with('success', 'Rol eliminado correctamente.');
     }
-} 
+}

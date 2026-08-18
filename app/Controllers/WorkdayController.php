@@ -147,6 +147,7 @@ class WorkdayController extends BaseController
 
         // Insertar registro en la base de datos
         if ($this->workdayModel->insert($data)) {
+            log_activity('Jornadas', 'START', 'Inició su jornada laboral');
             return redirect()->back()->with('success', 'Jornada iniciada correctamente.');
         } else {
             return redirect()->back()->with('errors', ['Error al iniciar la jornada.']);
@@ -210,6 +211,7 @@ class WorkdayController extends BaseController
 
         // Insertar registro
         if ($this->workdayModel->insert($data)) {
+            log_activity('Jornadas', 'PAUSE', 'Pausó su jornada laboral');
             return redirect()->back()->with('success', 'Jornada pausada correctamente.');
         } else {
             return redirect()->back()->with('errors', ['Error al pausar la jornada.']);
@@ -271,6 +273,7 @@ class WorkdayController extends BaseController
 
         // Insertar registro
         if ($this->workdayModel->insert($data)) {
+            log_activity('Jornadas', 'RESUME', 'Reanudó su jornada laboral');
             return redirect()->back()->with('success', 'Jornada reanudada correctamente.');
         } else {
             return redirect()->back()->with('errors', ['Error al reanudar la jornada.']);
@@ -334,6 +337,7 @@ class WorkdayController extends BaseController
 
         // Insertar registro
         if ($this->workdayModel->insert($data)) {
+            log_activity('Jornadas', 'END', 'Finalizó su jornada laboral');
             return redirect()->back()->with('success', 'Jornada finalizada correctamente.');
         } else {
             return redirect()->back()->with('errors', ['Error al finalizar la jornada.']);

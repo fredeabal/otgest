@@ -92,6 +92,14 @@ $routes->group('settings', ['filter' => 'permission:admin.company'], function($r
     $routes->get('download-db', 'SettingsController::downloadDatabase');
     $routes->post('restore-db', 'SettingsController::restoreDatabase');
 });
+
+// =================================================================================
+// ACTIVITY LOGS
+// =================================================================================
+$routes->group('logs', ['filter' => 'auth'], function ($routes) {
+    $routes->get('list', 'ActivityLogController::index', ['filter' => 'permission:admin.logs']);
+    $routes->get('export-pdf', 'ActivityLogController::exportPdf', ['filter' => 'permission:admin.logs']);
+});
 // =================================================================================
 // Rutas de gestión de solicitudes de ausencia
 // =================================================================================

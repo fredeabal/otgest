@@ -160,6 +160,9 @@ class AbsenceController extends BaseController
 
         // Guardar solicitud
         $this->absenceModel->save($absenceData);
+        
+        // Log activity
+        log_activity('Ausencias', 'CREATE', "Solicitó una ausencia de tipo: " . $this->request->getPost('type'));
 
         return redirect()->to('/absences/list')->with('success', 'Solicitud de ausencia enviada correctamente.');
     }
@@ -413,6 +416,8 @@ class AbsenceController extends BaseController
             'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
 
+        log_activity('Ausencias', 'APPROVE', "Aprobó la solicitud de ausencia ID: {$id}");
+
         // Enviar correo de aprobación al usuario
         $user = $this->usersModel->find($absence['user_id']);
         if ($user) {
@@ -440,6 +445,8 @@ class AbsenceController extends BaseController
             'admin_comments' => $adminComments,
             'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
+
+        log_activity('Ausencias', 'REJECT', "Rechazó la solicitud de ausencia ID: {$id}");
 
         // Enviar correo de rechazo al usuario
         $user = $this->usersModel->find($absence['user_id']);
@@ -470,6 +477,8 @@ class AbsenceController extends BaseController
             'status' => 'cancelled',
             'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
+
+        log_activity('Ausencias', 'CANCEL', "Canceló su solicitud de ausencia ID: {$id}");
 
         return redirect()->to('/absences/list')->with('success', 'Solicitud cancelada correctamente.');
     }

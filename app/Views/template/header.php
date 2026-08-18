@@ -322,6 +322,7 @@
                             </ul>
                         </li>
                         <?php endif; ?>
+
                         <!-- ============================= -->
                         <!-- Configuración -->
                         <!-- ============================= -->
@@ -355,6 +356,15 @@
                                         <span class="hide-menu">Mantenimiento</span>
                                     </a>
                                 </li>
+                                <?php if (has_permission('admin.logs')): ?>
+                                <li class="sidebar-item">
+                                    <a href="<?= base_url('logs/list') ?>" class="sidebar-link">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                        </div>
+                                        <span class="hide-menu">Registro de Actividad</span>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
                             </ul>
                         </li>
                         <?php endif; ?>

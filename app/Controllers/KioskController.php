@@ -67,6 +67,7 @@ class KioskController extends BaseController
                 'daily_hours' => $user['daily_hours'] ?? 8,
                 'max_daily_hours' => $user['max_daily_hours'] ?? 12,
             ]);
+            log_activity('Kiosco', 'START', 'Inició jornada desde Kiosco', $user['id']);
             return redirect()->back()->with('message', "¡Hola {$user['name']}! Entrada registrada a las " . date('H:i'));
         } elseif ($eventType === 'pause') {
             // Fin de pausa
@@ -81,6 +82,7 @@ class KioskController extends BaseController
                 'daily_hours' => $user['daily_hours'] ?? 8,
                 'max_daily_hours' => $user['max_daily_hours'] ?? 12,
             ]);
+            log_activity('Kiosco', 'RESUME', 'Reanudó jornada desde Kiosco', $user['id']);
             return redirect()->back()->with('message', "¡Hola {$user['name']}! Pausa terminada a las " . date('H:i'));
         } else {
             // Está trabajando ('start' o 'resume'), preguntar qué hacer
@@ -146,6 +148,7 @@ class KioskController extends BaseController
                 'daily_hours' => $user['daily_hours'] ?? 8,
                 'max_daily_hours' => $user['max_daily_hours'] ?? 12,
             ]);
+            log_activity('Kiosco', 'PAUSE', 'Pausó jornada desde Kiosco', $user['id']);
             return redirect()->to(base_url('kiosk'))->with('message', "¡Pausa iniciada, {$user['name']}! Disfruta tu descanso.");
         } elseif ($action === 'stop') {
             $this->workdayModel->insert([
@@ -159,6 +162,7 @@ class KioskController extends BaseController
                 'daily_hours' => $user['daily_hours'] ?? 8,
                 'max_daily_hours' => $user['max_daily_hours'] ?? 12,
             ]);
+            log_activity('Kiosco', 'END', 'Finalizó jornada desde Kiosco', $user['id']);
             return redirect()->to(base_url('kiosk'))->with('message', "¡Jornada finalizada, {$user['name']}! Hasta la próxima.");
         }
 

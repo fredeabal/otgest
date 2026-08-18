@@ -103,6 +103,8 @@ class ExpenseController extends BaseController
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
 
+        log_activity('Gastos', 'CREATE', "Solicitó un reembolso de gasto por: " . $this->request->getPost('amount') . " €");
+
         // Redirigir con mensaje de éxito
         return redirect()->to('/expenses/my-expenses')->with('success', 'Justificación de gasto solicitada correctamente.');
     }
@@ -204,6 +206,8 @@ class ExpenseController extends BaseController
             'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
 
+        log_activity('Gastos', 'APPROVE', "Aprobó el gasto ID: {$id}");
+
         return redirect()->to('/expenses/manage')->with('success', 'Gasto aprobado correctamente.');
     }
 
@@ -228,6 +232,8 @@ class ExpenseController extends BaseController
             'approved_at' => Time::now('Europe/Madrid', 'es_ES'),
             'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
         ]);
+
+        log_activity('Gastos', 'REJECT', "Rechazó el gasto ID: {$id}");
 
         return redirect()->to('/expenses/manage')->with('success', 'Gasto rechazado correctamente.');
     }
@@ -288,6 +294,8 @@ class ExpenseController extends BaseController
         }
 
         $this->expenseModel->delete($id);
+
+        log_activity('Gastos', 'DELETE', "Eliminó el gasto ID: {$id}");
 
         return redirect()->to('/expenses/my-expenses')->with('success', 'Justificación de gasto eliminada correctamente.');
     }

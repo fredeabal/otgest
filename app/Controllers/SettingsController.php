@@ -96,6 +96,8 @@ class SettingsController extends BaseController
 
         $this->companyModel->saveCompany($companyData);
 
+        log_activity('Ajustes', 'UPDATE', "Actualizó los datos de la empresa");
+
         return redirect()->to('/settings/company')->with('success', 'Datos de la empresa actualizados correctamente.');
     }
 
@@ -135,6 +137,8 @@ class SettingsController extends BaseController
         }
 
         $this->companyModel->saveCompany($companyData);
+
+        log_activity('Ajustes', 'UPDATE', "Actualizó la configuración SMTP");
 
         return redirect()->to('/settings/smtp')->with('success', 'Configuración de correo actualizada correctamente.');
     }
@@ -182,6 +186,8 @@ class SettingsController extends BaseController
                 }
             }
         }
+        
+        log_activity('Ajustes', 'MAINTENANCE', "Limpió las sesiones inactivas");
         return redirect()->to('/settings/maintenance')->with('success', 'Sesiones inactivas limpiadas correctamente.');
     }
 
@@ -192,6 +198,8 @@ class SettingsController extends BaseController
         if (is_dir($cachePath)) {
             foreach (glob($cachePath . '/*') as $file) { if (is_file($file)) unlink($file); }
         }
+        
+        log_activity('Ajustes', 'MAINTENANCE', "Limpió el caché del sistema");
         return redirect()->to('/settings/maintenance')->with('success', 'Cache limpiado correctamente.');
     }
 
@@ -202,6 +210,8 @@ class SettingsController extends BaseController
         if (is_dir($logsPath)) {
             foreach (glob($logsPath . '/*') as $file) { if (is_file($file)) unlink($file); }
         }
+        
+        log_activity('Ajustes', 'MAINTENANCE', "Limpió los logs del sistema");
         return redirect()->to('/settings/maintenance')->with('success', 'Logs limpiados correctamente.');
     }
 
@@ -212,6 +222,8 @@ class SettingsController extends BaseController
         if (is_dir($debugbarPath)) {
             foreach (glob($debugbarPath . '/*') as $file) { if (is_file($file)) unlink($file); }
         }
+        
+        log_activity('Ajustes', 'MAINTENANCE', "Limpió los archivos de debugbar");
         return redirect()->to('/settings/maintenance')->with('success', 'Debugbar limpiado correctamente.');
     }
 
@@ -236,6 +248,7 @@ class SettingsController extends BaseController
             }
         }
         
+        log_activity('Ajustes', 'MAINTENANCE', "Ejecutó mantenimiento completo");
         return redirect()->to('/settings/maintenance')->with('success', 'Mantenimiento completo ejecutado correctamente.');
     }
 
@@ -246,6 +259,7 @@ class SettingsController extends BaseController
         if (!has_permission('admin.company')) { return redirect()->to('/')->with('errors', ['No tienes permisos.']); }
         $dbPath = WRITEPATH . 'database/database.sqlite';
         if (file_exists($dbPath)) {
+            log_activity('Ajustes', 'BACKUP', "Descargó una copia de la base de datos");
             return $this->response->download($dbPath, null)->setFileName('otgest_backup_' . date('Y-m-d_H-i') . '.sqlite');
         } else {
             return redirect()->back()->with('errors', ['El archivo de base de datos no se encuentra.']);
@@ -273,6 +287,8 @@ class SettingsController extends BaseController
             // Reemplazar la base de datos actual con el archivo subido
             $file->move(WRITEPATH . 'database', 'database.sqlite', true);
             
+            log_activity('Ajustes', 'RESTORE', "Restauró una copia de la base de datos");
+
             // Limpiar sesiones para forzar a reconectar y evitar conflictos de IDs o roles
             $this->clearAll();
             

@@ -219,6 +219,8 @@ class DocumentsController extends BaseController
 
                 $documentId = $this->documentsModel->getInsertID();
 
+                log_activity('Documentos', 'CREATE', "Envió un documento ('{$originalName}') a {$recipient['name']}");
+
                 // Enviar notificación por correo
                 $this->sendDocumentNotification($documentId);
 
@@ -302,6 +304,8 @@ class DocumentsController extends BaseController
         ]);
 
         $documentId = $this->documentsModel->getInsertID();
+
+        log_activity('Documentos', 'CREATE', "Envió el documento '{$this->request->getPost('title')}'");
 
         // Enviar notificación por correo
         $this->sendDocumentNotification($documentId);
@@ -403,6 +407,8 @@ class DocumentsController extends BaseController
 
         // Eliminar registro de la base de datos
         $this->documentsModel->delete($id);
+
+        log_activity('Documentos', 'DELETE', "Eliminó el documento ID: {$id}");
 
         return redirect()->to('/documents/sent')->with('success', 'Documento eliminado correctamente.');
     }
