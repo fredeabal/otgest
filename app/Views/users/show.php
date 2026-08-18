@@ -203,9 +203,17 @@
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('documents.received', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Ver mis recibidos</label>
                                         </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" disabled <?= in_array('documents.send', $userPermissions) ? 'checked' : '' ?>>
+                                            <label class="form-check-label fs-3">Enviar individual</label>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" disabled <?= in_array('documents.sent', $userPermissions) ? 'checked' : '' ?>>
+                                            <label class="form-check-label fs-3">Ver mis enviados</label>
+                                        </div>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('documents.manage', $userPermissions) ? 'checked' : '' ?>>
-                                            <label class="form-check-label fs-3">Gestión de documentos</label>
+                                            <label class="form-check-label fs-3">Envíos masivos</label>
                                             <i class="ti ti-user-cog ms-3 text-danger"></i>
                                         </div>
                                     </div>
@@ -214,22 +222,27 @@
                             
                             <!-- USUARIOS Y AJUSTES -->
                             <div class="col-12">
-                                <div class="card mb-0 shadow-none border">
-                                    <div class="card-header bg-primary-subtle">
-                                        <h6 class="mb-0 text-primary d-flex align-items-center gap-2">
-                                            <i class="ti ti-settings fs-5"></i> Administración
+                                <div class="card mb-0 shadow-none border border-danger">
+                                    <div class="card-header bg-danger-subtle">
+                                        <h6 class="mb-0 text-danger d-flex align-items-center gap-2">
+                                            <i class="ti ti-shield-lock fs-5"></i> Administración General
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.users', $userPermissions) ? 'checked' : '' ?>>
-                                            <label class="form-check-label fs-3">Gestión de usuarios y roles</label>
-                                            <i class="ti ti-shield ms-3 text-danger"></i>
+                                            <label class="form-check-label fs-3">Gestionar Usuarios</label>
+                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.roles', $userPermissions) ? 'checked' : '' ?>>
+                                            <label class="form-check-label fs-3">Gestionar Roles</label>
+                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
                                         </div>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.settings', $userPermissions) ? 'checked' : '' ?>>
-                                            <label class="form-check-label fs-3">Ajustes del sistema</label>
-                                            <i class="ti ti-shield ms-3 text-danger"></i>
+                                            <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.company', $userPermissions) ? 'checked' : '' ?>>
+                                            <label class="form-check-label fs-3">Ajustes de la empresa</label>
+                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
                                         </div>
                                     </div>
                                 </div>
