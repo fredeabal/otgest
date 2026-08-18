@@ -94,7 +94,7 @@
                                 <h6 class="fs-4 fw-semibold mb-0"><?= esc($log['user_name'] ?? 'Sistema / Anónimo') ?></h6>
                             </td>
                             <td class="text-center">
-                                <span class="badge bg-primary-subtle text-primary fw-semibold text-small border border-secondary fs-2 w-100px-inline">
+                                <span class="badge bg-primary-subtle text-primary fw-semibold text-small border border-primary fs-2 w-100px-inline">
                                     <?= esc($log['module']) ?>
                                 </span>
                             </td>
