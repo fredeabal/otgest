@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/libs/animate.css/animate.min.css"/>
 
     <!-- CSS Principal -->
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css?v=<?= time() ?>" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css?v=<?= time() ?>" />
     <!-- solar icons -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
