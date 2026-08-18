@@ -13,7 +13,7 @@ class CompanyModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'cif', 'name', 'address', 'postal_code', 'phone', 'email', 'website', 'updated_by',
+        'cif', 'name', 'address', 'postal_code', 'phone', 'email', 'website',
         'smtp_host', 'smtp_port', 'smtp_user', 'smtp_pass', 'smtp_crypto', 'smtp_from_email', 'smtp_from_name'
     ];
 

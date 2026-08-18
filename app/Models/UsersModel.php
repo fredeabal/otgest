@@ -15,7 +15,7 @@ class UsersModel extends Model
     protected $primaryKey = 'id';
     // Campos permitidos para inserción/actualización masiva
     protected $allowedFields = [
-        'name', 'identification', 'email', 'address', 'birthdate', 'password', 'role_id', 'daily_hours', 'max_daily_hours', 'reset_token', 'reset_token_expiration', 'is_active', 'last_login', 'created_at', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by', 'avatar', 'permissions', 'theme', 'vacation_days', 'kiosk_token'
+        'name', 'identification', 'email', 'address', 'birthdate', 'password', 'role_id', 'daily_hours', 'max_daily_hours', 'reset_token', 'reset_token_expiration', 'is_active', 'last_login', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'avatar', 'permissions', 'theme', 'vacation_days', 'kiosk_token'
     ];
     // Activar timestamps automáticos
     protected $useTimestamps = true;

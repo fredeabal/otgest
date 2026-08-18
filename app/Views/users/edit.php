@@ -330,12 +330,7 @@
     </div>
 </div>
 
-<?php // usuario que lo modifico, solo visible en moviles ?>
-<?php if ($user['updated_by']): ?>
-<div class="container mt-n3 d-none d-md-block">
-    <span class="text-muted small">Última actualización por <?= esc($user['updated_by_name'] ?? 'Usuario desconocido') ?> el <?= esc(date('d/m/Y H:i', strtotime($user['updated_at']))) ?></span>
-</div>
-<?php endif; ?>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

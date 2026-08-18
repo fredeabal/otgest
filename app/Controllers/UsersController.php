@@ -125,7 +125,6 @@ class UsersController extends BaseController
             'kiosk_token' => $this->request->getPost('kiosk_token') ?: bin2hex(random_bytes(16)),
             'created_at' => Time::now('Europe/Madrid', 'es_ES'),
             'permissions' => $permissions ? json_encode($permissions) : null, // Guardar como JSON
-            'updated_by' => session()->get('user_id'),
         ]);
 
         // Redirigir con mensaje de éxito
@@ -155,9 +154,8 @@ class UsersController extends BaseController
     // =================================================================================
     public function show($id)
     {
-        $user = $this->usersModel->select('users.*, roles.name as role_name, updater.name as updated_by_name')
+        $user = $this->usersModel->select('users.*, roles.name as role_name')
             ->join('roles', 'roles.id = users.role_id', 'left')
-            ->join('users as updater', 'updater.id = users.updated_by', 'left')
             ->find($id);
 
         if (!$user) {
@@ -179,9 +177,7 @@ class UsersController extends BaseController
         // Obtener el usuario logueado
         $user = session()->get('user');
         // Obtener el usuario por ID y unir con la tabla de usuarios para obtener el nombre del último actualizador
-        $user = $this->usersModel->select('users.*, updater.name as updated_by_name')
-            ->join('users as updater', 'updater.id = users.updated_by', 'left')
-            ->find($id);
+        $user = $this->usersModel->find($id);
         // Verificar si el usuario existe
         if (!$user) {
             return redirect()->to('/users/list')->with('errors', ['Usuario no encontrado.']);
@@ -290,7 +286,6 @@ class UsersController extends BaseController
             'max_daily_hours' => $this->request->getPost('max_daily_hours'),
             'vacation_days' => $this->request->getPost('vacation_days'),
             'email' => $this->request->getPost('email'),
-            'updated_by' => session()->get('user_id'),
         ];
         if ($this->request->getPost('password')) {
             $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
@@ -553,9 +548,7 @@ class UsersController extends BaseController
             return redirect()->to('/users/list')->with('errors', ['No se puede eliminar al Administrador Principal.']);
         }
 
-        $user = session()->get('user_id');
         $data = [
-            'updated_by' => $user,
             'deleted_at' => Time::now('Europe/Madrid', 'es_ES')
         ];
         // Solo actualiza si hay datos válidos

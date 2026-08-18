@@ -86,9 +86,7 @@ class RolesController extends BaseController
         //titulo de la pagina
         $data['title'] = 'Editar rol';
         // Obtener el rol con el nombre del usuario que lo actualizó
-        $role = $this->rolesModel->select('roles.*, updater.name as updated_by_name')
-            ->join('users as updater', 'updater.id = roles.updated_by', 'left')
-            ->find($id);
+        $role = $this->rolesModel->find($id);
         if (!$role) {
             return redirect()->to('/roles/list')->with('errors', ['Rol no encontrado.']);
         }
@@ -129,8 +127,7 @@ class RolesController extends BaseController
         // Actualizar el rol
         $this->rolesModel->update($id, [
             'name' => $this->request->getPost('name'),
-            'permissions' => json_encode($permissions),
-            'updated_by' => session()->get('user_id')
+            'permissions' => json_encode($permissions)
         ]);
         return redirect()->to('/roles/list')->with('success', 'Rol actualizado correctamente.');
     }

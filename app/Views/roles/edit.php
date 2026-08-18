@@ -185,10 +185,4 @@
         </div>
     </div>
 
-<!-- usuario que lo modifico -->
-<?php if ($role['updated_by']): ?>
-<div class="container mt-n3 d-none d-md-block">
-    <span class="text-muted small">Última actualización por: <?= esc($role['updated_by_name'] ?? 'Usuario desconocido') ?> el <?= esc(date('d/m/Y H:i', strtotime($role['updated_at']))) ?></span>
-</div>
-<?php endif; ?>
 </div>

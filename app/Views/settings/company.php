@@ -71,17 +71,5 @@
         </div>
     </div>
 
-    <?php if (isset($company['updated_at']) && $company['updated_at'] != $company['created_at']): ?>
-    <div class="row mb-5 text-center mt-2">
-        <div class="col-md-12">
-            <small class="text-muted">
-                Última modificación el
-                <?= esc(date('d/m/Y H:i', strtotime($company['updated_at']))) ?>
-                <?php if (isset($company['updated_by_name'])): ?>
-                por <?= esc($company['updated_by_name']) ?>
-                <?php endif; ?>
-            </small>
-        </div>
-    </div>
-    <?php endif; ?>
+
 </div>

@@ -24,11 +24,7 @@ class SettingsController extends BaseController
         }
 
         $company = $this->companyModel->getCompany();
-        if ($company && $company['updated_by']) {
-            $userModel = new \App\Models\UsersModel();
-            $updater = $userModel->find($company['updated_by']);
-            $company['updated_by_name'] = $updater ? $updater['name'] : 'Usuario desconocido';
-        }
+
         
         $data['company'] = $company;
         $data['title'] = 'Configuración de Empresa';
@@ -96,7 +92,6 @@ class SettingsController extends BaseController
             'phone' => $this->request->getPost('phone') ?: null,
             'email' => $this->request->getPost('email') ?: null,
             'website' => $this->request->getPost('website') ?: null,
-            'updated_by' => session()->get('user_id'),
         ];
 
         $this->companyModel->saveCompany($companyData);
@@ -131,7 +126,6 @@ class SettingsController extends BaseController
             'smtp_crypto' => $this->request->getPost('smtp_crypto') ?: null,
             'smtp_from_email' => $this->request->getPost('smtp_from_email') ?: null,
             'smtp_from_name' => $this->request->getPost('smtp_from_name') ?: null,
-            'updated_by' => session()->get('user_id'),
         ];
 
         $newSmtpPass = $this->request->getPost('smtp_pass');
