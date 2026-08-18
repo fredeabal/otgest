@@ -67,7 +67,7 @@
             </div>
             <!-- Fin de buscador -->
 
-            <div class="mb-4 border rounded-1">
+            <div class="mb-4 border rounded-1 table-responsive">
                 <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
@@ -103,17 +103,17 @@
                                 <?php
                                     $actionClass = 'bg-primary-subtle text-primary border-primary';
                                     switch($log['action']) {
-                                        case 'CREATE': $actionClass = 'bg-success-subtle text-success border-success'; break;
-                                        case 'UPDATE': $actionClass = 'bg-info-subtle text-info border-info'; break;
-                                        case 'DELETE': $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
-                                        case 'LOGIN': $actionClass = 'bg-primary-subtle text-primary border-primary'; break;
-                                        case 'START_WORKDAY': $actionClass = 'bg-success-subtle text-success border-success'; break;
-                                        case 'PAUSE_WORKDAY': $actionClass = 'bg-warning-subtle text-warning border-warning'; break;
+                                        case 'CREATE':         $actionClass = 'bg-success-subtle text-success border-success'; break;
+                                        case 'UPDATE':         $actionClass = 'bg-info-subtle text-info border-info'; break;
+                                        case 'DELETE':         $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
+                                        case 'LOGIN':          $actionClass = 'bg-primary-subtle text-primary border-primary'; break;
+                                        case 'START_WORKDAY':  $actionClass = 'bg-success-subtle text-success border-success'; break;
+                                        case 'PAUSE_WORKDAY':  $actionClass = 'bg-warning-subtle text-warning border-warning'; break;
                                         case 'RESUME_WORKDAY': $actionClass = 'bg-info-subtle text-info border-info'; break;
-                                        case 'END_WORKDAY': $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
-                                        case 'AUTO_CLOSE': $actionClass = 'bg-secondary-subtle text-secondary border-secondary'; break;
-                                        case 'APPROVE': $actionClass = 'bg-success-subtle text-success border-success'; break;
-                                        case 'REJECT': $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
+                                        case 'END_WORKDAY':    $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
+                                        case 'AUTO_CLOSE':     $actionClass = 'bg-secondary-subtle text-secondary border-secondary'; break;
+                                        case 'APPROVE':        $actionClass = 'bg-success-subtle text-success border-success'; break;
+                                        case 'REJECT':         $actionClass = 'bg-danger-subtle text-danger border-danger'; break;
                                     }
                                 ?>
                                 <span class="badge <?= $actionClass ?> fw-semibold text-small border fs-2 w-100px-inline">
