@@ -30,6 +30,7 @@
 <script src="<?= base_url() ?>assets/js/utils.js"></script>
 <script src="<?= base_url() ?>assets/js/absences.js"></script>
 <script src="<?= base_url() ?>assets/js/workdays.js"></script>
+<script src="<?= base_url() ?>assets/js/logs-table.js"></script>
 
 <!-- Bootstrap Datepicker (formularios de creación/edición) -->
 <script src="<?= base_url() ?>assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>

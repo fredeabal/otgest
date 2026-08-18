@@ -1,4 +1,55 @@
 /**
  * logs-table.js
- * Reservado para futura lógica de la tabla de logs.
+ * Lógica de la tabla de logs.
  */
+
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('logTableSearch');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('keyup', function() {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.table tbody tr');
+
+        let visibleRows = 0;
+        let noRecordsRow = null;
+
+        rows.forEach(row => {
+            // Skip the "no records" placeholder if it's there
+            if (row.children.length === 1 && row.children[0].hasAttribute('colspan')) {
+                noRecordsRow = row;
+                row.style.display = 'none'; // We'll handle this row explicitly below
+                return;
+            }
+
+            const textContent = row.textContent.toLowerCase();
+            if (textContent.includes(filter)) {
+                row.style.display = '';
+                visibleRows++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Handle the "No records found" message dynamically
+        const tbody = document.querySelector('.table tbody');
+        let dynamicNoRecordsRow = tbody.querySelector('.dynamic-no-records');
+
+        if (visibleRows === 0 && rows.length > 0) {
+            if (!dynamicNoRecordsRow) {
+                dynamicNoRecordsRow = document.createElement('tr');
+                dynamicNoRecordsRow.className = 'dynamic-no-records';
+                dynamicNoRecordsRow.innerHTML = '<td colspan="6" class="text-center">No hay registros que coincidan con la búsqueda.</td>';
+                tbody.appendChild(dynamicNoRecordsRow);
+            } else {
+                dynamicNoRecordsRow.style.display = '';
+            }
+        } else if (dynamicNoRecordsRow) {
+            dynamicNoRecordsRow.style.display = 'none';
+        }
+        
+        if (noRecordsRow && rows.length === 1) {
+            noRecordsRow.style.display = '';
+        }
+    });
+});
