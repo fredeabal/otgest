@@ -10,15 +10,17 @@ use App\Models\UsersModel;
 use App\Models\DocumentsModel;
 use App\Models\AbsenceModel;
 use App\Models\ExpenseModel;
+use App\Models\ActivityLogModel;
 
 class DashboardController extends BaseController
 {
     // Modelos utilizados para acceder a los datos del sistema
-    protected $usersModel;      // Gestión de usuarios
-    protected $documentsModel;  // Gestión de documentos
-    protected $absenceModel;    // Gestión de ausencias
-    protected $expenseModel;    // Gestión de gastos
-    protected $workdayModel;    // Gestión de jornadas laborales
+    protected $usersModel;       // Gestión de usuarios
+    protected $documentsModel;   // Gestión de documentos
+    protected $absenceModel;     // Gestión de ausencias
+    protected $expenseModel;     // Gestión de gastos
+    protected $workdayModel;     // Gestión de jornadas laborales
+    protected $activityLogModel; // Registro de actividad del sistema
 
     // =================================================================================
     // Constructor - Inicialización de modelos
@@ -26,11 +28,12 @@ class DashboardController extends BaseController
     public function __construct()
     {
         // Inicializar modelos para acceso a datos
-        $this->usersModel = new UsersModel();
-        $this->documentsModel = new DocumentsModel();
-        $this->absenceModel = new AbsenceModel();
-        $this->expenseModel = new ExpenseModel();
-        $this->workdayModel = new WorkdayModel();
+        $this->usersModel       = new UsersModel();
+        $this->documentsModel   = new DocumentsModel();
+        $this->absenceModel     = new AbsenceModel();
+        $this->expenseModel     = new ExpenseModel();
+        $this->workdayModel     = new WorkdayModel();
+        $this->activityLogModel = new ActivityLogModel();
     }
 
     // =================================================================================
@@ -262,31 +265,13 @@ class DashboardController extends BaseController
                     })
                     ->limit(5)->get()->getResultArray();
 
-                // 1. Obtener últimas Ausencias
-                $absences = $this->absenceModel->select('users.name, absences.type, absences.created_at')
-                    ->join('users', 'users.id = absences.user_id')
-                    ->orderBy('absences.created_at', 'DESC')->limit(10)->findAll();
-                foreach($absences as &$a) $a['category'] = 'absence';
-
-                // 2. Obtener últimos Gastos
-                $expenses = $this->expenseModel->select('users.name, expenses.reason as type, expenses.created_at')
-                    ->join('users', 'users.id = expenses.user_id')
-                    ->orderBy('expenses.created_at', 'DESC')->limit(10)->findAll();
-                foreach($expenses as &$e) $e['category'] = 'expense';
-
-                // 3. Obtener últimos Documentos
-                $documents = $this->documentsModel->select('users.name, documents.title as type, documents.created_at')
-                    ->join('users', 'users.id = documents.sender_id')
-                    ->orderBy('documents.created_at', 'DESC')->limit(10)->findAll();
-                foreach($documents as &$d) $d['category'] = 'document';
-
-                // Unificación y ordenamiento cronológico
-                $timeline = array_merge($absences, $expenses, $documents);
-                usort($timeline, function($a, $b) { 
-                    return strtotime($b['created_at'] ?? '0') - strtotime($a['created_at'] ?? '0'); 
-                });
-                
-                $stats['activity_timeline'] = array_slice($timeline, 0, 5);
+                // Obtener últimos movimientos desde el registro de actividad
+                $stats['activity_timeline'] = $this->activityLogModel
+                    ->select('activity_logs.description, activity_logs.module, activity_logs.created_at, users.name')
+                    ->join('users', 'users.id = activity_logs.user_id', 'left')
+                    ->orderBy('activity_logs.created_at', 'DESC')
+                    ->limit(4)
+                    ->findAll();
             } else {
                 // Estadísticas para usuarios no admin con permisos limitados
                 if (has_permission('absences.manage')) {

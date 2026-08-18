@@ -1131,3 +1131,26 @@
     }
 }
 
+
+/* =========================================================================
+   Dashboard - Timeline de Últimos Movimientos
+   ========================================================================= */
+.text-truncate-timeline {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timeline-module-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background-color: rgba(var(--bs-primary-rgb), 0.12);
+    color: var(--bs-primary);
+    margin-bottom: 3px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}

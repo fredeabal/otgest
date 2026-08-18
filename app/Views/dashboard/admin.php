@@ -146,7 +146,7 @@
                         <?php if(!empty($stats['activity_timeline'])): ?>
                             <?php foreach($stats['activity_timeline'] as $item): ?>
                                 <div class="timeline-item d-flex mb-4">
-                                    <div class="timeline-time text-muted fs-2" style="width: 50px;">
+                                    <div class="timeline-time text-muted fs-2">
                                         <?= date('H:i', strtotime($item['created_at'])) ?>
                                     </div>
                                     <div class="timeline-badge-wrap d-flex flex-column align-items-center mx-3">
@@ -154,9 +154,10 @@
                                         <span class="timeline-line flex-grow-1 bg-light"></span>
                                     </div>
                                     <div class="timeline-desc">
-                                        <h6 class="fw-bold mb-0 fs-2" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= esc($item['name']) ?></h6>
-                                        <p class="fs-1 mb-0 fw-medium text-primary">
-                                            <?= esc($item['type']) ?>
+                                        <small class="text-primary fw-bold"><?= esc($item['module']) ?></small>
+                                        <h6 class="fw-bold mb-0 fs-2 text-truncate-timeline"><?= esc($item['name']) ?></h6>
+                                        <p class="fs-1 mb-0 text-muted">
+                                            <?= esc($item['description']) ?>
                                         </p>
                                     </div>
                                 </div>
