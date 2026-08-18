@@ -85,7 +85,9 @@ class AuthController extends BaseController
                 'user_avatar' => $user['avatar'],
                 'user_theme' => $user['theme'],
                 'isLoggedIn' => true,
-                'user_permissions' => isset($user['permissions']) ? json_decode($user['permissions'], true) : [],
+                'user_permissions' => !empty($user['permissions']) 
+                                        ? json_decode($user['permissions'], true) 
+                                        : (isset($user['role_permissions']) ? json_decode($user['role_permissions'], true) : []),
             ]);
 
             // Actualizar último login

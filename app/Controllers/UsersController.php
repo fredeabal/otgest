@@ -157,7 +157,7 @@ class UsersController extends BaseController
     // =================================================================================
     public function show($id)
     {
-        $user = $this->usersModel->select('users.*, roles.name as role_name')
+        $user = $this->usersModel->select('users.*, roles.name as role_name, roles.permissions as role_permissions')
             ->join('roles', 'roles.id = users.role_id', 'left')
             ->find($id);
 

@@ -33,7 +33,7 @@ class UsersModel extends Model
     public function findActiveByEmail($email)
     {
         // Solo usuarios activos
-        return $this->select('users.*, roles.name as role_name')
+        return $this->select('users.*, roles.name as role_name, roles.permissions as role_permissions')
                     ->join('roles', 'roles.id = users.role_id')
                     ->where('users.email', $email)
                     ->where('users.is_active', 1)

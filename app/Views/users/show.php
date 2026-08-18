@@ -104,8 +104,11 @@
                     // Permisos modulares (Granulares)
                     // ================================================================================= -->
                     <?php
-                    // Decodificar los permisos actuales del usuario
-                    $userPermissions = isset($user['permissions']) ? json_decode($user['permissions'], true) : [];
+                    // Permisos individuales del usuario; si no tiene, hereda los del rol
+                    $userPermissions = isset($user['permissions']) ? json_decode($user['permissions'], true) : null;
+                    if (empty($userPermissions)) {
+                        $userPermissions = isset($user['role_permissions']) ? json_decode($user['role_permissions'], true) : [];
+                    }
                     if (!is_array($userPermissions)) $userPermissions = [];
                     ?>
                     <div class="my-4" id="permissions-block">
