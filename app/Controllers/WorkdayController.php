@@ -796,12 +796,14 @@ class WorkdayController extends BaseController
             .total-row { background-color: #fff3cd; font-weight: bold; }
             .status-completed { background-color: #d4edda; color: #155724; }
             .status-in_progress { background-color: #fff3cd; color: #856404; }
+            .status-pause { background-color: #d1ecf1; color: #0c5460; }
         </style>';
 
         // Cabecera con información general
         $statusText = [
             'completed' => 'Completadas',
             'in_progress' => 'En Progreso',
+            'pause' => 'En Pausa',
             '' => 'Todas'
         ];
 
@@ -859,7 +861,7 @@ class WorkdayController extends BaseController
                 <td style="text-align: center;">' . $breakFormatted . '</td>
                 <td style="text-align: center;">' . $overtimeHoursFormatted . '</td>
                 <td style="text-align: center;">' . $dailyHoursFormatted . '</td>
-                <td style="text-align: center;">' . ($workday['status'] === 'completed' ? 'Completada' : 'En Progreso') . '</td>
+                <td style="text-align: center;">' . ($workday['status'] === 'completed' ? 'Completada' : ($workday['status'] === 'pause' ? 'En pausa' : 'En Progreso')) . '</td>
                 <td style="text-align: center;">' . ($workday['autoclose'] ? 'Sí' : 'No') . '</td>
             </tr>';
         }
@@ -949,12 +951,14 @@ class WorkdayController extends BaseController
             .total-row { background-color: #fff3cd; font-weight: bold; }
             .status-completed { background-color: #d4edda; color: #155724; }
             .status-in_progress { background-color: #fff3cd; color: #856404; }
+            .status-pause { background-color: #d1ecf1; color: #0c5460; }
         </style>';
 
         // Cabecera
         $statusText = [
-            'completed' => 'Completadas',
-            'in_progress' => 'En Progreso',
+            'completed' => 'Completada',
+            'in_progress' => 'En curso',
+            'pause' => 'En pausa',
             '' => 'Todas'
         ];
 
@@ -1017,7 +1021,7 @@ class WorkdayController extends BaseController
                 <td style="text-align: center;">' . $breakFormatted . '</td>
                 <td style="text-align: center;">' . $overtimeHoursFormatted . '</td>
                 <td style="text-align: center;">' . $dailyHoursFormatted . '</td>
-                <td style="text-align: center;">' . ($workday['status'] === 'completed' ? 'Completada' : 'En Progreso') . '</td>
+                <td style="text-align: center;">' . ($workday['status'] === 'completed' ? 'Completada' : ($workday['status'] === 'pause' ? 'En pausa' : 'En Progreso')) . '</td>
                 <td style="text-align: center;">' . ($workday['autoclose'] ? 'Sí' : 'No') . '</td>
             </tr>';
         }
@@ -1155,7 +1159,7 @@ class WorkdayController extends BaseController
     {
         $workday = calculate_workday_data($date, $events, $userDailyHours);
         
-        if ($workday && $workday['status'] === 'in_progress' && !$workday['autoclose']) {
+        if ($workday && in_array($workday['status'], ['in_progress', 'pause']) && !$workday['autoclose']) {
             $user = $this->userModel->find($userId);
             $maxDailyHours = $user['max_daily_hours'] ?? 8;
             if ($workday['total_hours'] >= $maxDailyHours) {

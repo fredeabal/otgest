@@ -68,7 +68,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="<?= base_url('workdays/manage?date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+            <a href="<?= base_url('workdays/manage?status=pause&date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center mx-auto mb-3">
                         <i class="ti ti-player-pause fs-30px"></i>

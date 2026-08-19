@@ -66,7 +66,11 @@ if (!function_exists('calculate_workday_data')) {
         if ($startTime && $endTime) {
             $status = 'completed';  // Jornada completa (entrada y salida)
         } elseif ($startTime) {
-            $status = 'in_progress'; // Jornada en progreso (solo entrada)
+            if ($breakStart) {
+                $status = 'pause'; // Jornada en pausa
+            } else {
+                $status = 'in_progress'; // Jornada en progreso (solo entrada)
+            }
         } else {
             return null;  // Jornada inválida (sin entrada)
         }

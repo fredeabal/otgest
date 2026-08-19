@@ -28,6 +28,7 @@
                         <option value="">Todos los estados</option>
                         <option value="completed" <?= ($status ?? '') === 'completed' ? 'selected' : '' ?>>Completada</option>
                         <option value="in_progress" <?= ($status ?? '') === 'in_progress' ? 'selected' : '' ?>>En progreso</option>
+                        <option value="pause" <?= ($status ?? '') === 'pause' ? 'selected' : '' ?>>En pausa</option>
                     </select>
                 </div>
                 <div class="col-md-3 d-flex align-items-end gap-2">
@@ -119,11 +120,13 @@
                                 <?php
                                 $statusClass = [
                                     'completed' => 'success',
-                                    'in_progress' => 'warning'
+                                    'in_progress' => 'warning',
+                                    'pause' => 'info'
                                 ];
                                 $statusText = [
                                     'completed' => 'Completada',
-                                    'in_progress' => 'En curso'
+                                    'in_progress' => 'En curso',
+                                    'pause' => 'En pausa'
                                 ];
                                 ?>
                                 <span class="badge bg-<?= $statusClass[$workday['status']] ?? 'secondary' ?>-subtle text-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fw-semibold border border-<?= $statusClass[$workday['status']] ?? 'secondary' ?> fs-2 w-100px-inline">
