@@ -164,6 +164,7 @@
                                         <i class="ti ti-dots-vertical fs-7"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <?php if ($expense['status'] === 'pending'): ?>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3 approve-expense-swal"
                                                 href="#"
@@ -179,6 +180,7 @@
                                                 <i class="ti ti-circle-x"></i>Rechazar
                                             </a>
                                         </li>
+                                        <?php endif; ?>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="<?= base_url('expenses/view/' . $expense['id']) ?>">
