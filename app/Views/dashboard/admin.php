@@ -57,7 +57,7 @@
     -->
     <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <a href="<?= base_url('workdays/manage?date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+            <a href="<?= base_url('workdays/manage?status=in_progress&date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center mx-auto mb-3">
                         <i class="ti ti-player-play fs-30px"></i>
