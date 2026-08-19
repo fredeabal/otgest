@@ -76,12 +76,12 @@ class DashboardController extends BaseController
             $groupedEvents[$event['workday_date']][] = $event;
         }
 
-        // Calcular jornadas completadas
+        // Calcular jornadas completadas y en curso
         $totalHours = 0;
         $workdaysCount = 0;
         foreach ($groupedEvents as $date => $events) {
             $workday = calculate_workday_data($date, $events, $userDailyHours);
-            if ($workday && $workday['status'] === 'completed') {
+            if ($workday && in_array($workday['status'], ['completed', 'in_progress'])) {
                 $totalHours += $workday['total_hours'];
                 $workdaysCount++;
             }

@@ -202,8 +202,8 @@ class ExpenseController extends BaseController
         $this->expenseModel->update($id, [
             'status' => 'approved',
             'approved_by' => session()->get('user_id'),
-            'approved_at' => Time::now('Europe/Madrid', 'es_ES'),
-            'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
+            'approved_at' => Time::now('Europe/Madrid', 'es_ES')->toDateTimeString(),
+            'updated_at' => Time::now('Europe/Madrid', 'es_ES')->toDateTimeString(),
         ]);
 
         log_activity('Gastos', 'APPROVE', "Aprobó el gasto ID: {$id}");
@@ -229,8 +229,8 @@ class ExpenseController extends BaseController
         $this->expenseModel->update($id, [
             'status' => 'rejected',
             'approved_by' => session()->get('user_id'),
-            'approved_at' => Time::now('Europe/Madrid', 'es_ES'),
-            'updated_at' => Time::now('Europe/Madrid', 'es_ES'),
+            'approved_at' => Time::now('Europe/Madrid', 'es_ES')->toDateTimeString(),
+            'updated_at' => Time::now('Europe/Madrid', 'es_ES')->toDateTimeString(),
         ]);
 
         log_activity('Gastos', 'REJECT', "Rechazó el gasto ID: {$id}");

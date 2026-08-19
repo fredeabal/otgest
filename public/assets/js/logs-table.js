@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", function() {
         let noRecordsRow = null;
 
         rows.forEach(row => {
-            // Skip the "no records" placeholder if it's there
+            // Saltar el marcador de "sin registros" si está presente
             if (row.children.length === 1 && row.children[0].hasAttribute('colspan')) {
                 noRecordsRow = row;
-                row.style.display = 'none'; // We'll handle this row explicitly below
+                row.style.display = 'none'; // Se manejará explícitamente esta fila más abajo
                 return;
             }
 
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        // Handle the "No records found" message dynamically
+        // Mostrar el mensaje "Sin registros encontrados" dinámicamente
         const tbody = document.querySelector('.table tbody');
         let dynamicNoRecordsRow = tbody.querySelector('.dynamic-no-records');
 
