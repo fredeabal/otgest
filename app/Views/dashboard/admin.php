@@ -79,7 +79,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="<?= base_url('absences/list?type=&status=&date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+            <a href="<?= base_url('absences/manage?status=approved&date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center mx-auto mb-3">
                         <i class="ti ti-alarm-off fs-30px"></i>
