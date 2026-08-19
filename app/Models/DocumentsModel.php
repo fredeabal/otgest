@@ -35,7 +35,7 @@ class DocumentsModel extends Model
     public function getSentDocumentsQuery($userId)
     {
         return $this->select('documents.*, users.name as receiver_name, users.email as receiver_email, users.identification as receiver_identification')
-                    ->join('users', 'users.id = documents.receiver_id')
+                    ->join('users', 'users.id = documents.receiver_id', 'left')
                     ->where('documents.sender_id', $userId)
                     ->orderBy('documents.created_at', 'DESC');
     }
@@ -45,7 +45,7 @@ class DocumentsModel extends Model
     public function getReceivedDocumentsQuery($userId)
     {
         return $this->select('documents.*, users.name as sender_name, users.email as sender_email, users.identification as sender_identification')
-                    ->join('users', 'users.id = documents.sender_id')
+                    ->join('users', 'users.id = documents.sender_id', 'left')
                     ->where('documents.receiver_id', $userId)
                     ->orderBy('documents.created_at', 'DESC');
     }

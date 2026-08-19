@@ -14,60 +14,39 @@
     <div class="row g-4 mb-4">
         <!-- Docs Pendientes -->
         <div class="col-md-4">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <i class="ti ti-file-plus fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-primary"><?= $stats['docs_pending_read'] ?? 0 ?></h2>
+            <a href="<?= base_url('documents/list') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-file-plus fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Documentos Pendientes</p>
-                    <div class="pt-3 border-top text-end">
-                        <a href="<?= base_url('documents/list') ?>" class="text-primary text-decoration-none fw-bold small transition-hover">
-                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-primary"><?= $stats['docs_pending_read'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Documentos Pendientes</p>
                 </div>
-            </div>
+            </a>
         </div>
         <!-- Ausencias Pendientes -->
         <div class="col-md-4">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <i class="ti ti-bell-ringing fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-primary"><?= $stats['absences_pending'] ?? 0 ?></h2>
+            <a href="<?= base_url('absences/manage') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-info-subtle text-info d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-bell-ringing fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Ausencias Pendientes</p>
-                    <div class="pt-3 border-top text-end">
-                        <a href="<?= base_url('absences/manage') ?>" class="text-primary text-decoration-none fw-bold small transition-hover">
-                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-info"><?= $stats['absences_pending'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Ausencias Pendientes</p>
                 </div>
-            </div>
+            </a>
         </div>
         <!-- Gastos Pendientes -->
         <div class="col-md-4">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <i class="ti ti-receipt fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-primary"><?= $stats['expenses_pending'] ?? 0 ?></h2>
+            <a href="<?= base_url('expenses/manage') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-secondary-subtle text-secondary d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-receipt fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Gastos Pendientes</p>
-                    <div class="pt-3 border-top text-end">
-                        <a href="<?= base_url('expenses/manage') ?>" class="text-primary text-decoration-none fw-bold small transition-hover">
-                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-secondary"><?= $stats['expenses_pending'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Gastos Pendientes</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -78,7 +57,7 @@
     -->
     <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <div class="card h-100 border shadow-none bg-white">
+            <a href="<?= base_url('workdays/manage?date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center mx-auto mb-3">
                         <i class="ti ti-player-play fs-30px"></i>
@@ -86,10 +65,10 @@
                     <h2 class="fw-bold mb-1 text-success"><?= $stats['users_active'] ?? 0 ?></h2>
                     <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm" >Usuarios Activos</p>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 border shadow-none bg-white">
+            <a href="<?= base_url('workdays/manage?date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center mx-auto mb-3">
                         <i class="ti ti-player-pause fs-30px"></i>
@@ -97,10 +76,10 @@
                     <h2 class="fw-bold mb-1 text-warning"><?= $stats['users_break'] ?? 0 ?></h2>
                     <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm" >Usuarios En Pausa</p>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 border shadow-none bg-white">
+            <a href="<?= base_url('absences/list?type=&status=&date_from=' . date('Y-m-d') . '&date_to=' . date('Y-m-d')) ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
                 <div class="card-body p-4 text-center">
                     <div class="round-50 rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center mx-auto mb-3">
                         <i class="ti ti-alarm-off fs-30px"></i>
@@ -108,7 +87,7 @@
                     <h2 class="fw-bold mb-1 text-danger"><?= $stats['absences_today'] ?? 0 ?></h2>
                     <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm" >Ausencias Hoy</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

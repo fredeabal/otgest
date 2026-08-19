@@ -121,7 +121,8 @@ class DashboardController extends BaseController
             // Combinar consultas en una sola consulta agrupada
             $documentsQuery = $this->documentsModel->builder()
                 ->select('sender_id, receiver_id, COUNT(*) as count')
-                ->where("sender_id = {$userId} OR receiver_id = {$userId}")
+                ->where('deleted_at IS NULL')
+                ->where("(sender_id = {$userId} OR receiver_id = {$userId})")
                 ->groupBy('sender_id, receiver_id')
                 ->get();
 

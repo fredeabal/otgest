@@ -119,82 +119,54 @@
     <div class="row g-4 mb-5">
         <!-- Mis Documentos Enviados -->
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-info-subtle text-info d-flex align-items-center justify-content-center">
-                            <i class="ti ti-plane fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-info"><?= $stats['my_sent_documents'] ?? 0 ?></h2>
+            <a href="<?= base_url('documents/sent') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-info-subtle text-info d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-plane fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Documentos Enviados</p>
-                    <div class="pt-3 border-top">
-                        <a href="<?= base_url('documents/sent') ?>" class="text-info text-decoration-none fw-bold small transition-hover d-flex align-items-center justify-content-end">
-                            Gestionar <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-info"><?= $stats['my_sent_documents'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Documentos Enviados</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Mis Documentos Recibidos -->
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center">
-                            <i class="ti ti-inbox fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-warning"><?= $stats['my_received_documents'] ?? 0 ?></h2>
+            <a href="<?= base_url('documents/list') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-inbox fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Documentos Recibidos</p>
-                    <div class="pt-3 border-top">
-                        <a href="<?= base_url('documents/list') ?>" class="text-warning text-decoration-none fw-bold small transition-hover d-flex align-items-center justify-content-end">
-                            Ver bandeja <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-warning"><?= $stats['my_received_documents'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Documentos Recibidos</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Solicitudes Aceptadas -->
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center">
-                            <i class="ti ti-thumb-up fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-success"><?= $stats['my_absences_approved'] ?? 0 ?></h2>
+            <a href="<?= base_url('absences/list?status=approved') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-thumb-up fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Solicitudes Aceptadas</p>
-                    <div class="pt-3 border-top">
-                        <a href="<?= base_url('absences/list?status=approved') ?>" class="text-success text-decoration-none fw-bold small transition-hover d-flex align-items-center justify-content-end">
-                            Ver historial <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-success"><?= $stats['my_absences_approved'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Solicitudes Aceptadas</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Solicitudes Rechazadas -->
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 border shadow-none bg-white">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="round-45 rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center">
-                            <i class="ti ti-thumb-down fs-24px"></i>
-                        </div>
-                        <h2 class="fw-bold mb-0 text-danger"><?= $stats['my_absences_rejected'] ?? 0 ?></h2>
+            <a href="<?= base_url('absences/list?status=rejected') ?>" class="card h-100 border shadow-none bg-white text-decoration-none transition-hover d-block">
+                <div class="card-body p-4 text-center">
+                    <div class="round-50 rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <i class="ti ti-thumb-down fs-30px"></i>
                     </div>
-                    <p class="text-muted fw-bold mb-3 small text-uppercase text-xs letter-spacing-sm" >Solicitudes Rechazadas</p>
-                    <div class="pt-3 border-top">
-                        <a href="<?= base_url('absences/list?status=rejected') ?>" class="text-danger text-decoration-none fw-bold small transition-hover d-flex align-items-center justify-content-end">
-                            Ver rechazos <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    <h2 class="fw-bold mb-1 text-danger"><?= $stats['my_absences_rejected'] ?? 0 ?></h2>
+                    <p class="text-muted fw-bold mb-0 text-uppercase small text-xs letter-spacing-sm">Solicitudes Rechazadas</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

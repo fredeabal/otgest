@@ -559,14 +559,10 @@ class UsersController extends BaseController
             return redirect()->to('/users/list')->with('errors', ['No se puede eliminar al Administrador Principal.']);
         }
 
-        $data = [
-            'deleted_at' => Time::now('Europe/Madrid', 'es_ES')
-        ];
-        // Solo actualiza si hay datos válidos
-        if (!empty($data)) {
-            $this->usersModel->update($id, $data);
-            log_activity('Usuarios', 'DELETE', "Eliminó al usuario ID: {$id}");
-        }
+        // Eliminar usando el método nativo delete() que maneja el soft delete automáticamente
+        $this->usersModel->delete($id);
+        log_activity('Usuarios', 'DELETE', "Eliminó al usuario ID: {$id}");
+        
         return redirect()->to('/users/list')->with('success', 'Usuario eliminado correctamente.');
     }
 

@@ -322,13 +322,13 @@ class DocumentsController extends BaseController
         $document = $this->documentsModel->where('id', $id)->where('(receiver_id = ' . $userId . ' OR sender_id = ' . $userId . ')')->first();
 
         if (!$document) {
-            return redirect()->to('/documents/list')->with('errors', ['Documento no encontrado o no tienes permisos.']);
+            return redirect()->back()->with('errors', ['Documento no encontrado o no tienes permisos.']);
         }
 
         $filePath = WRITEPATH . 'uploads/documents/' . $document['receiver_id'] . '/' . $document['file_path'];
 
         if (!is_file($filePath)) {
-            return redirect()->to('/documents/list')->with('errors', ['Archivo no encontrado.']);
+            return redirect()->back()->with('errors', ['Archivo no encontrado.']);
         }
 
         // Marcar como leído solo si no lo está y el usuario es el destinatario
@@ -361,13 +361,13 @@ class DocumentsController extends BaseController
         $document = $this->documentsModel->where('id', $id)->where('(receiver_id = ' . $userId . ' OR sender_id = ' . $userId . ')')->first();
 
         if (!$document) {
-            return redirect()->to('/documents/list')->with('errors', ['Documento no encontrado o no tienes permisos.']);
+            return redirect()->back()->with('errors', ['Documento no encontrado o no tienes permisos.']);
         }
 
         $filePath = WRITEPATH . 'uploads/documents/' . $document['receiver_id'] . '/' . $document['file_path'];
 
         if (!is_file($filePath)) {
-            return redirect()->to('/documents/list')->with('errors', ['Archivo no encontrado.']);
+            return redirect()->back()->with('errors', ['Archivo no encontrado.']);
         }
 
         // Marcar como leído solo si no lo está y el usuario es el destinatario
