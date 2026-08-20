@@ -14,8 +14,8 @@
             </div>
             <!-- fin de buscador de usuarios -->
 
-            <div class="mb-4 border rounded-1">
-                <table class="table text-nowrap mb-0 align-middle">
+            <div class="mb-4 border rounded-1 table-responsive">
+                <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -34,9 +34,9 @@
                         <?php else: ?>
                         <?php foreach ($users as $user): ?>
                         <tr onclick="window.location='<?= base_url('users/show/' . $user['id']) ?>'" class="cursor-pointer">
-                            <td>
+                            <td class="text-wrap text-md-nowrap">
                                 <div>
-                                    <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($user['name']) ?></h6>
+                                    <h6 class="fs-4 fw-semibold mb-0 mb-1" style="word-break: break-word;"><?= esc($user['name']) ?></h6>
                                     <span class="fw-normal text-muted small"><?= esc($user['identification']) ?></span>
                                 </div>
                             </td>
