@@ -14,16 +14,15 @@
             </div>
             <!-- fin de buscador de usuarios -->
 
-            <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
             <div class="mb-4 border rounded-1 table-responsive">
                 <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th class="">Email</th>
-                            <th class="text-center">Rol</th>
-                            <th class="text-center">Estado</th>
-                            <th class="text-center">Último login</th>
+                            <th class="d-none d-md-table-cell">Email</th>
+                            <th class="text-center d-none d-md-table-cell">Rol</th>
+                            <th class="text-center d-none d-md-table-cell">Estado</th>
+                            <th class="text-center d-none d-md-table-cell">Último login</th>
                             <th class=""></th>
                         </tr>
                     </thead>
@@ -41,16 +40,16 @@
                                     <span class="fw-normal text-muted small"><?= esc($user['identification']) ?></span>
                                 </div>
                             </td>
-                            <td class="">
+                            <td class="d-none d-md-table-cell">
                                 <?= esc($user['email']) ?>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-none d-md-table-cell">
                                 <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-100px-inline"
                                     >
                                     <?= esc($user['role_name']) ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-none d-md-table-cell">
                                 <?php if ($user['is_active'] == 1): ?>
                                 <span class="badge bg-success-subtle text-success fw-semibold border border-success fs-2 w-100px-inline"
                                     >Activo</span>
@@ -59,7 +58,7 @@
                                     >Inactivo</span>
                                 <?php endif; ?>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-none d-md-table-cell">
                                 <h6 class="fw-semibold mb-0 mb-1">
                                     <?= esc(date('d/m/Y', strtotime($user['last_login']))) ?></h6>
                                 <span
