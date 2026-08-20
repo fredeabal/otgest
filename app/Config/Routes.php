@@ -99,6 +99,7 @@ $routes->group('settings', ['filter' => 'permission:admin.company'], function($r
 $routes->group('logs', ['filter' => 'auth'], function ($routes) {
     $routes->get('list', 'ActivityLogController::index', ['filter' => 'permission:admin.logs']);
     $routes->get('export-pdf', 'ActivityLogController::exportPdf', ['filter' => 'permission:admin.logs']);
+    $routes->get('view/(:num)', 'ActivityLogController::view/$1', ['filter' => 'permission:admin.logs']);
 });
 // =================================================================================
 // Rutas de gestión de solicitudes de ausencia

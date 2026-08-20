@@ -85,7 +85,7 @@
                         </tr>
                         <?php else: ?>
                         <?php foreach ($logs as $log): ?>
-                        <tr>
+                        <tr onclick="window.location='<?= base_url('logs/view/' . $log['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <h6 class="fw-semibold mb-0 mb-1"><?= esc(date('d/m/Y', strtotime($log['created_at']))) ?></h6>
                                 <span class="fw-normal text-muted small"><?= esc(date('H:i', strtotime($log['created_at']))) ?></span>
@@ -98,22 +98,8 @@
                                     <?= esc($log['module']) ?>
                                 </span>
                             </td>
-                            <td style="max-width: 300px;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fw-normal text-truncate flex-grow-1">
-                                        <?= esc($log['description']) ?>
-                                    </span>
-                                    <?php if(mb_strlen($log['description']) > 40): ?>
-                                    <button type="button" class="btn btn-sm btn-light text-primary flex-shrink-0" 
-                                            onclick="showLogDetails(this)" 
-                                            data-desc="<?= esc($log['description']) ?>"
-                                            data-date="<?= esc(date('d/m/Y H:i', strtotime($log['created_at']))) ?>"
-                                            data-user="<?= esc($log['user_name'] ?? 'Sistema / Anónimo') ?>"
-                                            title="Ver descripción completa">
-                                        <i class="ti ti-eye"></i>
-                                    </button>
-                                    <?php endif; ?>
-                                </div>
+                            <td>
+                                <span class="fw-normal"><?= esc($log['description']) ?></span>
                             </td>
                             <td class="text-muted small">
                                 <?= esc($log['ip_address']) ?>
@@ -135,43 +121,3 @@
         </div>
     </div>
 </div>
-
-<!-- Modal Detalles del Log -->
-<div class="modal fade" id="logDetailsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detalle del Registro</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <span class="text-muted small uppercase fw-semibold">Fecha y Hora</span>
-                    <div id="logModalDate" class="fw-semibold"></div>
-                </div>
-                <div class="mb-3">
-                    <span class="text-muted small uppercase fw-semibold">Usuario</span>
-                    <div id="logModalUser" class="fw-semibold"></div>
-                </div>
-                <div class="mb-0">
-                    <span class="text-muted small uppercase fw-semibold">Descripción Completa</span>
-                    <div id="logModalDesc" class="p-3 bg-light rounded mt-1" style="white-space: pre-wrap;"></div>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function showLogDetails(btn) {
-    document.getElementById('logModalDate').innerText = btn.getAttribute('data-date');
-    document.getElementById('logModalUser').innerText = btn.getAttribute('data-user');
-    document.getElementById('logModalDesc').innerText = btn.getAttribute('data-desc');
-    
-    var modal = new bootstrap.Modal(document.getElementById('logDetailsModal'));
-    modal.show();
-}
-</script>

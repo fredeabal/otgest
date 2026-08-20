@@ -168,4 +168,29 @@ class ActivityLogController extends BaseController
 
         return $html;
     }
+
+    public function view($id)
+    {
+        if (!has_permission('admin.logs')) {
+            return redirect()->to('/')->with('errors', ['No tienes permisos para acceder a esta sección.']);
+        }
+
+        $log = $this->activityLogModel->select('activity_logs.*, users.name as user_name, users.email as user_email, users.role as user_role')
+            ->join('users', 'users.id = activity_logs.user_id', 'left')
+            ->where('activity_logs.id', $id)
+            ->first();
+
+        if (!$log) {
+            return redirect()->to('logs/list')->with('error', 'El registro de actividad no existe.');
+        }
+
+        $data = [
+            'title' => 'Detalle del Log',
+            'log' => $log
+        ];
+
+        echo view('template/header', $data);
+        echo view('logs/view', $data);
+        echo view('template/footer');
+    }
 }
