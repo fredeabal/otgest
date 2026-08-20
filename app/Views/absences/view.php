@@ -217,7 +217,7 @@
                                 Rechazar
                             </a>
                             <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark">
-                                Volver atrás
+                                Atrás
                             </a>
                         </div>
                     </div>
@@ -229,7 +229,7 @@
                             <a href="<?= base_url('absences/export-absence-pdf/' . $absence['id']) ?>" class="btn btn-primary me-2" target="_blank">
                                 <iconify-icon icon="solar:file-bold-duotone"></iconify-icon> Exportar PDF
                             </a>
-                            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark ms-1">Volver atrás</a>
+                            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark ms-1">Atrás</a>
                         </div>
                     </div>
                 </div>

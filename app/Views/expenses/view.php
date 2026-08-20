@@ -180,7 +180,7 @@
                         </a>
                         <?php endif; ?>
                         <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark mb-2">
-                            <i class="ti ti-arrow-left fs-5"></i> Volver atrás
+                            <i class="ti ti-arrow-left fs-5"></i> Atrás
                         </a>
                     </div>
                 </div>
