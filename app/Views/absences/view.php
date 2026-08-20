@@ -9,36 +9,7 @@
                     <div class="list-group list-group-flush">
 
 
-                        <!-- Modal para rechazar solicitud -->
-                        <div class="modal fade" id="rejectModal" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Rechazar Solicitud</h5>
-                                        <button type="button" class="btn-close"
-                                            data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <form id="rejectForm" method="post" data-action-base="<?= base_url('absences/reject/') ?>">
-                                        <?= csrf_field() ?>
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label for="admin_comments" class="form-label">Comentarios
-                                                    (opcional)</label>
-                                                <textarea name="admin_comments" id="admin_comments"
-                                                    class="form-control" rows="3"
-                                                    placeholder="Explica el motivo del rechazo..."></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-danger">Rechazar
-                                                Solicitud</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Aquí iba el modal de rechazo, eliminado a favor de SweetAlert -->
 
 
 
