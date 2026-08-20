@@ -135,7 +135,7 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('workdays.manage', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Gestión de jornadas</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('absences.manage', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Gestión de ausencias</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('expenses.manage', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Gestión de gastos</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -217,7 +217,7 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('documents.manage', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Envíos masivos</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -235,17 +235,22 @@
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.users', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Gestionar Usuarios</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.roles', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Gestionar Roles</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
-                                        <div class="form-check form-switch">
+                                        <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.company', $userPermissions) ? 'checked' : '' ?>>
                                             <label class="form-check-label fs-3">Ajustes de la empresa</label>
-                                            <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" disabled <?= in_array('admin.logs', $userPermissions) ? 'checked' : '' ?>>
+                                            <label class="form-check-label fs-3">Registro de actividad</label>
+                                            <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                         </div>
                                     </div>
                                 </div>

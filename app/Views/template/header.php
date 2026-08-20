@@ -324,6 +324,20 @@
                         <?php endif; ?>
 
                         <!-- ============================= -->
+                        <!-- Registro de Actividad -->
+                        <!-- ============================= -->
+                        <?php if (has_permission('admin.logs')): ?>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="<?= base_url('logs/list') ?>" aria-expanded="false">
+                                <span class="d-flex">
+                                    <i class="ti ti-activity fs-5"></i>
+                                </span>
+                                <span class="hide-menu">Registro de Actividad</span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <!-- ============================= -->
                         <!-- Configuración -->
                         <!-- ============================= -->
                         <?php if (has_permission('admin.company')): ?>
@@ -356,15 +370,6 @@
                                         <span class="hide-menu">Mantenimiento</span>
                                     </a>
                                 </li>
-                                <?php if (has_permission('admin.logs')): ?>
-                                <li class="sidebar-item">
-                                    <a href="<?= base_url('logs/list') ?>" class="sidebar-link">
-                                        <div class="round-16 d-flex align-items-center justify-content-center">
-                                        </div>
-                                        <span class="hide-menu">Registro de Actividad</span>
-                                    </a>
-                                </li>
-                                <?php endif; ?>
                             </ul>
                         </li>
                         <?php endif; ?>
@@ -409,9 +414,9 @@
                                         <div class="d-flex align-items-center py-9 mx-7">
                                             <img src="<?= base_url('users/avatar/' . esc(session('user_avatar'))) ?>"
                                                 class="rounded-circle" width="80" height="80" alt="Usuario" />
-                                            <div class="ms-3">
-                                                <h5 class="mb-1 fs-3"><?= esc(session('user_name')) ?></h5>
-                                                <span class="mb-1 d-block text-dark">
+                                            <div class="ms-3 overflow-hidden" style="max-width: 190px;">
+                                                <h5 class="mb-1 fs-3 text-truncate" title="<?= esc(session('user_name')) ?>"><?= esc(session('user_name')) ?></h5>
+                                                <span class="mb-1 d-block text-dark text-truncate">
                                                     <?php 
                                                         if (session('user_role_name')) {
                                                             echo esc(session('user_role_name'));
@@ -423,9 +428,9 @@
                                                         }
                                                     ?>
                                                 </span>
-                                                <p class="mb-0 d-flex text-dark align-items-center gap-2">
-                                                    <i class="ti ti-mail"></i>
-                                                    <?= esc(session('user_email')) ?>
+                                                <p class="mb-0 d-flex text-dark align-items-center gap-2" title="<?= esc(session('user_email')) ?>">
+                                                    <i class="ti ti-mail flex-shrink-0"></i>
+                                                    <span class="text-truncate"><?= esc(session('user_email')) ?></span>
                                                 </p>
                                             </div>
                                         </div>

@@ -21,7 +21,7 @@ class AddPermissionsToRoles extends Migration
             'absences.request', 'absences.list', 'absences.manage',
             'expenses.create', 'expenses.my', 'expenses.manage',
             'documents.received', 'documents.send', 'documents.sent', 'documents.manage',
-            'admin.users', 'admin.roles', 'admin.company'
+            'admin.users', 'admin.roles', 'admin.company', 'admin.logs'
         ]);
 
         $supervisorPermissions = json_encode([

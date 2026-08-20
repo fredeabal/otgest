@@ -53,7 +53,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="workdays_manage" name="permissions[]" value="workdays.manage" <?= in_array('workdays.manage', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="workdays_manage">Gestión de jornadas</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="absences_manage" name="permissions[]" value="absences.manage" <?= in_array('absences.manage', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="absences_manage">Gestión de ausencias</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -105,7 +105,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="expenses_manage" name="permissions[]" value="expenses.manage" <?= in_array('expenses.manage', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="expenses_manage">Gestión de gastos</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="documents_manage" name="permissions[]" value="documents.manage" <?= in_array('documents.manage', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="documents_manage">Envíos masivos</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -153,17 +153,22 @@
                                             <div class="form-check form-switch mb-3">
                                                 <input class="form-check-input" type="checkbox" id="admin_users" name="permissions[]" value="admin.users" <?= in_array('admin.users', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="admin_users">Gestionar Usuarios</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
                                             <div class="form-check form-switch mb-3">
                                                 <input class="form-check-input" type="checkbox" id="admin_roles" name="permissions[]" value="admin.roles" <?= in_array('admin.roles', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="admin_roles">Gestionar Roles</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
-                                            <div class="form-check form-switch">
+                                            <div class="form-check form-switch mb-3">
                                                 <input class="form-check-input" type="checkbox" id="admin_company" name="permissions[]" value="admin.company" <?= in_array('admin.company', $rolePermissions) ? 'checked' : '' ?>>
                                                 <label class="form-check-label fs-3" for="admin_company">Ajustes de la empresa</label>
-                                                <i class="ti ti-user-cog ms-3 text-danger"></i>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="admin_logs" name="permissions[]" value="admin.logs" <?= in_array('admin.logs', $rolePermissions) ? 'checked' : '' ?>>
+                                                <label class="form-check-label fs-3" for="admin_logs">Registro de actividad</label>
+                                                <i class="ti ti-shield-check fs-4 ms-2 text-danger" title="Requiere permisos de administrador"></i>
                                             </div>
                                         </div>
                                     </div>
