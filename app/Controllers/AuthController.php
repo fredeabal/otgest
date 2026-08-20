@@ -166,21 +166,22 @@ class AuthController extends BaseController
             // get_configured_email() ya configura el 'from' si existe en la BD
             $emailService->setTo($user['email']);
             $emailService->setSubject('Recupera tu contraseña');
-            $emailService->setMessage(
-                '<div style="font-family: Arial, Helvetica, sans-serif; background: #f7f7f7; padding: 32px 0;">
-                    <div style="max-width: 480px; margin: 0 auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(93,135,255,0.08); padding: 32px 24px;">
-                        <h2 style="color: #5d87ff; margin-bottom: 16px; text-align: center;">Recupera tu contraseña</h2>
-                        <p style="color: #222; margin-bottom: 18px;">Hola, <b>' . esc($user['name']) . '</b>:</p>
-                        <p style="color: #444; margin-bottom: 24px;">Has solicitado restablecer tu contraseña. Haz clic en el siguiente botón para continuar:</p>
-                        <div style="text-align: center; margin-bottom: 32px;">
-                            <a href="' . $link . '" style="display: inline-block; background: #5d87ff; color: #fff; text-decoration: none; padding: 12px 32px; border-radius: 6px; font-weight: bold; font-size: 16px;">Restablecer contraseña</a>
-                        </div>
-                        <p style="color: #888; font-size: 13px; text-align: center;">Si no solicitaste este cambio, ignora este mensaje.</p>
-                        <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 16px 0;">
-                        <p style="color: #aaa; font-size: 12px; text-align: center;">' . esc($companyName) . '</p>
-                    </div>
-                </div>'
-            );
+            $content = '
+                <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;">Si no solicitaste este cambio, puedes ignorar de forma segura este mensaje. Tu cuenta seguirá protegida.</p>
+            ';
+
+            $intro = 'Hola, <b>' . esc($user['name']) . '</b>:<br>Has solicitado restablecer tu contraseña. Haz clic en el siguiente botón para continuar:';
+
+            $emailBody = view('emails/template', [
+                'title' => 'Recupera tu contraseña',
+                'intro' => $intro,
+                'content' => $content,
+                'buttonText' => 'Restablecer contraseña',
+                'buttonUrl' => $link,
+                'companyName' => $companyName
+            ]);
+
+            $emailService->setMessage($emailBody);
             if (! $emailService->send()) {
                 log_message('error', 'No se pudo enviar el correo de recuperación a ' . $user['email']);
             }

@@ -104,7 +104,13 @@ class WorkdayModel extends Model
                 'autoclose' => true
             ];
 
-            return $this->insert($data) ? true : false;
+            $inserted = $this->insert($data);
+            
+            if ($inserted) {
+                $this->sendAutocloseEmail($user, $workdayDate, $endDateTime);
+                return true;
+            }
+            return false;
         }
 
         return false;
@@ -130,11 +136,48 @@ class WorkdayModel extends Model
                 return $sub;
             })
             ->select('user_id, workday_date')
-            ->distinct()
-            ->findAll();
+            ->distinct();
+        
+        $pastOpenWorkdays = $pastOpenWorkdays->findAll();
 
-        foreach ($pastOpenWorkdays as $pow) {
-            $this->autoCloseWorkday($pow['user_id'], $pow['workday_date']);
+        foreach ($pastOpenWorkdays as $workday) {
+            $this->autoCloseWorkday($workday['user_id'], $workday['workday_date']);
+        }
+    }
+
+    // =================================================================================
+    // Método auxiliar para enviar email al usuario cuando se cierra su jornada automáticamente
+    // =================================================================================
+    private function sendAutocloseEmail($user, $workdayDate, $endDateTime)
+    {
+        helper('email');
+        $emailService = get_configured_email();
+
+        $date = date('d/m/Y', strtotime($workdayDate));
+        $time = date('H:i', strtotime($endDateTime));
+
+        $content = '
+            <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Día:</strong> ' . $date . '</p>
+            <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Hora de cierre:</strong> ' . $time . '</p>
+            <p style="margin: 15px 0 0 0; font-size: 13px; color: #8c98a4; -webkit-text-fill-color: #8c98a4;">Si se trata de un error o has olvidado fichar tu salida a tu hora real, por favor, contacta con tu administrador para que ajuste el registro de ese día.</p>
+        ';
+
+        $intro = "Hola " . $user['name'] . ",<br>Te informamos de que tu jornada laboral ha superado el límite de horas máximas permitidas y el sistema la ha <strong>cerrado automáticamente</strong>.";
+
+        $emailBody = view('emails/template', [
+            'title' => 'Jornada cerrada automáticamente',
+            'intro' => $intro,
+            'content' => $content,
+            'buttonText' => 'Ver mis registros',
+            'buttonUrl' => site_url('workdays/my-records')
+        ]);
+
+        $emailService->setTo($user['email']);
+        $emailService->setSubject($subject);
+        $emailService->setMessage($emailBody);
+
+        if (!$emailService->send()) {
+            log_message('error', 'No se pudo enviar el correo de auto-cierre de jornada a ' . $user['email']);
         }
     }
 }

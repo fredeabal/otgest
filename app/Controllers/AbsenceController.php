@@ -882,21 +882,23 @@ class AbsenceController extends BaseController
         // get_configured_email() ya configura el 'from' si existe en la BD
         $emailService->setTo($user['email']);
         $emailService->setSubject($subject);
-        $emailService->setMessage(
-            '<div style="font-family: Arial, Helvetica, sans-serif; background: #fff; padding: 32px 0; border: 1px solid #ddd;">
-                <div style="max-width: 480px; margin: 0 auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(93,135,255,0.08); padding: 32px 24px;">
-                    <h2 style="color: #5d87ff; margin-bottom: 16px; text-align: center;">Solicitud de Ausencia ' . ucfirst($statusText) . '</h2>
-                    <p style="color: #222; margin-bottom: 18px;">Hola, <b>' . esc($user['name']) . '</b>:</p>
-                    <p style="color: #444; margin-bottom: 24px;">Tu solicitud de ausencia ha sido <strong>' . $statusText . '</strong>. Puedes revisar los detalles en la aplicación:</p>
-                    <div style="text-align: center; margin-bottom: 32px;">
-                        <a href="' . $link . '" style="display: inline-block; background: #5d87ff; color: #fff; text-decoration: none; padding: 12px 32px; border-radius: 6px; font-weight: bold; font-size: 16px;">Ver Detalles</a>
-                    </div>' .
-                    ($adminComments ? '<p style="color: #666; margin-bottom: 24px;"><strong>Comentarios del administrador:</strong><br>' . esc($adminComments) . '</p>' : '') .
-                    '<hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 16px 0;">
-                    <p style="color: #aaa; font-size: 12px; text-align: center;">' . esc($companyName) . '</p>
-                </div>
-            </div>'
-        );
+        $intro = 'Hola, <b>' . esc($user['name']) . '</b>:<br>Tu solicitud de ausencia ha sido <strong>' . $statusText . '</strong>. Puedes revisar los detalles en la aplicación:';
+        
+        $content = '';
+        if ($adminComments) {
+            $content = '<p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Comentarios del administrador:</strong><br>' . nl2br(esc($adminComments)) . '</p>';
+        }
+
+        $emailBody = view('emails/template', [
+            'title' => 'Solicitud ' . ucfirst($statusText),
+            'intro' => $intro,
+            'content' => $content,
+            'buttonText' => 'Ver Detalles',
+            'buttonUrl' => $link,
+            'companyName' => $companyName
+        ]);
+
+        $emailService->setMessage($emailBody);
 
         if (!$emailService->send()) {
             log_message('error', 'No se pudo enviar el correo de respuesta de ausencia a ' . $user['email']);

@@ -208,6 +208,12 @@ class ExpenseController extends BaseController
 
         log_activity('Gastos', 'APPROVE', "Aprobó el gasto ID: {$id}");
 
+        // Enviar correo de notificación
+        $user = $this->usersModel->find($expense['user_id']);
+        if ($user) {
+            $this->sendExpenseResponseEmail($user, $expense, 'approved');
+        }
+
         return redirect()->to('/expenses/manage')->with('success', 'Gasto aprobado correctamente.');
     }
 
@@ -237,6 +243,12 @@ class ExpenseController extends BaseController
         ]);
 
         log_activity('Gastos', 'REJECT', "Rechazó el gasto ID: {$id}");
+
+        // Enviar correo de notificación
+        $user = $this->usersModel->find($expense['user_id']);
+        if ($user) {
+            $this->sendExpenseResponseEmail($user, $expense, 'rejected', $rejectionReason);
+        }
 
         return redirect()->to('/expenses/manage')->with('success', 'Gasto rechazado correctamente.');
     }
@@ -662,5 +674,53 @@ class ExpenseController extends BaseController
             ->setContentType($mime)
             ->setHeader('Content-Length', filesize($path))
             ->setBody(file_get_contents($path));
+    }
+
+    // =================================================================================
+    // Método para enviar correo de notificación al aprobar/rechazar gasto
+    // =================================================================================
+    private function sendExpenseResponseEmail($user, $expense, $status, $adminComments = null)
+    {
+        helper('email');
+        $emailService = get_configured_email();
+
+        $amount = number_format($expense['amount'], 2, ',', '.') . ' €';
+        $date = date('d/m/Y', strtotime($expense['expense_date']));
+
+        $content = '
+            <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Fecha:</strong> ' . $date . '</p>
+            <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Importe:</strong> ' . $amount . '</p>
+        ';
+
+        if ($status === 'approved') {
+            $subject = "Gasto Aprobado";
+            $intro = "Hola " . $user['name'] . ",<br>Tu ticket de gasto ha sido <strong>aprobado</strong>.";
+        } else {
+            $subject = "Gasto Rechazado";
+            $intro = "Hola " . $user['name'] . ",<br>Lamentablemente, tu ticket de gasto ha sido <strong>rechazado</strong>.";
+            
+            if (!empty($adminComments)) {
+                $content .= '<p style="margin: 15px 0 0 0; font-size: 14px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Motivo:</strong><br>' . nl2br(esc($adminComments)) . '</p>';
+            }
+            
+            $content .= '<p style="margin: 15px 0 0 0; font-size: 13px; color: #8c98a4; -webkit-text-fill-color: #8c98a4;">Por favor, contacta con administración si necesitas más información.</p>';
+        }
+
+        $emailService->setTo($user['email']);
+        $emailService->setSubject($subject);
+        
+        $emailBody = view('emails/template', [
+            'title' => $subject,
+            'intro' => $intro,
+            'content' => $content,
+            'buttonText' => 'Ver gastos',
+            'buttonUrl' => site_url('expenses/my-expenses')
+        ]);
+        
+        $emailService->setMessage($emailBody);
+
+        if (!$emailService->send()) {
+            log_message('error', 'No se pudo enviar el correo de notificación de gasto a ' . $user['email']);
+        }
     }
 }

@@ -143,6 +143,9 @@ class SettingsController extends BaseController
         return redirect()->to('/settings/smtp')->with('success', 'Configuración de correo actualizada correctamente.');
     }
 
+    // =================================================================================
+    // Probar configuración SMTP
+    // =================================================================================
     public function testSmtp()
     {
         if (!has_permission('admin.company')) {
@@ -159,7 +162,11 @@ class SettingsController extends BaseController
 
         $email->setTo($userEmail);
         $email->setSubject('Prueba de configuración SMTP - OtGest');
-        $email->setMessage('Este es un correo de prueba para verificar que la configuración SMTP de OtGest funciona correctamente.');
+        $emailBody = view('emails/template', [
+            'title' => 'Prueba SMTP exitosa',
+            'intro' => 'Este es un correo de prueba para verificar que la configuración SMTP funciona correctamente.'
+        ]);
+        $email->setMessage($emailBody);
 
         if ($email->send()) {
             return $this->response->setJSON(['success' => true, 'message' => 'Correo de prueba enviado correctamente a ' . $userEmail]);

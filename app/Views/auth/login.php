@@ -29,6 +29,7 @@
     <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css?v=<?= time() ?>" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/libs/sweetalert2/dist/sweetalert2.min.css">
     <title>Iniciar Sesión</title>
 </head>
 
@@ -55,19 +56,6 @@
                                             alt="Logo-light" />
                                     </a>
                                 </div>
-
-                                <!-- Mensajes de error y éxito -->
-                                <?php if (session('errors')) : ?>
-                                <div class="alert alert-danger text-danger mb-4">
-                                    <?php foreach(session('errors') as $error): ?>
-                                    <div><?= esc($error) ?></div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <?php endif; ?>
-
-                                <?php if (session('success')): ?>
-                                <div class="alert alert-success text-success"> <?= esc(session('success')) ?> </div>
-                                <?php endif; ?>
 
                                 <!-- Formulario de login -->
                                 <form action="<?= site_url('login') ?>" method="post">
@@ -102,22 +90,39 @@
         <script src="<?= base_url() ?>assets/js/theme/theme.js"></script>
         <script src="<?= base_url() ?>assets/js/theme/app.min.js"></script>
         <script src="<?= base_url('assets/js/theme/theme-switcher.js') ?>"></script>
-
+        <script src="<?= base_url() ?>assets/libs/sweetalert2/dist/sweetalert2.min.js"></script>
         <script>
-        // Oculta automáticamente los alerts después de 3 segundos
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                document.querySelectorAll('.alert').forEach(function(alert) {
-                    alert.style.transition = 'opacity 0.5s';
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500);
-                });
-            }, 3000);
+            const toastError = <?= json_encode(session()->getFlashdata('error')) ?>;
+            const toastErrors = <?= json_encode(session()->getFlashdata('errors')) ?>;
+            const toastMessage = <?= json_encode(session()->getFlashdata('success')) ?>;
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            
+            const systemAlert = Swal.mixin({
+                position: 'center',
+                showConfirmButton: false,
+                buttonsStyling: false,
+                timer: 5000,
+                timerProgressBar: true,
+                background: isDark ? '#0b1114' : '#f8f9fa',
+                color: isDark ? '#fff' : '#0b1114',
+                showCloseButton: false
+            });
+            
+            if (toastMessage) {
+                systemAlert.fire({ icon: 'success', title: '¡Completado!', html: `<div class="text-center">${toastMessage}</div>`, iconColor: '#10B981' });
+            }
+            if (toastError) {
+                systemAlert.fire({ icon: 'error', title: 'Error', html: `<div class="text-center">${toastError}</div>`, iconColor: '#b31b34' });
+            }
+            if (toastErrors) {
+                const errorContent = typeof toastErrors === 'object' && toastErrors !== null
+                    ? (Array.isArray(toastErrors) ? toastErrors : Object.values(toastErrors)).join('<br>') 
+                    : toastErrors;
+                systemAlert.fire({ icon: 'error', title: 'Error de Validación', html: `<div class="text-center">${errorContent}</div>`, iconColor: '#b31b34' });
+            }
         });
         </script>
-
 </body>
 
 </html>

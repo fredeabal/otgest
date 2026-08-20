@@ -437,25 +437,23 @@ class DocumentsController extends BaseController
         $emailService->setSubject('Nuevo documento recibido'); // Asunto del correo
 
         // Contenido HTML del correo con diseño responsivo
-        $emailService->setMessage(
-            '<div style="font-family: Arial, Helvetica, sans-serif; background: #f7f7f7; padding: 32px 0;">
-                <div style="max-width: 480px; margin: 0 auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(93,135,255,0.08); padding: 32px 24px;">
-                    <h2 style="color: #5d87ff; margin-bottom: 16px; text-align: center;">Nuevo documento recibido</h2>
-                    <p style="color: #222; margin-bottom: 18px;">Hola, <b>' . esc($document['receiver_name']) . '</b>:</p>
-                    <p style="color: #444; margin-bottom: 24px;">Has recibido un nuevo documento de <b>' . esc($document['sender_name']) . '</b>.</p>
-                    <div style="background: #f8f9fa; padding: 16px; border-radius: 6px; margin-bottom: 24px;">
-                        <p style="margin: 0; color: #333;"><strong>Título:</strong> ' . esc($document['title']) . '</p>
-                        <p style="margin: 8px 0 0 0; color: #333;"><strong>Fecha de envío:</strong> ' . esc(date('d/m/Y H:i', strtotime($document['sent_at']))) . '</p>
-                    </div>
-                    <div style="text-align: center; margin-bottom: 32px;">
-                        <a href="' . site_url('documents/list') . '" style="display: inline-block; background: #5d87ff; color: #fff; text-decoration: none; padding: 12px 32px; border-radius: 6px; font-weight: bold; font-size: 16px;">Ver documento</a>
-                    </div>
-                    <p style="color: #888; font-size: 13px; text-align: center;">Puedes acceder a tu cuenta para descargar el documento.</p>
-                    <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 16px 0;">
-                    <p style="color: #aaa; font-size: 12px; text-align: center;">' . esc($companyName) . '</p>
-                </div>
-            </div>'
-        );
+        $content = '
+            <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Título:</strong> ' . esc($document['title']) . '</p>
+            <p style="margin: 0 0 10px 0; font-size: 16px; color: #5a6a85; -webkit-text-fill-color: #5a6a85;"><strong>Fecha de envío:</strong> ' . esc(date('d/m/Y H:i', strtotime($document['sent_at']))) . '</p>
+        ';
+
+        $intro = 'Hola, <b>' . esc($document['receiver_name']) . '</b>:<br>Has recibido un nuevo documento de <b>' . esc($document['sender_name']) . '</b>.';
+
+        $emailBody = view('emails/template', [
+            'title' => 'Nuevo documento recibido',
+            'intro' => $intro,
+            'content' => $content,
+            'buttonText' => 'Ver documento',
+            'buttonUrl' => site_url('documents/list'),
+            'companyName' => $companyName
+        ]);
+
+        $emailService->setMessage($emailBody);
 
         // Intentar enviar el correo y registrar error si falla
         if (!$emailService->send()) {
