@@ -88,12 +88,6 @@
                                             </a>
                                         </li>
                                         <?php endif; ?>
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center gap-3"
-                                                href="mailto:<?= esc($user['email']) ?>">
-                                                <i class="ti ti-mail"></i> Enviar correo
-                                            </a>
-                                        </li>
                                         <?php if ($user['id'] != 1): ?>
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-3 delete-user-swal"
