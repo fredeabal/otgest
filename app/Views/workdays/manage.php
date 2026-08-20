@@ -227,8 +227,8 @@
                     </div>
                 </div>
                 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
