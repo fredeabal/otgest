@@ -224,10 +224,13 @@ class ExpenseController extends BaseController
         if ($expense['status'] !== 'pending') {
             return redirect()->to('/expenses/manage')->with('errors', ['Este gasto ya ha sido procesado.']);
         }
+        
+        $rejectionReason = $this->request->getPost('rejection_reason');
 
         // Actualizar gasto
         $this->expenseModel->update($id, [
             'status' => 'rejected',
+            'rejection_reason' => $rejectionReason,
             'approved_by' => session()->get('user_id'),
             'approved_at' => Time::now('Europe/Madrid', 'es_ES')->toDateTimeString(),
             'updated_at' => Time::now('Europe/Madrid', 'es_ES')->toDateTimeString(),

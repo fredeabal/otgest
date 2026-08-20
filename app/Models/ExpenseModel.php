@@ -15,7 +15,7 @@ class ExpenseModel extends Model
     protected $primaryKey = 'id';
     // Campos permitidos para inserción/actualización masiva
     protected $allowedFields = [
-        'user_id', 'reason', 'receipt_image', 'status', 'approved_by', 'approved_at', 'amount', 'category', 'expense_date', 'created_at', 'updated_at', 'deleted_at'
+        'user_id', 'reason', 'receipt_image', 'status', 'approved_by', 'approved_at', 'amount', 'category', 'expense_date', 'rejection_reason', 'created_at', 'updated_at', 'deleted_at'
     ];
     // Activar timestamps automáticos
     protected $useTimestamps = true;

@@ -158,7 +158,23 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
+
+                <!-- =================================================================================
+                // Motivo de Rechazo (Opcional)
+                // ================================================================================= -->
+                <?php if ($expense['status'] === 'rejected' && !empty($expense['rejection_reason'])): ?>
+                <div class="alert alert-danger mt-4 border-0 mb-0 d-flex align-items-center gap-3">
+                    <div class="bg-danger-subtle rounded-circle p-2 d-inline-flex">
+                        <i class="ti ti-info-circle text-danger fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-danger">Motivo de rechazo</h6>
+                        <p class="mb-0 text-dark"><?= nl2br(esc($expense['rejection_reason'])) ?></p>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
 
             <!-- =================================================================================
@@ -200,7 +216,7 @@ document.querySelectorAll('.approve-expense-swal, .reject-expense-swal').forEach
         const action = link.dataset.title;
         const isApprove = link.classList.contains('approve-expense-swal');
 
-        Swal.fire({
+        let swalConfig = {
             title: `Confirmar ${action}`,
             text: `¿Estás seguro de ${action} este gasto?`,
             icon: 'question',
@@ -209,9 +225,37 @@ document.querySelectorAll('.approve-expense-swal, .reject-expense-swal').forEach
             cancelButtonColor: '#6c757d',
             confirmButtonText: isApprove ? 'Sí, aprobar' : 'Sí, rechazar',
             cancelButtonText: 'Cancelar'
-        }).then((result) => {
+        };
+
+        if (!isApprove) {
+            swalConfig.input = 'textarea';
+            swalConfig.inputPlaceholder = 'Escribe el motivo del rechazo (opcional pero recomendado)...';
+            swalConfig.inputAttributes = {
+                'aria-label': 'Motivo del rechazo'
+            };
+        }
+
+        Swal.fire(swalConfig).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = url;
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                const csrf = document.createElement('input');
+                csrf.type = 'hidden';
+                csrf.name = '<?= csrf_token() ?>';
+                csrf.value = '<?= csrf_hash() ?>';
+                form.appendChild(csrf);
+
+                if (!isApprove && result.value) {
+                    const reasonInput = document.createElement('input');
+                    reasonInput.type = 'hidden';
+                    reasonInput.name = 'rejection_reason';
+                    reasonInput.value = result.value;
+                    form.appendChild(reasonInput);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
             }
         });
     });
@@ -221,33 +265,5 @@ document.querySelectorAll('.approve-expense-swal, .reject-expense-swal').forEach
 function goBack() {
     window.history.back();
 }
-</script>
 
-<script>
-// =================================================================================
-// Confirmación de aprobación/rechazo con SweetAlert
-// =================================================================================
-document.querySelectorAll('.approve-expense-swal, .reject-expense-swal').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const url = link.dataset.url;
-        const action = link.dataset.title;
-        const isApprove = link.classList.contains('approve-expense-swal');
-
-        Swal.fire({
-            title: `Confirmar ${action}`,
-            text: `¿Estás seguro de ${action} este gasto?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: isApprove ? '#28a745' : '#dc3545',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: isApprove ? 'Sí, aprobar' : 'Sí, rechazar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
-        });
-    });
-});
 </script>
