@@ -74,7 +74,7 @@
                             <th class="d-none d-md-table-cell">Categoría</th>
                             <th class="d-none d-md-table-cell">Importe</th>
                             <th class="text-center d-none d-md-table-cell">Fecha solicitud</th>
-                            <th class="text-center">Estado</th>
+                            <th class="text-center d-none d-md-table-cell">Estado</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -99,8 +99,8 @@
                         <tr onclick="window.location='<?= base_url('expenses/view/' . $expense['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
-                                    <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($expense['user_name']) ?></h6>
-                                    <span class="fw-normal text-muted small">DNI:
+                                    <h6 class="fs-4 fw-semibold mb-0 mb-1 d-inline-block text-truncate" style="max-width: 200px;"><?= esc($expense['user_name']) ?></h6>
+                                    <span class="fw-normal text-muted small d-block">DNI:
                                         <?= esc($expense['user_identification']) ?></span>
                                 </div>
                             </td>
@@ -135,7 +135,7 @@
                                     <?= esc(date('H:i', strtotime($expense['created_at']))) ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-none d-md-table-cell">
                                 <?php
                                 $statusClass = '';
                                 $statusText = '';
