@@ -13,11 +13,27 @@ document.addEventListener('DOMContentLoaded', function() {
             initialView: 'dayGridMonth',
             locale: 'es',
             headerToolbar: {
-                left: 'prev,next',
+                left: 'prev,next today',
                 center: 'title',
                 right: ''
             },
             events: eventsUrl,
+            eventClassNames: function() {
+                return ['fc-minimal-event'];
+            },
+            eventContent: function(arg) {
+                // Renderizar solo un círculo del color del evento
+                let color = arg.event.backgroundColor || arg.event.extendedProps?.color || '#5d87ff';
+                let dot = document.createElement('div');
+                dot.className = 'fc-custom-dot mx-auto';
+                dot.style.backgroundColor = color;
+                dot.style.width = '12px';
+                dot.style.height = '12px';
+                dot.style.borderRadius = '50%';
+                dot.style.cursor = 'pointer';
+                dot.title = arg.event.title;
+                return { domNodes: [dot] };
+            },
             eventClick: function(info) {
                 if (info.event.url) {
                     info.jsEvent.preventDefault();
@@ -28,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
             firstDay: 1, // Lunes
             handleWindowResize: true,
             displayEventTime: false,
-            eventDisplay: 'block',
             themeSystem: 'bootstrap5'
         });
         
