@@ -65,7 +65,7 @@
                                     <i class="ti ti-refresh fs-5"></i>
                                 </a>
                                 <a href="<?= base_url('absences/export-pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-outline-primary btn-icon-lg" title="Exportar PDF">
-                                    <i class="ti ti-file fs-5"></i>
+                                    <i class="ti ti-file-download fs-5"></i>
                                 </a>
                             </div>
                         </div>
