@@ -100,10 +100,10 @@
                                 <tr onclick="window.location='<?= base_url('absences/view/' . $absence['id']) ?>'" class="cursor-pointer">
                                     <td>
                                         <div>
-                                            <h6 class="fs-4 fw-semibold mb-0">
+                                            <h6 class="fs-4 fw-semibold mb-0 d-inline-block text-truncate" style="max-width: 200px;">
                                                 <?= esc($absence['user_name']) ?>
                                             </h6>
-                                            <span class="fw-normal text-muted small">
+                                            <span class="fw-normal text-muted small d-block">
                                                 ID: <?= esc($absence['user_identification']) ?>
                                             </span>
                                         </div>
