@@ -549,7 +549,7 @@ class WorkdayController extends BaseController
     public function edit()
     {
         // 1. Validar permisos
-        if (!auth()->user()->can('workdays.manage')) {
+        if (!has_permission('workdays.manage')) {
             return redirect()->back()->with('error', 'No tienes permisos para modificar jornadas.');
         }
 
