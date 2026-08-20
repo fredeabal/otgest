@@ -171,16 +171,16 @@
                         <a href="<?= base_url('expenses/approve/' . $expense['id']) ?>"
                             class="btn bg-success-subtle text-success me-2 mb-2 approve-expense-swal"
                             data-url="<?= base_url('expenses/approve/' . $expense['id']) ?>" data-title="aprobar">
-                            <i class="ti ti-check fs-5"></i> Aprobar
+                            Aprobar
                         </a>
                         <a href="<?= base_url('expenses/reject/' . $expense['id']) ?>"
                             class="btn bg-danger-subtle text-danger me-2 mb-2 reject-expense-swal"
                             data-url="<?= base_url('expenses/reject/' . $expense['id']) ?>" data-title="rechazar">
-                            <i class="ti ti-x fs-5"></i> Rechazar
+                            Rechazar
                         </a>
                         <?php endif; ?>
                         <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark mb-2">
-                            <i class="ti ti-arrow-left fs-5"></i> Atrás
+                            Atrás
                         </a>
                     </div>
                 </div>
