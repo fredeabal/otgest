@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Determinar clase del icono de Tabler
                 let iconClass = 'ti ti-calendar'; // por defecto
                 if (type === 'workday') {
-                    iconClass = 'ti ti-clock';
+                    iconClass = 'ti ti-check';
                 } else if (type === 'absence') {
                     if (absType === 'vacaciones') {
                         iconClass = 'ti ti-umbrella';
