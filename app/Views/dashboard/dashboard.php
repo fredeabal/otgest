@@ -226,3 +226,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<!-- Script para el Calendario de Actividad -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    if (calendarEl && typeof FullCalendar !== 'undefined') {
+        const eventsUrl = calendarEl.getAttribute('data-events-url');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            firstDay: 1, // Lunes
+            height: 'auto',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            events: eventsUrl,
+            eventDisplay: 'custom',
+            eventContent: function(arg) {
+                // Renderizar solo un círculo del color del evento
+                let color = arg.event.backgroundColor || arg.event.extendedProps?.color || '#5d87ff';
+                return {
+                    html: `<div class="mx-auto" style="width: 12px; height: 12px; border-radius: 50%; background-color: ${color}; cursor: pointer;" title="${arg.event.title}"></div>`
+                };
+            },
+            eventClick: function(info) {
+                if (info.event.url) {
+                    window.location.href = info.event.url;
+                    info.jsEvent.preventDefault();
+                }
+            }
+        });
+        calendar.render();
+    }
+});
+</script>
