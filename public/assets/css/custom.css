@@ -1173,8 +1173,3 @@
     transform: scale(1.15);
     box-shadow: 0 4px 8px rgba(0,0,0,0.25);
 }
-
-/* Fallback para el icono ti-file-type-pdf si no está en la fuente principal */
-.ti-file-type-pdf:before {
-    content: "\f028" !important; /* Mapear a ti-file-description (documento con líneas) */
-}

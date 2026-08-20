@@ -198,7 +198,7 @@
                     <div class="row">
                         <div class="col-sm-12 text-center py-3">
                             <a href="<?= base_url('absences/export-absence-pdf/' . $absence['id']) ?>" class="btn btn-primary me-2" target="_blank">
-                                <i class="ti ti-file-type-pdf"></i> Exportar PDF
+                                <i class="ti ti-file-description"></i> Exportar PDF
                             </a>
                             <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark ms-1">Atrás</a>
                         </div>

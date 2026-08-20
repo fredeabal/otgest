@@ -151,7 +151,7 @@
                                 <?php endif; ?>
                                 <?php else: ?>
                                 <div class="text-center w-100">
-                                    <i class="ti ti-file-type-pdf text-muted mb-2" style="font-size: 2rem;"></i>
+                                    <i class="ti ti-file-description text-muted mb-2" style="font-size: 2rem;"></i>
                                     <p class="text-muted mb-0">No se ha adjuntado archivo del recibo</p>
                                 </div>
                                 <?php endif; ?>
