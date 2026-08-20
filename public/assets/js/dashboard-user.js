@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (['baja', 'accidente', 'enfermedad'].includes(absType)) {
                         iconClass = 'ti ti-activity-heartbeat'; // o ti-medical-cross
                     } else {
-                        iconClass = 'ti ti-info-circle';
+                        iconClass = 'ti ti-clock';
                     }
                 }
                 
