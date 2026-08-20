@@ -162,24 +162,28 @@
             </div>
 
             <!-- =================================================================================
-                // Acciones (solo para administradores en gastos pendientes)
+                // Acciones
                 // ================================================================================= -->
-            <?php if ($expense['status'] === 'pending' && (has_permission('expenses.manage'))): ?>
-            <div class="col-md-12 mt-5 mb-3 text-center">
-                <a href="<?= base_url('expenses/approve/' . $expense['id']) ?>"
-                    class="btn bg-success-subtle text-success me-2 approve-expense-swal"
-                    data-url="<?= base_url('expenses/approve/' . $expense['id']) ?>" data-title="aprobar">
-                    Aprobar
-                </a>
-                <a href="<?= base_url('expenses/reject/' . $expense['id']) ?>"
-                    class="btn bg-danger-subtle text-danger me-2 reject-expense-swal"
-                    data-url="<?= base_url('expenses/reject/' . $expense['id']) ?>" data-title="rechazar">
-                    Rechazar
-                </a>
-                <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark">
-                    Volver atrás
-                </a>
-                <?php endif; ?>
+            <div class="card-footer px-0 bg-transparent mt-4 border-top-0">
+                <div class="row">
+                    <div class="col-sm-12 text-center mb-3">
+                        <?php if ($expense['status'] === 'pending' && (has_permission('expenses.manage'))): ?>
+                        <a href="<?= base_url('expenses/approve/' . $expense['id']) ?>"
+                            class="btn bg-success-subtle text-success me-2 mb-2 approve-expense-swal"
+                            data-url="<?= base_url('expenses/approve/' . $expense['id']) ?>" data-title="aprobar">
+                            <i class="ti ti-check fs-5"></i> Aprobar
+                        </a>
+                        <a href="<?= base_url('expenses/reject/' . $expense['id']) ?>"
+                            class="btn bg-danger-subtle text-danger me-2 mb-2 reject-expense-swal"
+                            data-url="<?= base_url('expenses/reject/' . $expense['id']) ?>" data-title="rechazar">
+                            <i class="ti ti-x fs-5"></i> Rechazar
+                        </a>
+                        <?php endif; ?>
+                        <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark mb-2">
+                            <i class="ti ti-arrow-left fs-5"></i> Volver atrás
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
