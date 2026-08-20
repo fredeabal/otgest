@@ -32,7 +32,7 @@ if (!isset($companyName)) {
         <tr>
             <td align="center">
                 <a href="<?= base_url() ?>">
-                    <img src="<?= base_url('assets/images/logos/favicon.png') ?>" alt="Logo" style="max-width: 135px; height: auto; margin-bottom: 30px; display: block;">
+                    <img src="<?= base_url('assets/images/logos/favicon.png') ?>" alt="Logo" style="max-width: 100px; height: auto; margin-bottom: 30px; display: block;">
                 </a>
                 <table width="100%" max-width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #f8f9fa; background-image: linear-gradient(#f8f9fa, #f8f9fa); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e9ecef;">
                     <tr>
