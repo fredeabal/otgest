@@ -119,7 +119,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Gestión</span>
-                                        <i class="ti ti-shield-check"></i>
+                                        <i class="ti ti-shield-check fs-4 ms-2 text-primary" title="Requiere permisos de administrador"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -171,7 +171,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Envío masivo</span>
-                                        <i class="ti ti-shield-check"></i>
+                                        <i class="ti ti-shield-check fs-4 ms-2 text-primary" title="Requiere permisos de administrador"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -214,7 +214,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Gestión</span>
-                                        <i class="ti ti-shield-check"></i>
+                                        <i class="ti ti-shield-check fs-4 ms-2 text-primary" title="Requiere permisos de administrador"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -257,7 +257,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Gestión</span>
-                                        <i class="ti ti-shield-check"></i>
+                                        <i class="ti ti-shield-check fs-4 ms-2 text-primary" title="Requiere permisos de administrador"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
