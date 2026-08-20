@@ -48,7 +48,7 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.css?v=<?= time() ?>" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.css?v=<?= time() ?>" />
     <!-- solar icons -->
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
     
     <title><?= esc($title) ?></title>
 
@@ -71,7 +71,7 @@
 
                     <a href="javascript:void(0)"
                         class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
-                        <iconify-icon icon="solar:close-circle-bold-duotone" class="fs-5"></iconify-icon>
+                        <i class="ti ti-circle-x fs-5"></i>
                     </a>
                     
                 </div>
@@ -79,7 +79,7 @@
                     <ul id="sidebarnav">
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="<?= base_url() ?>" aria-expanded="false">
-                                <span><iconify-icon icon="solar:widget-2-bold-duotone" class="fs-5"></iconify-icon></span>
+                                <span><i class="ti ti-layout-dashboard fs-5"></i></span>
                                 <span class="hide-menu">Dashboard</span>
                             </a>
                         </li>
@@ -90,7 +90,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:stopwatch-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-clock fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Jornadas</span>
                             </a>
@@ -119,7 +119,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Gestión</span>
-                                        <iconify-icon icon="eos-icons:admin-outlined"></iconify-icon>
+                                        <i class="ti ti-shield-check"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -133,7 +133,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:document-text-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-file-text fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Documentos</span>
                             </a>
@@ -171,7 +171,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Envío masivo</span>
-                                        <iconify-icon icon="eos-icons:admin-outlined"></iconify-icon>
+                                        <i class="ti ti-shield-check"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -185,7 +185,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:calendar-minimalistic-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-calendar-event fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Ausencias</span>
                             </a>
@@ -214,7 +214,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Gestión</span>
-                                        <iconify-icon icon="eos-icons:admin-outlined"></iconify-icon>
+                                        <i class="ti ti-shield-check"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -228,7 +228,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:bill-list-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-receipt fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Gastos</span>
                             </a>
@@ -257,7 +257,7 @@
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                         </div>
                                         <span class="hide-menu">Gestión</span>
-                                        <iconify-icon icon="eos-icons:admin-outlined"></iconify-icon>
+                                        <i class="ti ti-shield-check"></i>
                                     </a>
                                 </li>
                                 <?php endif; ?>
@@ -271,7 +271,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:users-group-rounded-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-users fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Usuarios</span>
                             </a>
@@ -300,7 +300,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:shield-keyhole-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-shield-lock fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Roles</span>
                             </a>
@@ -330,7 +330,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
-                                    <iconify-icon icon="solar:settings-bold-duotone" class="fs-5"></iconify-icon>
+                                    <i class="ti ti-settings fs-5"></i>
                                 </span>
                                 <span class="hide-menu">Configuración</span>
                             </a>
@@ -385,7 +385,7 @@
                         <ul class="navbar-nav">
                             <li class="nav-item nav-icon-hover-bg rounded-circle ms-n2">
                                 <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
-                                    <iconify-icon icon="solar:hamburger-menu-line-duotone" class="fs-7"></iconify-icon>
+                                    <i class="ti ti-menu-2 fs-7"></i>
                                 </a>
                             </li>
                         </ul>
@@ -424,7 +424,7 @@
                                                     ?>
                                                 </span>
                                                 <p class="mb-0 d-flex text-dark align-items-center gap-2">
-                                                    <iconify-icon icon="solar:letter-bold-duotone"></iconify-icon>
+                                                    <i class="ti ti-mail"></i>
                                                     <?= esc(session('user_email')) ?>
                                                 </p>
                                             </div>
@@ -434,7 +434,7 @@
                                                 class="py-8 px-7 mt-8 d-flex align-items-center">
                                                 <span
                                                     class="d-flex align-items-center justify-content-center bg-primary-subtle rounded-1 p-6">
-                                                    <iconify-icon icon="solar:user-circle-bold-duotone" class="fs-6 text-dark"></iconify-icon>
+                                                    <i class="ti ti-user-circle fs-6 text-dark"></i>
                                                 </span>
                                                 <div class="w-75 d-inline-block v-middle ps-3">
                                                     <h6 class="mb-1 bg-hover-primary">Mi Perfil</h6>
@@ -446,7 +446,7 @@
                                                 class="py-8 px-7 d-flex align-items-center">
                                                 <span
                                                     class="d-flex align-items-center justify-content-center bg-primary-subtle rounded-1 p-6">
-                                                    <iconify-icon icon="solar:logout-bold-duotone" class="fs-6 text-dark"></iconify-icon>
+                                                    <i class="ti ti-logout fs-6 text-dark"></i>
                                                 </span>
                                                 <div class="w-75 d-inline-block v-middle ps-3">
                                                     <h6 class="mb-1 bg-hover-primary">Cerrar sesión</h6>
@@ -459,7 +459,7 @@
                                                 data-bs-target="#helpModal">
                                                 <span
                                                     class="d-flex align-items-center justify-content-center bg-primary-subtle rounded-1 p-6">
-                                                    <iconify-icon icon="solar:question-circle-bold-duotone" class="fs-6 text-dark"></iconify-icon>
+                                                    <i class="ti ti-help fs-6 text-dark"></i>
                                                 </span>
                                                 <div class="w-75 d-inline-block v-middle ps-3">
                                                     <h6 class="mb-1 bg-hover-primary">Ayuda</h6>
@@ -482,7 +482,7 @@
                     <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
                         <div class="modal-header bg-primary-subtle text-primary border-0 py-4">
                             <h5 class="modal-title text-primary d-flex align-items-center gap-2" id="helpModalLabel">
-                                <iconify-icon icon="solar:info-square-bold-duotone" class="fs-6"></iconify-icon>
+                                <i class="ti ti-info-square fs-6"></i>
                                 Información del Sistema
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -490,7 +490,7 @@
                         <div class="modal-body p-5">
                             <div class="text-center mb-4">
                                 <div class="bg-primary-subtle d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px;">
-                                    <iconify-icon icon="solar:user-bold-duotone" class="text-primary" style="font-size: 40px;"></iconify-icon>
+                                    <i class="ti ti-user text-primary" style="font-size: 40px;"></i>
                                 </div>
                                 <h4 class="fw-bold text-dark mb-1">Freddy De Abreu A.</h4>
                                 <p class="text-muted fs-3 mb-0">Desarrollo y Soporte Técnico</p>
@@ -499,7 +499,7 @@
                                 <div class="text-center mb-4">
                                     <div class="d-flex flex-column align-items-center gap-2 mb-4">
                                         <div class="bg-primary-subtle rounded-circle p-2 d-inline-flex mb-1">
-                                            <iconify-icon icon="solar:letter-bold-duotone" class="text-primary fs-5"></iconify-icon>
+                                            <i class="ti ti-mail text-primary fs-5"></i>
                                         </div>
                                         <div>
                                             <span class="d-block text-muted fs-2">Correo de contacto</span>
@@ -509,7 +509,7 @@
                                     
                                     <div class="d-flex flex-column align-items-center gap-2 mb-2">
                                         <div class="bg-primary-subtle rounded-circle p-2 d-inline-flex mb-1">
-                                            <iconify-icon icon="solar:code-bold-duotone" class="text-primary fs-5"></iconify-icon>
+                                            <i class="ti ti-code text-primary fs-5"></i>
                                         </div>
                                         <div>
                                             <span class="d-block text-muted fs-2">Versión actual</span>
