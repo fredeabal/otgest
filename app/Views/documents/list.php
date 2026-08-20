@@ -78,7 +78,7 @@
                             <td class="d-none d-md-table-cell">
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1 d-inline-block text-truncate" style="max-width: 200px;"><?= esc($doc['sender_name']) ?></h6>
-                                    <span class="fw-normal text-muted small">
+                                    <span class="fw-normal text-muted small d-block">
                                         <?php if (has_permission('documents.manage') && !empty($doc['sender_identification'])): ?>
                                             ID: <?= esc($doc['sender_identification']) ?> (<?= esc($doc['sender_email']) ?>)
                                         <?php else: ?>
