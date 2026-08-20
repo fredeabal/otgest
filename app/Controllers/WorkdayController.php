@@ -1164,9 +1164,6 @@ class WorkdayController extends BaseController
     }
 
 
-    // =================================================================================
-    // Métodos auxiliares
-    // =================================================================================
 
     // =================================================================================
     // Método auxiliar para saber si hay una jornada abierta
@@ -1195,9 +1192,6 @@ class WorkdayController extends BaseController
         return $lastRecord;
     }
 
-    // =================================================================================
-    // Método helper para calcular datos de una jornada específica
-    // =================================================================================
 
     // =================================================================================
     // Método auxiliar para cerrar automáticamente una jornada si excede las horas máximas

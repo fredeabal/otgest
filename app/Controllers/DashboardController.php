@@ -363,9 +363,6 @@ class DashboardController extends BaseController
         return null;
     }
 
-    // =================================================================================
-    // Método helper para calcular datos de una jornada específica
-    // =================================================================================
 
     // =================================================================================
     // Endpoint para obtener eventos del calendario (AJAX)
