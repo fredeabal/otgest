@@ -14,8 +14,7 @@
                                 <div class="col-sm-8">
                                     <strong><?= esc($log['user_name'] ?? 'Sistema / Anónimo') ?></strong><br>
                                     <?php if(!empty($log['user_email'])): ?>
-                                    <small class="text-muted">Email: <?= esc($log['user_email']) ?></small><br>
-                                    <small class="text-muted">Rol: <?= esc(ucfirst($log['user_role'] ?? 'Usuario')) ?></small>
+                                    <small class="text-muted">Email: <?= esc($log['user_email']) ?></small>
                                     <?php endif; ?>
                                 </div>
                             </div>

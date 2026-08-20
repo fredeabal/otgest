@@ -175,9 +175,8 @@ class ActivityLogController extends BaseController
             return redirect()->to('/')->with('errors', ['No tienes permisos para acceder a esta sección.']);
         }
 
-        $log = $this->activityLogModel->select('activity_logs.*, users.name as user_name, users.email as user_email, roles.name as user_role')
+        $log = $this->activityLogModel->select('activity_logs.*, users.name as user_name, users.email as user_email')
             ->join('users', 'users.id = activity_logs.user_id', 'left')
-            ->join('roles', 'roles.id = users.role_id', 'left')
             ->where('activity_logs.id', $id)
             ->first();
 
