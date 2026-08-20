@@ -86,7 +86,7 @@
                                     <th class="d-none d-md-table-cell">Tipo</th>
                                     <th class="text-center d-none d-md-table-cell">Fecha Inicio</th>
                                     <th class="text-center d-none d-md-table-cell">Fecha Fin</th>
-                                    <th class="text-center">Estado</th>
+                                    <th class="text-center d-none d-md-table-cell">Estado</th>
                                     <th class="text-center"></th>
                                 </tr>
                             </thead>
@@ -137,7 +137,7 @@
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center d-none d-md-table-cell">
                                         <?php
                                 $statusClass = [
                                     'pending' => 'warning',
