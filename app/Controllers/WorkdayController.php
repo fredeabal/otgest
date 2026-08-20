@@ -39,6 +39,9 @@ class WorkdayController extends BaseController
             'title' => 'Control de Jornada Laboral',
         ];
 
+        // Buscar jornadas de días anteriores que estén en estado start, pause o resume y cerrarlas automáticamente
+        $this->workdayModel->autoClosePastWorkdays($userId);
+
         // Revisar si la jornada excede las horas máximas y cerrarla automáticamente
         $openWorkday = $this->getOpenWorkdayType($userId);
         if ($openWorkday && in_array($openWorkday['event_type'], ['start', 'pause', 'resume'])) {
@@ -352,6 +355,9 @@ class WorkdayController extends BaseController
         // Obtener usuario autenticado
         $userId = session()->get('user_id');
 
+        // Auto-cerrar jornadas del pasado
+        $this->workdayModel->autoClosePastWorkdays($userId);
+
         // Obtener filtros de la URL (con valores por defecto)
         $date_from = $this->request->getGet('date_from') ?? date('Y-m-01'); // Primer día del mes actual
         $date_to = $this->request->getGet('date_to') ?? date('Y-m-t');       // Último día del mes actual
@@ -438,6 +444,9 @@ class WorkdayController extends BaseController
     {
         // Obtener filtros de la URL (con valores por defecto)
         $user_id = $this->request->getGet('user_id');
+
+        // Auto-cerrar jornadas del pasado para todos los usuarios
+        $this->workdayModel->autoClosePastWorkdays();
         $date_from = $this->request->getGet('date_from') ?? date('Y-m-01'); // Primer día del mes actual
         $date_to = $this->request->getGet('date_to') ?? date('Y-m-t');       // Último día del mes actual
         $status = $this->request->getGet('status');                          // Filtro de estado (opcional)
@@ -1096,60 +1105,7 @@ class WorkdayController extends BaseController
     // =================================================================================
     private function autoCloseWorkday($userId, $workdayDate)
     {
-        // Verificar si ya existe un registro 'stop' para esta jornada para evitar dobles cierres automáticos
-        $existingOut = $this->workdayModel
-            ->where('user_id', $userId)
-            ->where('workday_date', $workdayDate)
-            ->where('event_type', 'stop')
-            ->first();
-
-        // Si ya existe un registro de salida, no hacer nada
-        if ($existingOut) {
-            return false;
-        }
-
-        // Obtener las horas máximas diarias del usuario
-        $user = $this->userModel->find($userId);
-        $maxDailyHours = $user['max_daily_hours'] ?? 8; // Valor por defecto de 8 horas si no está definido
-
-        // Obtener eventos de la jornada específica
-        $events = $this->workdayModel
-            ->where('user_id', $userId)
-            ->where('workday_date', $workdayDate)
-            ->orderBy('event_time', 'ASC')
-            ->findAll();
-
-        // Calcular horas trabajadas usando el método existente
-        $workdayData = calculate_workday_data($workdayDate, $events, $maxDailyHours);
-
-        // Verificar si excede las horas máximas
-        if ($workdayData['total_hours'] >= $maxDailyHours) {
-            // Obtener horas diarias del usuario para cumplimiento legislativo español
-            $dailyHours = $user['daily_hours'] ?? 8;
-
-            // Calcular hora de salida como entrada + horas diarias (cumplimiento legislativo)
-            $startDateTime = $workdayDate . ' ' . $workdayData['start_time'] . ':00';
-            $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($dailyHours * 3600) + 59); // +59 segundos para redondear
-
-            // Crear registro de salida automática
-            $data = [
-                'user_id' => $userId,
-                'workday_date' => $workdayDate,
-                'event_type' => 'stop',
-                'event_time' => $endDateTime,
-                'latitude' => null,  // No hay coordenadas para cierre automático
-                'longitude' => null,
-                'autoclose' => true  // Marcar como cierre automático
-            ];
-
-            // Insertar registro
-            if ($this->workdayModel->insert($data)) {
-                return true; // Éxito
-            } else {
-                return false; // Error al guardar
-            }
-        }
-        return false; // No excedió las horas
+        return $this->workdayModel->autoCloseWorkday($userId, $workdayDate);
     }
 
     // =================================================================================
@@ -1158,11 +1114,12 @@ class WorkdayController extends BaseController
     private function processWorkdayWithAutoClose($userId, $date, &$events, $userDailyHours)
     {
         $workday = calculate_workday_data($date, $events, $userDailyHours);
+        $isPastDay = (strtotime($date) < strtotime(date('Y-m-d')));
         
         if ($workday && in_array($workday['status'], ['in_progress', 'pause']) && !$workday['autoclose']) {
             $user = $this->userModel->find($userId);
             $maxDailyHours = $user['max_daily_hours'] ?? 8;
-            if ($workday['total_hours'] >= $maxDailyHours) {
+            if ($workday['total_hours'] >= $maxDailyHours || $isPastDay) {
                 if ($this->autoCloseWorkday($userId, $date)) {
                     // Recargar eventos y recalcular si se cerró exitosamente
                     $events = $this->workdayModel->where('user_id', $userId)

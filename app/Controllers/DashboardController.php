@@ -46,6 +46,13 @@ class DashboardController extends BaseController
         $isAdmin = ($userRole == 1 || $userRole == 2);
         $permissions = session()->get('user_permissions') ?? [];
 
+        // Auto-cerrar jornadas del pasado no cerradas
+        if ($isAdmin) {
+            $this->workdayModel->autoClosePastWorkdays();
+        } else {
+            $this->workdayModel->autoClosePastWorkdays($userId);
+        }
+
         $data['title'] = 'Escritorio';
         $data['stats'] = $this->calculateAllStats($userId, $isAdmin, $permissions);
 
@@ -330,6 +337,9 @@ class DashboardController extends BaseController
 
         // Si el último evento es 'start', 'pause' o 'resume', la jornada está activa
         if (in_array($lastRecord['event_type'], ['start', 'pause', 'resume'])) {
+            if ($lastRecord['workday_date'] < date('Y-m-d')) {
+                return null;
+            }
             $events = $this->workdayModel->where('user_id', $userId)
                 ->where('workday_date', $lastRecord['workday_date'])
                 ->orderBy('event_time', 'ASC')
