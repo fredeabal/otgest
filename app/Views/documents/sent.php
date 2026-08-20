@@ -65,15 +65,14 @@
             </div>
             <!-- Fin de buscador de documentos -->
 
-            <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
-            <div class="mb-4 border rounded-1 table-responsive">
+            <div class="mb-4 border rounded-1">
                 <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Título</th>
-                            <th class="">Destinatario</th>
-                            <th class="text-center">Fecha de envío</th>
-                            <th class="text-center">Fecha de lectura</th>
+                            <th class="d-none d-md-table-cell">Destinatario</th>
+                            <th class="text-center d-none d-md-table-cell">Fecha de envío</th>
+                            <th class="text-center d-none d-md-table-cell">Fecha de lectura</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -90,7 +89,7 @@
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($doc['title']) ?></h6>
                                 </div>
                             </td>
-                            <td class="">
+                            <td class="d-none d-md-table-cell">
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($doc['receiver_name']) ?></h6>
                                     <span class="fw-normal text-muted small">
@@ -102,7 +101,7 @@
                                     </span>
                                 </div>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-none d-md-table-cell">
                                 <h6 class="fw-semibold mb-0 mb-1">
                                     <?= esc(date('d/m/Y', strtotime($doc['sent_at']))) ?>
                                 </h6>
@@ -110,7 +109,7 @@
                                     <?= esc(date('H:i', strtotime($doc['sent_at']))) ?>
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-none d-md-table-cell">
                                 <?php if (!empty($doc['read_at'])): ?>
                                 <h6 class="fw-semibold mb-0 mb-1">
                                     <?= esc(date('d/m/Y', strtotime($doc['read_at']))) ?>

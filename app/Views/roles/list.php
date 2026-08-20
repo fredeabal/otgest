@@ -13,8 +13,7 @@
                 <input type="text" id="roleTableSearch" class="form-control" placeholder="Buscar rol...">
             </div>
             <!-- fin de buscador de roles -->
-            <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
-            <div class="mb-4 border rounded-1 table-responsive">
+            <div class="mb-4 border rounded-1">
                 <table class="table text-nowrap mb-0 align-middle">
                     <thead>
                         <tr>
