@@ -40,24 +40,56 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
                 
-                // Contenedor del badge circular
-                let badge = document.createElement('div');
-                badge.className = 'fc-custom-event-badge mx-auto d-flex align-items-center justify-content-center';
-                badge.style.backgroundColor = color;
-                badge.style.width = '28px';
-                badge.style.height = '28px';
-                badge.style.borderRadius = '50%';
-                badge.style.cursor = 'pointer';
-                badge.title = arg.event.title;
+                // Detectar si el evento es de múltiples días
+                let isMultiDay = false;
+                if (arg.event.start && arg.event.end) {
+                    let diffDays = Math.round((arg.event.end - arg.event.start) / (24 * 60 * 60 * 1000));
+                    if (diffDays > 1) {
+                        isMultiDay = true;
+                    }
+                }
                 
-                // Icono interno
-                let icon = document.createElement('i');
-                icon.className = iconClass + ' text-white';
-                icon.style.fontSize = '14px';
+                let container = document.createElement('div');
                 
-                badge.appendChild(icon);
+                if (isMultiDay) {
+                    // Renderizado de banda (píldora) para múltiples días
+                    container.className = 'fc-custom-event-band d-flex align-items-center px-2 text-white';
+                    container.style.backgroundColor = color;
+                    container.style.height = '28px';
+                    container.style.borderRadius = '14px';
+                    container.style.width = '100%';
+                    container.style.overflow = 'hidden';
+                    container.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                    container.style.cursor = 'pointer';
+                    container.title = arg.event.title;
+                    
+                    let icon = document.createElement('i');
+                    icon.className = iconClass + ' fs-4 me-2 flex-shrink-0';
+                    
+                    let text = document.createElement('span');
+                    text.className = 'fs-2 fw-semibold text-truncate';
+                    text.innerText = arg.event.title;
+                    
+                    container.appendChild(icon);
+                    container.appendChild(text);
+                } else {
+                    // Renderizado circular para un solo día
+                    container.className = 'fc-custom-event-badge mx-auto d-flex align-items-center justify-content-center';
+                    container.style.backgroundColor = color;
+                    container.style.width = '28px';
+                    container.style.height = '28px';
+                    container.style.borderRadius = '50%';
+                    container.style.cursor = 'pointer';
+                    container.title = arg.event.title;
+                    
+                    let icon = document.createElement('i');
+                    icon.className = iconClass + ' text-white';
+                    icon.style.fontSize = '14px';
+                    
+                    container.appendChild(icon);
+                }
                 
-                return { domNodes: [badge] };
+                return { domNodes: [container] };
             },
             eventClick: function(info) {
                 if (info.event.url) {
