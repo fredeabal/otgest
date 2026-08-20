@@ -411,7 +411,10 @@ class DashboardController extends BaseController
                 'allDay' => true,
                 'color' => $color,
                 'url' => base_url('absences/view/' . $abs['id']),
-                'extendedProps' => ['type' => 'absence']
+                'extendedProps' => [
+                    'type' => 'absence',
+                    'absence_type' => $abs['type']
+                ]
             ];
         }
 

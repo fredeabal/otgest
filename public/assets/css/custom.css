@@ -1164,11 +1164,12 @@
     margin: 2px 0 !important;
 }
 
-.fc-custom-dot {
+.fc-custom-event-badge {
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.fc-custom-dot:hover {
-    transform: scale(1.25);
+.fc-custom-event-badge:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
 }
