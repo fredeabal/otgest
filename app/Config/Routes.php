@@ -131,6 +131,7 @@ $routes->get('workdays/my-records', 'WorkdayController::myRecords', ['filter' =>
 $routes->get('workdays/export-my-pdf', 'WorkdayController::exportMyPdf', ['filter' => 'permission:workdays.records,workdays.manage']);
 $routes->post('workdays/end', 'WorkdayController::end', ['filter' => 'permission:workdays.clockin,workdays.manage']);
 $routes->get('workdays/manage', 'WorkdayController::manage', ['filter' => 'permission:workdays.manage']);
+$routes->post('workdays/edit', 'WorkdayController::edit', ['filter' => 'permission:workdays.manage']);
 $routes->get('workdays/export-pdf', 'WorkdayController::exportPdf', ['filter' => 'permission:workdays.manage']);
 $routes->get('workdays/view/(:any)', 'WorkdayController::view/$1', ['filter' => 'permission:workdays.records,workdays.manage']);
 

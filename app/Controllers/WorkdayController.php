@@ -544,6 +544,105 @@ class WorkdayController extends BaseController
     }
 
     // =================================================================================
+    // Editar jornada (Para administradores)
+    // =================================================================================
+    public function edit()
+    {
+        // 1. Validar permisos
+        if (!auth()->user()->can('workdays.manage')) {
+            return redirect()->back()->with('error', 'No tienes permisos para modificar jornadas.');
+        }
+
+        // 2. Obtener datos del POST
+        $userId = $this->request->getPost('user_id');
+        $date = $this->request->getPost('workday_date');
+        $startTime = $this->request->getPost('start_time'); // HH:MM
+        $endTime = $this->request->getPost('end_time');     // HH:MM (puede ser vacío)
+        $reason = $this->request->getPost('reason');
+
+        if (!$userId || !$date || !$startTime || !$reason) {
+            return redirect()->back()->with('error', 'Faltan datos obligatorios para la modificación.');
+        }
+
+        // Construir datetimes completos
+        $startDateTime = $date . ' ' . $startTime . ':00';
+        $endDateTime = $endTime ? ($date . ' ' . $endTime . ':00') : null;
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        // 3. Buscar y actualizar el evento 'start'
+        $startEvent = $this->workdayModel
+            ->where('user_id', $userId)
+            ->where('workday_date', $date)
+            ->where('event_type', 'start')
+            ->first();
+
+        if ($startEvent) {
+            // Actualizar el evento start
+            $this->workdayModel->update($startEvent['id'], [
+                'event_time' => $startDateTime
+            ]);
+        } else {
+            // Si por algún motivo no existe (raro), crearlo
+            $user = $this->userModel->find($userId);
+            $this->workdayModel->insert([
+                'user_id' => $userId,
+                'workday_date' => $date,
+                'event_type' => 'start',
+                'event_time' => $startDateTime,
+                'daily_hours' => $user['daily_hours'] ?? 8,
+                'max_daily_hours' => $user['max_daily_hours'] ?? 12
+            ]);
+        }
+
+        // 4. Buscar y actualizar/crear el evento 'stop'
+        $stopEvent = $this->workdayModel
+            ->where('user_id', $userId)
+            ->where('workday_date', $date)
+            ->where('event_type', 'stop')
+            ->first();
+
+        if ($endDateTime) {
+            if ($stopEvent) {
+                // Actualizar el existente
+                $this->workdayModel->update($stopEvent['id'], [
+                    'event_time' => $endDateTime
+                ]);
+            } else {
+                // Crear evento stop para cerrar la jornada
+                $this->workdayModel->insert([
+                    'user_id' => $userId,
+                    'workday_date' => $date,
+                    'event_type' => 'stop',
+                    'event_time' => $endDateTime,
+                    'is_autoclose' => 0
+                ]);
+            }
+        } else {
+            // Si no se proporcionó hora de salida, pero había un evento stop, se borra (reabre)
+            if ($stopEvent) {
+                $this->workdayModel->delete($stopEvent['id']);
+            }
+        }
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return redirect()->back()->with('error', 'Error al modificar la jornada en la base de datos.');
+        }
+
+        // 5. Registrar en log
+        helper('activity');
+        $user = $this->userModel->find($userId);
+        $userName = $user ? $user['name'] : "ID {$userId}";
+        $logDescription = "Modificó la jornada de {$userName} para el {$date}. Entrada: {$startTime}" . ($endTime ? " - Salida: {$endTime}" : " (Reabierta)") . ". Motivo: {$reason}";
+        log_activity('Workdays', 'UPDATE', $logDescription);
+
+        return redirect()->back()->with('message', 'La jornada se ha modificado y guardado en el historial de auditoría correctamente.');
+    }
+
+    // =================================================================================
     // Ver detalles de una jornada específica
     // =================================================================================
     public function view($date)

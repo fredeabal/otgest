@@ -160,6 +160,15 @@
                                                 <i class="ti ti-eye"></i> Ver detalles
                                             </a>
                                         </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-3 text-primary"
+                                                href="javascript:void(0)" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editWorkdayModal"
+                                                onclick="loadEditWorkday('<?= $workday['date'] ?>', <?= $workday['user_id'] ?>, '<?= $workday['start_time'] ?? '' ?>', '<?= $workday['end_time'] ?? '' ?>', '<?= esc(addslashes($workday['user_name'])) ?>')">
+                                                <i class="ti ti-edit"></i> Editar
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -179,3 +188,61 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Edición de Jornada -->
+<div class="modal fade" id="editWorkdayModal" tabindex="-1" aria-labelledby="editWorkdayModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editWorkdayModalLabel">Editar Jornada - <span id="editUserName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="<?= base_url('workdays/edit') ?>" method="POST">
+                <?= csrf_field() ?>
+                <input type="hidden" name="user_id" id="editUserId">
+                <input type="hidden" name="workday_date" id="editWorkdayDate">
+                
+                <div class="modal-body">
+                    <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+                        <i class="ti ti-alert-circle fs-5 me-2"></i>
+                        <div>
+                            Toda modificación quedará registrada en el historial de auditoría por motivos legales.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="start_time" class="form-label">Hora de Entrada <span class="text-danger">*</span></label>
+                        <input type="time" class="form-control" id="editStartTime" name="start_time" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="end_time" class="form-label">Hora de Salida</label>
+                        <input type="time" class="form-control" id="editEndTime" name="end_time">
+                        <div class="form-text text-info"><i class="ti ti-info-circle"></i> Si el usuario olvidó fichar la salida, puedes establecerla aquí. Si guardas sin hora de salida, la jornada continuará en curso.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Motivo de la modificación <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="editReason" name="reason" rows="2" required placeholder="Ej: El trabajador olvidó fichar la salida el día de ayer..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadEditWorkday(date, userId, startTime, endTime, userName) {
+    document.getElementById('editUserName').innerText = userName;
+    document.getElementById('editUserId').value = userId;
+    document.getElementById('editWorkdayDate').value = date;
+    document.getElementById('editStartTime').value = startTime;
+    document.getElementById('editEndTime').value = endTime;
+    document.getElementById('editReason').value = ''; // Limpiar siempre el motivo anterior
+}
+</script>
