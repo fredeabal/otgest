@@ -36,7 +36,8 @@
                         <tr onclick="window.location='<?= base_url('users/show/' . $user['id']) ?>'" class="cursor-pointer">
                             <td>
                                 <div>
-                                    <h6 class="fs-4 fw-semibold mb-0 mb-1"><?= esc($user['name']) ?></h6>
+                                    <h6 class="fs-4 fw-semibold mb-0 mb-1 d-inline-block text-truncate" style="max-width: 200px;"><?= esc($user['name']) ?></h6>
+                                    <br>
                                     <span class="fw-normal text-muted small"><?= esc($user['identification']) ?></span>
                                 </div>
                             </td>
