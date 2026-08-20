@@ -68,8 +68,12 @@
 
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end bg-white border-top">
-                    <a href="<?= base_url('logs/list') ?>" class="btn btn-dark">Volver</a>
+                <div class="card-footer px-0">
+                    <div class="row">
+                        <div class="col-sm-12 text-center py-3">
+                            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-dark ms-1">Volver atrás</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
