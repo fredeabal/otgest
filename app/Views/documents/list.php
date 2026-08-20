@@ -59,7 +59,7 @@
                             <th class="d-none d-md-table-cell">Remitente</th>
                             <th class="text-center d-none d-md-table-cell">Fecha de envío</th>
                             <th class="text-center d-none d-md-table-cell">Fecha de lectura</th>
-                            <th class="text-center"><i class="ti ti-dots-vertical"></i></th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>

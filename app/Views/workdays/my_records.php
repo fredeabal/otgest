@@ -55,7 +55,7 @@
                             <th class="text-center">Horas totales</th>
                             <th class="text-center d-none d-md-table-cell">Horas extras</th>
                             <th class="text-center d-none d-md-table-cell">Estado</th>
-                            <th class="text-center"><i class="ti ti-dots-vertical"></i></th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>

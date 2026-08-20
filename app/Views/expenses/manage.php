@@ -75,7 +75,7 @@
                             <th class="d-none d-md-table-cell">Importe</th>
                             <th class="text-center d-none d-md-table-cell">Fecha solicitud</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center"><i class="ti ti-dots-vertical"></i></th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>

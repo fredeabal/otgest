@@ -66,7 +66,7 @@
                             <th class="d-none d-md-table-cell text-center">Fecha Inicio</th>
                             <th class="d-none d-md-table-cell text-center">Fecha Fin</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center"><i class="ti ti-dots-vertical"></i></th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>
