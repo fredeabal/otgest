@@ -71,7 +71,7 @@
                             <th class="text-center">Horas totales</th>
                             <th class="text-center d-none d-md-table-cell">Horas extras</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center">Acciones</th>
+                            <th class="text-center"><i class="ti ti-dots-vertical"></i></th>
                         </tr>
                     </thead>
                     <tbody>

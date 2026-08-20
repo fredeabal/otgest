@@ -57,7 +57,7 @@
                             <th class="d-none d-md-table-cell">Categoría</th>
                             <th class="text-center d-none d-md-table-cell">Estado</th>
                             <th class="text-center d-none d-md-table-cell">Fecha solicitud</th>
-                            <th class="text-center">Acciones</th>
+                            <th class="text-center"><i class="ti ti-dots-vertical"></i></th>
                         </tr>
                     </thead>
                     <tbody>
