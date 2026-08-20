@@ -58,7 +58,8 @@
             </div>
             <!-- Fin de buscador de solicitudes -->
 
-            <div class="mb-4 border rounded-1">
+            <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
+            <div class="mb-4 border rounded-1 table-responsive">
                 <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
@@ -80,7 +81,7 @@
                                     </h6>
                                 </div>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <div>
                                     <h6 class="fw-semibold mb-0 mb-1">
                                         <?= esc(date('d/m/Y', strtotime($absence['start_date']))) ?>
@@ -92,7 +93,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <div>
                                     <h6 class="fw-semibold mb-0 mb-1">
                                         <?= esc(date('d/m/Y', strtotime($absence['end_date']))) ?>

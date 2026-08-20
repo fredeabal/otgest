@@ -78,14 +78,15 @@
                     </div>
                     <!-- Fin de buscador de solicitudes -->
 
-                    <div class="mb-4 border rounded-1">
+                    <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
+            <div class="mb-4 border rounded-1 table-responsive">
                         <table class="table text-nowrap mb-0 align-middle table-hover">
                             <thead>
                                 <tr>
                                     <th>Usuario</th>
-                                    <th class="d-none d-md-table-cell">Tipo</th>
-                                    <th class="text-center d-none d-md-table-cell">Fecha Inicio</th>
-                                    <th class="text-center d-none d-md-table-cell">Fecha Fin</th>
+                                    <th class="">Tipo</th>
+                                    <th class="text-center">Fecha Inicio</th>
+                                    <th class="text-center">Fecha Fin</th>
                                     <th class="text-center">Estado</th>
                                     <th class="text-center"></th>
                                 </tr>
@@ -108,12 +109,12 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="d-none d-md-table-cell">
+                                    <td class="">
                                         <h6 class="fw-semibold mb-0">
                                             <?= $absenceTypes[$absence['type']] ?? $absence['type'] ?>
                                         </h6>
                                     </td>
-                                    <td class="text-center d-none d-md-table-cell">
+                                    <td class="text-center">
                                         <div>
                                             <h6 class="fw-semibold mb-0 mb-1">
                                                 <?= esc(date('d/m/Y', strtotime($absence['start_date']))) ?>
@@ -125,7 +126,7 @@
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td class="text-center d-none d-md-table-cell">
+                                    <td class="text-center">
                                         <div>
                                             <h6 class="fw-semibold mb-0 mb-1">
                                                 <?= esc(date('d/m/Y', strtotime($absence['end_date']))) ?>

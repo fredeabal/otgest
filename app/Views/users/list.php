@@ -20,10 +20,10 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th class="d-none d-md-table-cell">Email</th>
-                            <th class="text-center d-none d-md-table-cell">Rol</th>
+                            <th class="">Email</th>
+                            <th class="text-center">Rol</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center d-none d-md-table-cell">Último login</th>
+                            <th class="text-center">Último login</th>
                             <th class=""></th>
                         </tr>
                     </thead>
@@ -41,10 +41,10 @@
                                     <span class="fw-normal text-muted small"><?= esc($user['identification']) ?></span>
                                 </div>
                             </td>
-                            <td class="d-none d-md-table-cell">
+                            <td class="">
                                 <?= esc($user['email']) ?>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <span class="badge bg-info-subtle text-info fw-semibold text-small border border-info fs-2 w-100px-inline"
                                     >
                                     <?= esc($user['role_name']) ?>
@@ -59,7 +59,7 @@
                                     >Inactivo</span>
                                 <?php endif; ?>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <h6 class="fw-semibold mb-0 mb-1">
                                     <?= esc(date('d/m/Y', strtotime($user['last_login']))) ?></h6>
                                 <span

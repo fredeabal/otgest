@@ -48,15 +48,16 @@
             </div>
             <!-- Fin de buscador de gastos -->
 
-            <div class="mb-4 border rounded-1">
+            <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
+            <div class="mb-4 border rounded-1 table-responsive">
                 <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Fecha del gasto</th>
-                            <th class="d-none d-md-table-cell">Importe</th>
-                            <th class="d-none d-md-table-cell">Categoría</th>
-                            <th class="text-center d-none d-md-table-cell">Estado</th>
-                            <th class="text-center d-none d-md-table-cell">Fecha solicitud</th>
+                            <th class="">Importe</th>
+                            <th class="">Categoría</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Fecha solicitud</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -73,7 +74,7 @@
                                     <?= esc(date('d/m/Y', strtotime($expense['expense_date']))) ?>
                                 </h6>
                             </td>
-                            <td class="d-none d-md-table-cell">
+                            <td class="">
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1">
                                         <?php if ($expense['amount']): ?>
@@ -84,14 +85,14 @@
                                     </h6>
                                 </div>
                             </td>
-                            <td class="d-none d-md-table-cell">
+                            <td class="">
                                 <div>
                                     <h6 class="fs-4 fw-semibold mb-0 mb-1">
                                         <?= esc($expense['category'] ?: '-') ?>
                                     </h6>
                                 </div>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <?php
                                 $statusClass = '';
                                 $statusText = '';
@@ -112,7 +113,7 @@
                                 ?>
                                 <span class="<?= $statusClass ?> w-100px-inline" ><?= $statusText ?></span>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <h6 class="fw-semibold mb-0 mb-1">
                                     <?= esc(date('d/m/Y', strtotime($expense['created_at']))) ?>
                                 </h6>

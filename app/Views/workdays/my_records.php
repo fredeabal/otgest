@@ -45,16 +45,17 @@
             </form>
             <!-- Fin de buscador de jornadas -->
 
-            <div class="mb-4 border rounded-1">
+            <span class="text-muted d-block mb-2 d-md-none">Deslice para ver la tabla <i class="ti ti-arrow-right ms-2"></i></span>
+            <div class="mb-4 border rounded-1 table-responsive">
                 <table class="table text-nowrap mb-0 align-middle table-hover">
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th class="text-center d-none d-md-table-cell">Inicio</th>
-                            <th class="text-center d-none d-md-table-cell">Fin</th>
+                            <th class="text-center">Inicio</th>
+                            <th class="text-center">Fin</th>
                             <th class="text-center">Horas totales</th>
-                            <th class="text-center d-none d-md-table-cell">Horas extras</th>
-                            <th class="text-center d-none d-md-table-cell">Estado</th>
+                            <th class="text-center">Horas extras</th>
+                            <th class="text-center">Estado</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -71,7 +72,7 @@
                                 <?= esc(date('d/m/Y', strtotime($workday['date']))) ?>
                             </td>
                             <!-- Hora de inicio -->
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <?php if ($workday['start_time']): ?>
                                     <?= esc($workday['start_time']) ?><br>
                                     <small class="text-muted"><?= esc($workday['start_date']) ?></small>
@@ -80,7 +81,7 @@
                                 <?php endif; ?>
                             </td>
                             <!-- Hora de fin -->
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <?php if ($workday['end_time']): ?>
                                     <?= esc($workday['end_time']) ?><br>
                                     <small class="text-muted"><?= esc($workday['end_date']) ?></small>
@@ -104,7 +105,7 @@
                                     ?> h
                                 </span>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2 w-100px-inline"
                                     >
                                     <?php
@@ -116,7 +117,7 @@
                                 </span>
                             </td>
 
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <?php
                                 $statusClass = [
                                     'completed' => 'success',

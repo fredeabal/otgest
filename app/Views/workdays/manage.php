@@ -66,10 +66,10 @@
                         <tr>
                             <th>Usuario</th>
                             <th>Fecha</th>
-                            <th class="text-center d-none d-md-table-cell">Inicio</th>
-                            <th class="text-center d-none d-md-table-cell">Fin</th>
+                            <th class="text-center">Inicio</th>
+                            <th class="text-center">Fin</th>
                             <th class="text-center">Horas totales</th>
-                            <th class="text-center d-none d-md-table-cell">Horas extras</th>
+                            <th class="text-center">Horas extras</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center"></th>
                         </tr>
@@ -91,7 +91,7 @@
                             <td>
                                 <?= esc(date('d/m/Y', strtotime($workday['date']))) ?>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <?php if ($workday['start_time']): ?>
                                     <?= esc($workday['start_time']) ?><br>
                                     <small class="text-muted"><?= esc($workday['start_date']) ?></small>
@@ -99,7 +99,7 @@
                                     -
                                 <?php endif; ?>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <?php if ($workday['end_time']): ?>
                                     <?= esc($workday['end_time']) ?><br>
                                     <small class="text-muted"><?= esc($workday['end_date']) ?></small>
@@ -118,7 +118,7 @@
                                     ?> h
                                 </span>
                             </td>
-                            <td class="text-center d-none d-md-table-cell">
+                            <td class="text-center">
                                 <span class="badge bg-warning-subtle text-warning fw-semibold text-small border border-warning fs-2 w-100px-inline"
                                       >
                                     <?php
