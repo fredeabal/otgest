@@ -161,7 +161,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center gap-3 text-primary"
+                                            <a class="dropdown-item d-flex align-items-center gap-3"
                                                 href="javascript:void(0)" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editWorkdayModal"
