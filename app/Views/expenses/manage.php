@@ -250,7 +250,7 @@ document.querySelectorAll('.approve-expense-swal, .reject-expense-swal').forEach
 
         if (!isApprove) {
             swalConfig.input = 'textarea';
-            swalConfig.inputPlaceholder = 'Escribe el motivo del rechazo (opcional pero recomendado)...';
+            swalConfig.inputPlaceholder = 'Escribe el motivo del rechazo...';
             swalConfig.inputAttributes = {
                 'aria-label': 'Motivo del rechazo'
             };
