@@ -637,7 +637,7 @@ class WorkdayController extends BaseController
         $user = $this->userModel->find($userId);
         $userName = $user ? $user['name'] : "ID {$userId}";
         $logDescription = "Modificó la jornada de {$userName} para el {$date}. Entrada: {$startTime}" . ($endTime ? " - Salida: {$endTime}" : " (Reabierta)") . ". Motivo: {$reason}";
-        log_activity('Workdays', 'UPDATE', $logDescription);
+        log_activity('Jornadas', 'UPDATE', $logDescription);
 
         return redirect()->back()->with('message', 'La jornada se ha modificado y guardado en el historial de auditoría correctamente.');
     }
