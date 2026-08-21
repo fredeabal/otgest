@@ -151,13 +151,13 @@ class ExpenseController extends BaseController
         $userId = $this->request->getGet('user_id');
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');
-        $status = $this->request->getGet('status') ?: 'pending'; // Default: pending
+        $status = $this->request->getGet('status') ?? ''; // Default: todos
 
         $query = $this->expenseModel->select('expenses.*, users.name as user_name, users.identification as user_identification')
             ->join('users', 'users.id = expenses.user_id', 'left');
 
         // Aplicar filtro de estado
-        if ($status !== 'all') {
+        if ($status !== '' && $status !== 'all') {
             $query->where('expenses.status', $status);
         }
 
@@ -324,14 +324,14 @@ class ExpenseController extends BaseController
         $userId = $this->request->getGet('user_id');
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');
-        $status = $this->request->getGet('status') ?: 'pending';
+        $status = $this->request->getGet('status') ?? '';
 
         $query = $this->expenseModel->select('expenses.*, users.name as user_name, users.identification as user_identification, processor.name as processed_by_name')
             ->join('users', 'users.id = expenses.user_id', 'left')
             ->join('users as processor', 'processor.id = expenses.approved_by', 'left');
 
         // Aplicar filtro de estado
-        if ($status !== 'all') {
+        if ($status !== '' && $status !== 'all') {
             $query->where('expenses.status', $status);
         }
 
