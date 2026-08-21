@@ -27,10 +27,10 @@
                     <div class="col-md-6">
                         <label for="status_filter" class="form-label fw-semibold text-muted small uppercase">Estado</label>
                         <select name="status" id="status_filter" class="form-select">
-                            <option value="pending" <?= ($current_status ?? 'pending') === 'pending' ? 'selected' : '' ?>>Pendientes</option>
+                            <option value="pending" <?= ($current_status ?? '') === 'pending' ? 'selected' : '' ?>>Pendientes</option>
                             <option value="approved" <?= ($current_status ?? '') === 'approved' ? 'selected' : '' ?>>Aprobados</option>
                             <option value="rejected" <?= ($current_status ?? '') === 'rejected' ? 'selected' : '' ?>>Rechazados</option>
-                            <option value="all" <?= ($current_status ?? '') === 'all' ? 'selected' : '' ?>>Todos</option>
+                            <option value="all" <?= empty($current_status) || $current_status === 'all' ? 'selected' : '' ?>>Todos</option>
                         </select>
                     </div>
                 </div>

@@ -23,10 +23,10 @@
                 <div class="col-md-4">
                     <label for="status" class="form-label fw-semibold text-muted small uppercase">Estado</label>
                     <select name="status" id="status" class="form-select">
-                        <option value="pending" <?= ($current_status ?? 'pending') === 'pending' ? 'selected' : '' ?>>Pendiente</option>
+                        <option value="pending" <?= ($current_status ?? '') === 'pending' ? 'selected' : '' ?>>Pendiente</option>
                         <option value="approved" <?= ($current_status ?? '') === 'approved' ? 'selected' : '' ?>>Aprobado</option>
                         <option value="rejected" <?= ($current_status ?? '') === 'rejected' ? 'selected' : '' ?>>Rechazado</option>
-                        <option value="all" <?= ($current_status ?? '') === 'all' ? 'selected' : '' ?>>Todos</option>
+                        <option value="all" <?= empty($current_status) || $current_status === 'all' ? 'selected' : '' ?>>Todos</option>
                     </select>
                 </div>
                 <div class="col-md-3 d-flex align-items-end gap-2">

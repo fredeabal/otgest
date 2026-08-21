@@ -39,11 +39,11 @@
                             <div class="col-md-3">
                                 <label for="status" class="form-label fw-semibold text-muted small uppercase">Estado</label>
                                 <select name="status" id="status" class="form-select">
-                                    <option value="pending" <?= ($current_status ?? 'pending') === 'pending' ? 'selected' : '' ?>>Pendientes</option>
+                                    <option value="pending" <?= ($current_status ?? '') === 'pending' ? 'selected' : '' ?>>Pendientes</option>
                                     <option value="approved" <?= ($current_status ?? '') === 'approved' ? 'selected' : '' ?>>Aprobadas</option>
                                     <option value="rejected" <?= ($current_status ?? '') === 'rejected' ? 'selected' : '' ?>>Rechazadas</option>
                                     <option value="cancelled" <?= ($current_status ?? '') === 'cancelled' ? 'selected' : '' ?>>Canceladas</option>
-                                    <option value="all" <?= ($current_status ?? '') === 'all' ? 'selected' : '' ?>>Todas</option>
+                                    <option value="all" <?= empty($current_status) || $current_status === 'all' ? 'selected' : '' ?>>Todas</option>
                                 </select>
                             </div>
                         </div>
