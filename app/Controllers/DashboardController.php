@@ -277,7 +277,7 @@ class DashboardController extends BaseController
                 $stats['activity_timeline'] = $this->activityLogModel
                     ->select('activity_logs.description, activity_logs.module, activity_logs.created_at, users.name')
                     ->join('users', 'users.id = activity_logs.user_id', 'left')
-                    ->whereIn('activity_logs.module', ['Jornadas', 'Workdays'])
+                    ->where('activity_logs.module', 'Jornadas')
                     ->orderBy('activity_logs.created_at', 'DESC')
                     ->limit(4)
                     ->findAll();
