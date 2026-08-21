@@ -126,9 +126,9 @@ class ExpenseController extends BaseController
             $query->where('expense_date <=', $this->request->getGet('date_to'));
         }
 
-        // Filtro de estado (default: pending)
-        $status = $this->request->getGet('status') ?: 'pending';
-        if ($status !== 'all') {
+        // Filtro de estado (default: todos)
+        $status = $this->request->getGet('status') ?? '';
+        if ($status !== '' && $status !== 'all') {
             $query->where('status', $status);
         }
 
@@ -488,7 +488,7 @@ class ExpenseController extends BaseController
         // Aplicar los mismos filtros que en my()
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');
-        $status = $this->request->getGet('status') ?: 'pending';
+        $status = $this->request->getGet('status') ?? '';
 
         $query = $this->expenseModel->select('expenses.*, processor.name as processed_by_name')
             ->join('users as processor', 'processor.id = expenses.approved_by', 'left')
@@ -501,7 +501,7 @@ class ExpenseController extends BaseController
         if (!empty($dateTo)) {
             $query->where('expense_date <=', $dateTo);
         }
-        if ($status !== 'all') {
+        if ($status !== '' && $status !== 'all') {
             $query->where('status', $status);
         }
 

@@ -181,12 +181,9 @@ class AbsenceController extends BaseController
             $query->where('type', $this->request->getGet('type'));
         }
 
-        // Filtro de estado con default 'pending'
-        $status = $this->request->getGet('status');
-        if ($status === null) {
-            $status = 'pending';
-        }
-        if ($status !== '') {
+        // Filtro de estado (default: todos)
+        $status = $this->request->getGet('status') ?? '';
+        if ($status !== '' && $status !== 'all') {
             $query->where('status', $status);
         }
 
@@ -225,11 +222,8 @@ class AbsenceController extends BaseController
             $query->where('absences.type', $this->request->getGet('type'));
         }
 
-        $status = $this->request->getGet('status');
-        if ($status === null) {
-            $status = 'pending';
-        }
-        if ($status !== '') {
+        $status = $this->request->getGet('status') ?? '';
+        if ($status !== '' && $status !== 'all') {
             $query->where('absences.status', $status);
         }
 
